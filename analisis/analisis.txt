@@ -1,0 +1,26 @@
+Planificacion desarrollo social media:
+	**ANALISIS**
+    • Descripcion funcionalidades: donde pondremos como sera nuestra app y lo que queremos que haga
+    
+    	**DISEÑO**
+    
+    • Diagrama ER: Crearemos como sera la base de datos
+    • Analisis de clases: donde identificaremos los modelos, atributos y metodos (UML).
+    • Diseño interfaz grafica (prototipo): Empezamos a pensar como lucira nuestra app
+   **OPCIONAL***
+    • Analisis de casos uso: donde pondremos los usuarios y los metodos que tiene acceso asi como sus roles
+    • Diagrama de secuencia??: donde describimos los distitnos metodos paso a paso
+    	**FIN**
+    	
+    	**DESARROLLO
+    	
+    • Crear sprints: donde crearemos las distintas tareas a hacer y cada cuanto tiempo
+    • Codificacion y pruebas
+    
+    	**PRUEBAS**
+    
+    • Podriamos usar selenium?
+    
+    	**Implantacion**
+    
+    •Puesta en marcha
