@@ -6,6 +6,7 @@ const User = require('../models/index').user;
 const validateJWT = async( req = request, res = response, next ) => {
 
     const token = req.header('x-token');
+    console.log(token);
 
     if ( !token ) {
         return res.status(401).json({
@@ -18,7 +19,7 @@ const validateJWT = async( req = request, res = response, next ) => {
         const { id } = jwt.verify( token, process.env.SECRETORPRIVATEKEY );
 
         // leer el usuario que corresponde al uid
-        const user = await User.findById( id );
+        const user = await User.findByPk( id );
 
         if( !user ) {
             return res.status(401).json({
@@ -27,9 +28,9 @@ const validateJWT = async( req = request, res = response, next ) => {
         }
 
         // Verificar si el uid tiene estado true
-        if ( !user.estado ) {
+        if ( !user.statusid != 1) {
             return res.status(401).json({
-                msg: 'Token unuseful - user with state: false'
+                msg: 'Token unuseful - user unactive'
             })
         }
         
@@ -38,7 +39,6 @@ const validateJWT = async( req = request, res = response, next ) => {
         next();
 
     } catch (error) {
-
         console.log(error);
         res.status(401).json({
             msg: 'Token invalid'
