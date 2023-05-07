@@ -1,20 +1,39 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
+const User = require('../models/index').user;
 
-const User = require('../models/user');
-
-
-
-const usuariosGet = async(req = request, res = response) => {
+const usersGet = async(req = request, res = response) => {
     //From 0 to 5
-    const { offset = 1, limit = 1 } = req.query;
+    const { offset = 0, limit = 5 } = req.query;
     const query = { user_statusid: 1 };
 
     const users = await User.findAll({offset, limit, where: query });
-
+    /*
+    const users = await user.findAll({offset, limit, where: query, include:{
+        model: user_rol,
+        as: 'user_rol'
+        }
+    });
+    */
     res.json({
         users
+    });
+}
+
+const usersGetById = async(req = request, res = response) => {
+    //From 0 to 5
+    const { id } = req.params;
+    const query = { user_statusid: 1, id };
+
+    const user = await User.findAll({ where: query });
+    if(!user){
+    return res.status(400).json({
+        msg: 'Usuario not found'
+    });
+    }
+    res.status(200).json({
+        user
     });
 }
 /*
@@ -66,7 +85,7 @@ const usuariosDelete = async(req, res = response) => {
     res.json(usuario);
 }
 
-usuariosPost,
+    usuariosPost,
     usuariosPut,
     usuariosPatch,
     usuariosDelete,
@@ -74,5 +93,6 @@ usuariosPost,
 */
 
 module.exports = {
-    usuariosGet
+    usersGet,
+    usersGetById
 }

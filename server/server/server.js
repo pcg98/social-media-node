@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('../database/config');
-const User = require('../models/user');
 
 class Server {
 
@@ -11,10 +10,10 @@ class Server {
         this.db = db
         // Conectar a base de datos
         this.conectarDB();
-
+        //this.prueba();
         this.usuariosPath = '/api/users';
 
-        //this.authPath     = '/api/auth'; 
+        this.authPath     = '/api/auth'; 
 
         // Middlewares
         this.middlewares();
@@ -26,13 +25,13 @@ class Server {
     async conectarDB() {
         try{
             await this.db.authenticate();
-            console.log("Connection succesfull");
+            console.log("Connection with the DB succesfull");
+              
         }catch(error){
             console.log("Fail with the DB");
             console.log(error)
         }
     }
-
 
     middlewares() {
 
@@ -48,8 +47,7 @@ class Server {
     }
 
     routes() {
-        
-        //this.app.use( this.authPath, require('../routes/auth'));
+        this.app.use( this.authPath, require('../routes/auth'));
         this.app.use( this.usuariosPath, require('../routes/users'));
     }
 

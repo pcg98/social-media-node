@@ -2,12 +2,14 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { usuariosGet } = require('../controllers/userController');
+const { usersGet, usersGetById } = require('../controllers/userController');
+const { validateJWT } = require('../middlewares');
 
 const router = Router();
 
 
-router.get('/', usuariosGet );
+router.get('/', usersGet );
+router.get("/:id",[validateJWT] ,usersGetById);
 /*
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),
