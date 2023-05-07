@@ -1,27 +1,27 @@
 CREATE TABLE `user` (
-  id                bigint(20) NOT NULL, 
+  id                bigint(20) NOT NULL AUTO_INCREMENT, 
   email             varchar(255) NOT NULL UNIQUE, 
-  nickname          varchar(255) NOT NULL UNIQUE, 
-  telephone         varchar(255) NOT NULL UNIQUE, 
+  nickname          varchar(30) NOT NULL UNIQUE, 
+  telephone         varchar(20) NOT NULL UNIQUE, 
   password          varchar(255) NOT NULL, 
   bio               varchar(100), 
-  sex               varchar(6) NOT NULL comment 'It should be woman, male or other', 
-  createdAt         date DEFAULT Now() NOT NULL, 
+  sex               enum("men","woman","other") NOT NULL comment 'It should be woman, male or other', 
+  createdAt         date DEFAULT CURDATE() NOT NULL, 
   user_statusid     tinyint(3) DEFAULT 0 NOT NULL, 
   user_rolid        tinyint(3) DEFAULT 1 NOT NULL, 
   user_visibilityid tinyint(3) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_follower (
-  id                    bigint(20) NOT NULL, 
+  id                    bigint(20) NOT NULL AUTO_INCREMENT, 
   sourceid              bigint(20) NOT NULL, 
   targetid              bigint(20) NOT NULL, 
-  createdAt             date DEFAULT NOW() NOT NULL, 
+  createdAt             date DEFAULT CURDATE() NOT NULL, 
   relationship_statusid tinyint(3) NOT NULL, 
   PRIMARY KEY (id, 
   sourceid, 
   targetid));
 CREATE TABLE messages (
-  id       bigint(20) NOT NULL, 
+  id       bigint(20) NOT NULL AUTO_INCREMENT, 
   senderid bigint(20) NOT NULL, 
   targetid bigint(20) NOT NULL, 
   body     varchar(255) NOT NULL comment 'Body del mensaje', 
@@ -30,21 +30,21 @@ CREATE TABLE messages (
   senderid, 
   targetid));
 CREATE TABLE user_image (
-  id        int(10) NOT NULL, 
+  id        int(10) NOT NULL AUTO_INCREMENT, 
   userid    bigint(20) NOT NULL, 
   title     varchar(80), 
-  createdAt date DEFAULT NOW() NOT NULL, 
+  createdAt date DEFAULT CURDATE() NOT NULL, 
   url       varchar(255), 
   PRIMARY KEY (id));
 CREATE TABLE image_comment (
-  id           int(11) NOT NULL, 
+  id           int(11) NOT NULL AUTO_INCREMENT, 
   body         varchar(255) NOT NULL, 
-  createdAt    date DEFAULT now() NOT NULL comment 'If we don''t have any date, we put the actual date in the database', 
+  createdAt    date DEFAULT CURDATE() NOT NULL comment 'If we don''t have any date, we put the actual date in the database', 
   userid       bigint(20) NOT NULL, 
   user_imageid int(10) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_report (
-  id          int(10) NOT NULL, 
+  id          int(10) NOT NULL AUTO_INCREMENT, 
   sourceid    bigint(20) NOT NULL, 
   targetid    bigint(20) NOT NULL, 
   reason      varchar(100) NOT NULL comment 'ENum distintos motivos en ele backend, aqui va a ser varchar', 
@@ -53,7 +53,7 @@ CREATE TABLE user_report (
   sourceid, 
   targetid));
 CREATE TABLE user_suspension (
-  id                  int(10) NOT NULL, 
+  id                  int(10) NOT NULL AUTO_INCREMENT, 
   userid              bigint(20) NOT NULL, 
   untilDate           date NOT NULL, 
   user_reportid       int(10) NOT NULL, 
@@ -61,50 +61,50 @@ CREATE TABLE user_suspension (
   user_reporttargetid bigint(20) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_following (
-  id                    bigint(20) NOT NULL, 
+  id                    bigint(20) NOT NULL AUTO_INCREMENT, 
   sourceid              bigint(20) NOT NULL, 
   targetid              bigint(20) NOT NULL, 
-  createdAt             date DEFAULT NOW() NOT NULL, 
+  createdAt             date DEFAULT CURDATE() NOT NULL, 
   relationship_statusid tinyint(3) NOT NULL, 
   PRIMARY KEY (id, 
   sourceid, 
   targetid));
 CREATE TABLE user_blocked (
-  id        int(11) NOT NULL, 
+  id        int(11) NOT NULL AUTO_INCREMENT, 
   sourceid  bigint(20) NOT NULL, 
   targetid  bigint(20) NOT NULL, 
-  createdAt timestamp DEFAULT now() NOT NULL, 
+  createdAt date DEFAULT CURDATE() NOT NULL, 
   PRIMARY KEY (id, 
   sourceid, 
   targetid));
 CREATE TABLE user_status (
-  id     tinyint(3) NOT NULL, 
+  id     tinyint(3) NOT NULL AUTO_INCREMENT, 
   status varchar(50) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE relationship_status (
-  id     tinyint(3) NOT NULL, 
+  id     tinyint(3) NOT NULL AUTO_INCREMENT, 
   status varchar(50) NOT NULL comment 'It should be accepted, pending or rejected', 
   PRIMARY KEY (id));
 CREATE TABLE user_notification (
-  id                    bigint(20) NOT NULL, 
+  id                    bigint(20) NOT NULL AUTO_INCREMENT, 
   sourceid              bigint(20) NOT NULL, 
   targetid2             bigint(20) NOT NULL, 
   is_see                bit(1) DEFAULT false NOT NULL, 
   notification_objectid int(11) NOT NULL, 
-  createdAt             date DEFAULT now() NOT NULL, 
+  createdAt             date DEFAULT CURDATE() NOT NULL, 
   PRIMARY KEY (id, 
   sourceid, 
   targetid2));
 CREATE TABLE user_rol (
-  id  tinyint(3) NOT NULL, 
+  id  tinyint(3) NOT NULL AUTO_INCREMENT, 
   rol varchar(50) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_visibility (
-  id         tinyint(3) NOT NULL, 
+  id         tinyint(3) NOT NULL AUTO_INCREMENT, 
   visibility varchar(50) NOT NULL comment 'Public or private', 
   PRIMARY KEY (id));
 CREATE TABLE notification_object (
-  id        int(11) NOT NULL, 
+  id        int(11) NOT NULL AUTO_INCREMENT, 
   entity    varchar(255) NOT NULL, 
   entity_id int(11) NOT NULL, 
   PRIMARY KEY (id));
