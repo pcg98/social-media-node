@@ -29,7 +29,7 @@ const usersGetById = async(req = request, res = response) => {
     const user = await User.findAll({ where: query });
     if(!user){
     return res.status(400).json({
-        msg: 'Usuario not found'
+        msg: 'User not found'
     });
     }
     res.status(200).json({
