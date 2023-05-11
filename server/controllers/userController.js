@@ -36,11 +36,11 @@ const usersGetById = async(req = request, res = response) => {
         user
     });
 }
-/*
+
 const usuariosPost = async(req, res = response) => {
     
-    const { nombre, correo, password, rol } = req.body;
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const { correo, password } = req.body;
+    const usuario = new User({ correo, password });
 
     // Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
@@ -53,7 +53,7 @@ const usuariosPost = async(req, res = response) => {
         usuario
     });
 }
-
+/*
 const usuariosPut = async(req, res = response) => {
 
     const { id } = req.params;

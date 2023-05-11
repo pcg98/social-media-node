@@ -18,7 +18,7 @@ const validateJWT = async( req = request, res = response, next ) => {
         
         const { id } = jwt.verify( token, process.env.SECRETORPRIVATEKEY );
 
-        // leer el usuario que corresponde al uid
+        // leer el usuario que corresponde al id
         const user = await User.findByPk( id );
 
         if( !user ) {

@@ -9,11 +9,16 @@ const { generateJWT } = require('../helpers/generate-jwt');
 const login = async(req, res = response) => {
 
     const { email, password } = req.body;
+    console.log("New request");
 
     try {
       
         // Check email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ 
+            where: {
+                email: email
+            }
+        });
         if ( !user ) {
             return res.status(400).json({
                 msg: 'User / Password are incorrect - email'
@@ -34,10 +39,10 @@ const login = async(req, res = response) => {
                 msg: 'User / Password are incorrect - password'
             });
         }
-
+        console.log(user);
         // Generate the JWT
-        const token = await generateJWT( user.id );
-
+        const token = await generateJWT( user.id, user.rol );
+        console.log(token);
         res.json({
             user,
             token
