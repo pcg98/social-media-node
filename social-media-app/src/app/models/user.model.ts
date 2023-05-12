@@ -11,7 +11,7 @@ export class User {
       public last_name: string,
       public email: string,
       public nickname: string,
-      public telehpone: string,
+      public telephone: string,
       public password: string,
       public sex: Sex,
       public user_statusid: number,

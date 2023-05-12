@@ -1,6 +1,6 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
 const User = require('../models/index').user;
 
 const usersGet = async(req = request, res = response) => {
@@ -19,6 +19,12 @@ const usersGet = async(req = request, res = response) => {
     res.json({
         users
     });
+}
+const userProfilebyJWT = async(req = request, res = response) => {
+   const currentUser = req.user; 
+        res.json(
+            currentUser
+        );
 }
 
 const usersGetById = async(req = request, res = response) => {
@@ -94,5 +100,6 @@ const usuariosDelete = async(req, res = response) => {
 
 module.exports = {
     usersGet,
-    usersGetById
+    usersGetById,
+    userProfilebyJWT
 }
