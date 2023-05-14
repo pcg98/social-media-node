@@ -6,7 +6,6 @@ const User = require('../models/index').user;
 const validateJWT = async( req = request, res = response, next ) => {
 
     const token = req.header('x-token');
-    console.log(token);
 
     if ( !token ) {
         return res.status(401).json({

@@ -2,8 +2,9 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { usersGet, usersGetById, userProfilebyJWT } = require('../controllers/userController');
-const { validateJWT } = require('../middlewares');
+const { usersGet, usersGetById, userProfilebyJWT, userPostCreate, uploadProfilePicture } = require('../controllers/userController');
+const { validateJWT, emailIsUnique, usernameIsUnique } = require('../middlewares');
+const { upload } = require('../middlewares/multer');
 
 const router = Router();
 
@@ -11,6 +12,8 @@ const router = Router();
 router.get('/', usersGet );
 router.get("/user-by-id/:id",[validateJWT] ,usersGetById);
 router.get("/home",[validateJWT] ,userProfilebyJWT);
+router.post("/create",[validateJWT, emailIsUnique, usernameIsUnique] ,userPostCreate);
+router.post('/profile-picture', [validateJWT, upload.single('profilePicture')], uploadProfilePicture);
 /*
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),

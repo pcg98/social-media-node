@@ -2,6 +2,7 @@ const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/index').user;
+const fs = require('fs');
 
 const usersGet = async(req = request, res = response) => {
     //From 0 to 5
@@ -43,22 +44,44 @@ const usersGetById = async(req = request, res = response) => {
     });
 }
 
-const usuariosPost = async(req, res = response) => {
-    
-    const { correo, password } = req.body;
-    const usuario = new User({ correo, password });
+const userPostCreate = async(req, res = response) => {
+    try{
+        const { password } = req.body;
+    const user = new User(req.body);
 
-    // Encriptar la contraseña
+    // Encrypt the password
     const salt = bcryptjs.genSaltSync();
-    usuario.password = bcryptjs.hashSync( password, salt );
-
-    // Guardar en BD
-    await usuario.save();
-
-    res.json({
-        usuario
+    user.password = bcryptjs.hashSync( password, salt );
+    console.log('Creating new user');
+    // Save on DB
+    await user.save();
+    console.log(user);
+    //Create the route for the user folder
+    const userFolder = process.env.FOLDER_IMAGES+`/${user.id}`;
+    //If user with that id don't have any folder...
+    if(!fs.existsSync(userFolder)){
+        //Create a folder
+        fs.mkdirSync(userFolder);
+    }
+    //Return the user as a JSON
+    res.status(200).json({
+        user
     });
+    }catch(e){
+        console.log(e);
+        res.status(422).json('Something was wrong');
+    }
 }
+const uploadProfilePicture = (req, res, next) => {
+    if (!req.file) {
+      res.status(400).send({ message: 'No file uploaded!' });
+    } else {
+      // Here you can save the file path to the user profile in your database
+      res.status(200).send({ message: 'File uploaded successfully!' });
+      next();
+    }
+};
+
 /*
 const usuariosPut = async(req, res = response) => {
 
@@ -101,5 +124,7 @@ const usuariosDelete = async(req, res = response) => {
 module.exports = {
     usersGet,
     usersGetById,
-    userProfilebyJWT
+    userProfilebyJWT,
+    userPostCreate,
+    uploadProfilePicture
 }

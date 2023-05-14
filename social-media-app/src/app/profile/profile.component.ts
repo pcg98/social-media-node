@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
     .subscribe((data: User) => {
       console.log(data)
       this.user = new User(data.name, data.last_name, data.email, data.nickname,
-        data.telephone, data.password, data.sex, data.user_statusid, data.user_rolid, data.id);
+        data.telephone, data.password, data.sex, data.user_statusid, data.user_rolid, data.profile_picture, data.id);
       console.log(this.user instanceof User);
     });
   }

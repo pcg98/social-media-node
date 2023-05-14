@@ -48,6 +48,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "It should be woman, male or other"
     },
+    profile_picture: {
+      type: DataTypes.STRING(255),
+      defaultValue: 'default.png',
+      allowNull: false,
+    },
     user_statusid: {
       type: DataTypes.TINYINT,
       allowNull: false,
