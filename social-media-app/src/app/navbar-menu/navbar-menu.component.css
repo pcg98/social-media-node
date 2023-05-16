@@ -1,0 +1,34 @@
+.navbar {
+  background-color: #f8f9fa;
+}
+
+.navbar .navbar-brand {
+  font-weight: bold;
+}
+
+.navbar .navbar-nav .nav-link {
+  font-weight: bold;
+}
+
+.navbar .navbar-nav .active > .nav-link {
+  color: #007bff;
+}
+
+.navbar .logout-btn {
+  margin-left: auto;
+}
+
+.navbar .search-form {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.navbar .search-input {
+  width: 200px;
+  margin-right: 5px;
+}
+
+.navbar .search-btn {
+  margin-left: 5px;
+}

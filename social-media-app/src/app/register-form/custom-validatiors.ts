@@ -25,7 +25,7 @@ export class CustomValidators {
       const email = control.value;
       return http.get(URL_API+'/check-email', { params: { email } })
         .pipe(
-          map((res: any) => res.exists ? { uniqueEmail: true } : null)
+          map((res: any) => res.exists ? null : { emailTaken: true })
         );
     };
   }

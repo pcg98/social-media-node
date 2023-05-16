@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { MessagesService } from '../services/messages-service.service';
 import { UserService } from '../services/user.service';
 import { CustomValidators } from './custom-validatiors';
+
 
 @Component({
   selector: 'app-register-form',
@@ -15,7 +18,7 @@ export class RegisterFormComponent implements OnInit {
   userForm: FormGroup;
   httpAnswerMessageError: string;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder) { }
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private router: Router, private MessagesService: MessagesService) { }
 
   ngOnInit() {
     this.userForm = this.formBuilder.group({
@@ -34,10 +37,20 @@ export class RegisterFormComponent implements OnInit {
     this.userService.createUser(this.user) // pass the user object to the createUser() method in the UserService
       .subscribe(() => {
         console.log('User created successfully!');
+        this.MessagesService.sendMessageAndRedirect('Login successful', '/home');
       }, error => {
-        alert("An error happens")
         console.log(error);
-        this.httpAnswerMessageError = error.error;
+        console.log(error.nicknameTaken);
+        if(error.error.nicknameTaken){
+          alert("Nickname taken")
+        }
+        if(error.error.emailTaken){
+          alert("Email taken")
+        }
+        if(error.error.telephoneTaken){
+          alert("Telephone taken")
+        }
+        //this.httpAnswerMessageError = error.error;
       });
       console.log(this.userForm.value)
   }

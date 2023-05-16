@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { TokenStorageService } from '../services/token-storage.service';
-import { Router } from '@angular/router';
+import { MessagesService } from '../services/messages-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,14 @@ export class LoginComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   roles: string[] = [];
-
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private router: Router) { }
+  constructor(private authService: AuthService, private tokenStorage: TokenStorageService, private messagesService: MessagesService) { }
 
   ngOnInit() {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.roles = this.tokenStorage.getUser().user_rolid;
     }
+
   }
 
   onSubmit() {
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         console.log("Se accedio con exito");
         this.roles = this.tokenStorage.getUser().user_rolid;
-        this.router.navigate(['/profile']);
+        this.messagesService.sendMessageAndRedirect('Login successful','/profile');
       },
       err => {
         this.errorMessage = err.error.message;

@@ -7,7 +7,7 @@ const emailIsUnique = async( req = request, res = response, next ) => {
     try {
         const user = await User.findOne({ where: { email } });
         if (user) {
-          return res.status(409).json({ message: 'Email already exists.' });
+          return res.status(409).json({ emailTaken: true });
         }
         next();
       } catch (err) {
@@ -16,23 +16,39 @@ const emailIsUnique = async( req = request, res = response, next ) => {
       
 
 }
-const usernameIsUnique = async( req = request, res = response, next ) => {
+const nicknameIsUnique = async( req = request, res = response, next ) => {
         
-    const { username } = req.body;
+    const { nickname } = req.body;
 
     try {
-        const user = await User.findOne({ where: { username } });
+        const user = await User.findOne({ where: { nickname } });
         if (user) {
-          return res.status(409).json({ message: 'username already exists.' });
+          return res.status(409).json({ nicknameTaken: true });
         }
         next();
     } catch (err) {
-        return res.status(500).json({ message: 'Error occurred while checking username uniqueness.' });
+        return res.status(500).json({ message: 'Error occurred while checking nickname uniqueness.' });
     }
+
+}
+const telephoneIsUnique = async( req = request, res = response, next ) => {
+        
+  const { telephone } = req.body;
+
+  try {
+      const user = await User.findOne({ where: { telephone } });
+      if (user) {
+        return res.status(409).json({ telephoneTaken: true });
+      }
+      next();
+  } catch (err) {
+      return res.status(500).json({ message: 'Error occurred while checking telephone uniqueness.' });
+  }
 
 }
 
 module.exports = {
     emailIsUnique,
-    usernameIsUnique
+    nicknameIsUnique,
+    telephoneIsUnique
 };
