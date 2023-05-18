@@ -50,7 +50,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     profile_picture: {
       type: DataTypes.STRING(255),
-      defaultValue: 'default.png',
+      defaultValue: 'default.jpg',
       allowNull: false,
     },
     user_statusid: {

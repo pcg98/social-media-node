@@ -1,7 +1,8 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/index').user;
+const { User } = require('../models/index');
+const { Op } = require('sequelize');
 const fs = require('fs');
 
 const usersGet = async(req = request, res = response) => {
@@ -72,6 +73,25 @@ const userPostCreate = async(req, res = response) => {
         res.status(422).json('Something was wrong');
     }
 }
+const userGetSearchByNickname = async(req, res = response) => {
+    try{
+        const { nickname } = req.params;
+        const users = await User.findAll({
+            where: {
+              nickname: {
+                [Op.like]: `%${nickname}%`
+              }
+            }
+        });
+
+        console.log(users);
+        //Return the users as a JSON
+        res.status(200).json(users);
+    }catch(e){
+        console.log(e);
+        res.status(422).json('Something was wrong');
+    }
+}
 const uploadProfilePicture = (req, res, next) => {
     if (!req.file) {
       res.status(400).send({ message: 'No file uploaded!' });
@@ -126,5 +146,6 @@ module.exports = {
     usersGetById,
     userProfilebyJWT,
     userPostCreate,
-    uploadProfilePicture
+    uploadProfilePicture,
+    userGetSearchByNickname
 }

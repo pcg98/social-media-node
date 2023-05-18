@@ -96,14 +96,14 @@ function initModels(sequelize) {
   user_visibility.hasMany(user, { as: "users", foreignKey: "user_visibilityid"});
 
   return {
-    image_comment,
-    messages,
+    ImageComment:image_comment,
+    Messages: messages,
     notification_object,
     relationship_status,
-    user,
-    user_blocked,
-    user_follower,
-    user_following,
+    User: user,
+    UserBlocked: user_blocked,
+    UserFollower: user_follower,
+    UserFollowing: user_following,
     user_image,
     user_notification,
     user_report,

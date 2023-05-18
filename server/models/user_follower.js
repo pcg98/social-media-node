@@ -28,6 +28,7 @@ module.exports = function(sequelize, DataTypes) {
     relationship_statusid: {
       type: DataTypes.TINYINT,
       allowNull: false,
+      defaultValue: 3,
       references: {
         model: 'relationship_status',
         key: 'id'

@@ -14,6 +14,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
+import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/search-username-form.component';
+import { SearchUsersByNicknameComponent } from './search-users-by-nickname/search-users-by-nickname.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { RegisterFormComponent } from './register-form/register-form.component';
     BoardModeratorComponent,*/
     ProfileComponent,
     NavbarMenuComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    SearchUsernameFormComponent,
+    SearchUsersByNicknameComponent
   ],
   imports: [
     BrowserModule,

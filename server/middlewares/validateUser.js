@@ -1,5 +1,5 @@
 const { response, request } = require('express');
-const User = require('../models/index').user;
+const { User } = require('../models/index');
 
 const emailIsUnique = async( req = request, res = response, next ) => {
     const { email } = req.body;

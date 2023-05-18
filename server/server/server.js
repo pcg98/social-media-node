@@ -14,6 +14,7 @@ class Server {
         this.usuariosPath = '/api/users';
 
         this.authPath     = '/api/auth'; 
+        this.actionsPath = 'api/actions'
 
         // Middlewares
         this.middlewares();
@@ -49,6 +50,7 @@ class Server {
     routes() {
         this.app.use( this.authPath, require('../routes/auth'));
         this.app.use( this.usuariosPath, require('../routes/users'));
+        this.app.use( this.actionsPath, require('../routes/users-actions'));
     }
 
     listen() {

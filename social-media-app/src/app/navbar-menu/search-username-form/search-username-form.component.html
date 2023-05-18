@@ -1,0 +1,6 @@
+<form class="form-inline" (ngSubmit)="submitForm()">
+  <div class="input-group">
+    <input type="text" [(ngModel)]="inputNickname" [ngModelOptions]="{standalone: true}" class="form-control search-input" placeholder="Search">
+    <button type="submit" class="btn btn-primary search-btn">Search</button>
+  </div>
+</form>

@@ -51,5 +51,10 @@ export class UserService {
     return this.http
       .get<boolean>(`${API_URL}/users/check-username/${username}`);
   }
+  getUsersByNickname(nickname: string) {
+    console.log('Enter in the service');
+    return this.http
+      .get(`${API_URL}/by-nickname/${nickname}`);
+  }
 }
 
