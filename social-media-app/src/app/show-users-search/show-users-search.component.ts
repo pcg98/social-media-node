@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
 import { UserService } from '../services/user.service';
 
 @Component({
-  selector: 'app-search-users-by-nickname',
-  templateUrl: './search-users-by-nickname.component.html',
-  styleUrls: ['./search-users-by-nickname.component.css']
+  selector: 'show-users-search',
+  templateUrl: './show-users-search.component.html',
+  styleUrls: ['./show-users-search.component.css']
 })
-export class SearchUsersByNicknameComponent implements OnInit {
+export class ShowUsersSearchComponent implements OnInit {
   nickname : string;
   users : User | User[];
   showMessageForm = false;
+  id : number;
+  form: FormBuilder;
 
 
   constructor(private route: ActivatedRoute, private userService: UserService,
@@ -23,6 +26,7 @@ export class SearchUsersByNicknameComponent implements OnInit {
       this.nickname = params.get('nickname');
       console.log("Hola")
       this.fetchData();
+      this.id = this.userService.getCurrentUserInfo().id;
     });
   }
   fetchData() {
@@ -44,8 +48,20 @@ export class SearchUsersByNicknameComponent implements OnInit {
   }
   //Send the form to the server
   //through the service
-  sendRequest(data: any){
-    this.actionsService.postSendRequestFriend(data);
+  sendRequest(form: NgForm) {
+    const formValues = form.value;
+    console.log('Form Data:', formValues);
+    this.actionsService.postSendRequestFriend(form.value)
+    .subscribe(response => {
+      // Handle the response from the server
+      console.log('Response:', response);
+      alert("Send request");
+      // ...
+    }, error => {
+      // Handle any error that occurs during the request
+      console.error('Error:', error);
+      // ...
+    });
   }
   toggleMessageForm() {
     this.showMessageForm = !this.showMessageForm;

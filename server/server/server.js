@@ -14,7 +14,7 @@ class Server {
         this.usuariosPath = '/api/users';
 
         this.authPath     = '/api/auth'; 
-        this.actionsPath = 'api/actions'
+        this.actionsPath = '/api/actions'
 
         // Middlewares
         this.middlewares();
@@ -26,7 +26,6 @@ class Server {
     async conectarDB() {
         try{
             await this.db.authenticate();
-            console.log("Connection with the DB succesfull");
               
         }catch(error){
             console.log("Fail with the DB");

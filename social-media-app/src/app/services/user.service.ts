@@ -14,13 +14,16 @@ const API_URL = environment.apiUrl+'/users';
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenStorageService: TokenStorageService) { }
   //Get the current user by a server
   //request with the JWT
 
   getCurrentUser(jwt: string):Observable<User> {
     const headers = { 'x-token': jwt }; // Set the Authorization header with the JWT
     return this.http.get<User>(API_URL+"/home", { headers });
+  }
+  getCurrentUserInfo():any {
+    return this.tokenStorageService.getUser();
   }
   /*
   validarToken(): Observable<boolean> {

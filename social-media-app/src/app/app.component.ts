@@ -12,16 +12,16 @@ export class AppComponent implements OnInit {
   showAdminBoard = false;
   showModeratorBoard = false;
   username: string;
+  currentUserId: number
   title: 'Social Media App'
 
   constructor(private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
     this.isLoggedIn = !!this.tokenStorageService.getToken();
-
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
-      console.log(user);
+      console.log(user," desde app");
       this.role = user.rol_id;
       /*
       this.showAdminBoard = this.roles.includes('ROLE_ADMIN');

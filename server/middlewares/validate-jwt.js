@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
 
 const validateJWT = async( req = request, res = response, next ) => {
-
+    console.log("Validamos JWT");
+    
     const token = req.header('x-token');
 
     if ( !token ) {

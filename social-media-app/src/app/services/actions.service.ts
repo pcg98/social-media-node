@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
 const API_URL = environment.apiUrl+'/actions';
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +35,11 @@ export class ActionsService {
   }*/
   postSendRequestFriend(data: any): Observable<any>{
     console.log("Sending a request ",data);
-    return this.http.post(API_URL+"/send-request", data)
+    console.log(API_URL+"/send-request");
+    console.log(data.targetId)
+    return this.http.post(API_URL+"/send-request",{
+      targetId: data.targetId,
+      sourceId: data.sourceId
+    }, httpOptions);
   }
 }

@@ -39,10 +39,9 @@ const login = async(req, res = response) => {
                 msg: 'User / Password are incorrect - password'
             });
         }
-        console.log(user);
+
         // Generate the JWT
         const token = await generateJWT( user.id, user.rol );
-        console.log(token);
         res.json({
             user,
             token

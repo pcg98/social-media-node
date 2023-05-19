@@ -48,7 +48,7 @@ const usersGetById = async(req = request, res = response) => {
 const userPostCreate = async(req, res = response) => {
     try{
         const { password } = req.body;
-    const user = new User(req.body);
+        const user = new User(req.body);
 
     // Encrypt the password
     const salt = bcryptjs.genSaltSync();

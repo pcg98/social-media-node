@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8000/api',
-  SECRETORPRIVATEKEY: "HolAeSTo_12412:fsfda"
+  apiUrl: 'http://localhost:8000/api'
 };
 
 /*

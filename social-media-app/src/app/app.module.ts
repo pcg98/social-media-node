@@ -15,7 +15,7 @@ import { authInterceptorProviders } from './helpers/auth.interceptor';
 import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/search-username-form.component';
-import { SearchUsersByNicknameComponent } from './search-users-by-nickname/search-users-by-nickname.component';
+import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import { SearchUsersByNicknameComponent } from './search-users-by-nickname/searc
     NavbarMenuComponent,
     RegisterFormComponent,
     SearchUsernameFormComponent,
-    SearchUsersByNicknameComponent
+    ShowUsersSearchComponent
   ],
   imports: [
     BrowserModule,

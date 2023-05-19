@@ -1,4 +1,4 @@
-<form #userForm="ngForm" (ngSubmit)="onSubmit()">
+<form #form="ngForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="name">Name:</label>
     <input type="text" class="form-control" id="name" [(ngModel)]="user.name" name="name" #name="ngModel" required>

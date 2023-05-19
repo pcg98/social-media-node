@@ -1,7 +1,7 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 
-const { User, UserBlocked, UserFollowing } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserFollower } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
@@ -59,13 +59,12 @@ const sendRequest = async(req, res = response) => {
 }*/
 
 const sendRequest = async(req, res = response) => {
-
-    const { id, idTo } = req.body;
+    const { sourceId, targetId } = req.body;
 
     try {
         const user = await User.findOne({ 
             where: {
-                id: idTo
+                id: targetId
             }
         });
         if ( !user ) {
@@ -80,19 +79,20 @@ const sendRequest = async(req, res = response) => {
                 msg: 'User disabled'
             });
         }
-        const following = UserFollowing.create({
-            sourceId: id,
-            targetid: idTo
+        const following = await UserFollowing.create({
+            sourceid: sourceId,
+            targetid: targetId
         });
-        following.save();
-        console.log(user);
-        // Generate the JWT
-        const token = await generateJWT( user.id, user.rol );
-        console.log(token);
-        res.json({
-            user,
-            token
-        })
+        const follower = await UserFollower.create({
+            sourceid: sourceId,
+            targetid: targetId
+        });
+        
+        console.log(follower)," creado";
+        res.status(200).json({
+            following,
+            follower
+        });
 
     } catch (error) {
         console.log(error)
