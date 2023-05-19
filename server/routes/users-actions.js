@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { sendRequest, blockUser } = require('../controllers/actionsController');
+const { sendRequest, blockUser, searchUsersByNickname } = require('../controllers/actionsController');
 const { validateJWT } = require('../middlewares');
 const { upload } = require('../middlewares/multer');
 
@@ -11,6 +11,7 @@ const router = Router();
 
 router.post('/send-request',[validateJWT], sendRequest );
 router.post('/block',[validateJWT], blockUser );
+router.post('/search-user',[validateJWT], searchUsersByNickname );
 /*userGetSearchByNickname
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),

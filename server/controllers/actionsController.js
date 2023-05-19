@@ -1,6 +1,6 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
-
+const sequelize = require('../database/config')
 const { User, UserBlocked, UserFollowing, UserFollower } = require('../models/index');
 
 
@@ -103,56 +103,59 @@ const sendRequest = async(req, res = response) => {
 
 }
 
-const searchUsersByUsername = async(req, res = response) => {
-    const { id } = req.body;
-    User.findAll({
-        where: {
-          id: id,
-        },
-        include: [
-          {
-            model: UserBlocked,
-            where: {
-              blockingUserId: id,
-            },
-            required: false,
-          },
-          {
-            model: User,
-            as: 'Following',
-            through: {
-              model: UserFollowing,
-              where: {
-                sourceId: id,
-                status: 'pending',
-              },
-            },
-            required: false,
-          },
-        ],
-      })
+const searchUsersByNickname = async(req, res = response) => {
+    const { nickname } = req.body;
+    const { id } = req.user;
+    console.log("Id "+id);
+    //Query to get the users with that nickname
+    //excepts the current users and the users who block
+    //the user
+    let users= await sequelize.query('SELECT * FROM user WHERE nickname LIKE :nickname and user_statusid = 1 '
+        +'and id != :currentId and id NOT IN'
+        +' (select sourceId from user_blocked where targetId = :currentId) ', {
+            replacements: { nickname: `%${nickname}%`,
+                currentId: id}, 
+            type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
+        })
         .then((users) => {
-          if (users.length === 0 || users[0].UserBlocks.length > 0) {
-            // User is either not found or blocked by another user
-            console.log('User is blocked or not found');
-            return [];
-          }
-      
-          const user = users[0];
-          const pendingRequests = user.Following.filter(following => !user.UserBlocks.some(blockedUser => blockedUser.targetid === following.id));
-      
-          // Set the pending field to true for the pending requests
-          const usersWithPendingField = pendingRequests.map(request => ({
-            ...request.toJSON(),
-            pending: true,
-          }));
-      
-          console.log('Users with pending requests:', usersWithPendingField);
-          return usersWithPendingField;
+            return users;
         })
         .catch((error) => {
-          console.error('Error occurred during query:', error);
+            console.error('Error occurred during query:', error);
         });
+    //Get all the user who actual user send a request and 
+    //haven't answer or is frined. !=2 2 is for rejected
+    let followings = await sequelize.query('SELECT id, relationship_statusid FROM user_following WHERE sourceid = :currentId and relationship_statusid != 2', {
+        replacements: { currentId: id}, 
+        type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
+    })
+    .then((pendings) => {
+        return pendings;
+    })
+    .catch((error) => {
+        console.error('Error occurred during query pendings:', error);
+    });
+    console.log(followings);
+    //Want all the user who have accepted or pending in our
+    //current user to control that in front end
+    //If there is more than one users...
+    
+    let result = users.map((user) => {
+    // Find the corresponding object in the second array based on the id
+    const foundFollowing = followings.find((following) => following.id === user.id);
+    if (foundFollowing) {
+        if (foundFollowing.relationship_statusid === 1) {
+            user.accepted = true;
+        }
+        if (foundFollowing.relationship_statusid === 3) {
+            user.pending = true;
+        }
+        console.log("Se conocen");
+    }
+        return user;
+    });
+    res.status(200).json(result);
+
 }
 const blockUser = async(req, res = response) => {
     const { id, idTo } = req.body;
@@ -176,6 +179,6 @@ const blockUser = async(req, res = response) => {
 
 module.exports = {
     sendRequest,
-    searchUsersByUsername,
+    searchUsersByNickname,
     blockUser
 }
