@@ -63,6 +63,21 @@ export class ShowUsersSearchComponent implements OnInit {
       // ...
     });
   }
+  cancelRequest(form: NgForm) {
+    const formValues = form.value;
+    console.log('Form Data Cancel:', formValues);
+    this.actionsService.postCancelRequestFriend(formValues)
+    .subscribe(response => {
+      // Handle the response from the server
+      console.log('Response:', response);
+      alert("Canceled request");
+      // ...
+    }, error => {
+      // Handle any error that occurs during the request
+      console.error('Error:', error);
+      // ...
+    });
+  }
   toggleMessageForm() {
     this.showMessageForm = !this.showMessageForm;
   }

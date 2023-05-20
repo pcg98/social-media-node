@@ -33,6 +33,7 @@ export class ActionsService {
     );
 
   }*/
+  //Method to send a request to somebody
   postSendRequestFriend(data: any): Observable<any>{
     console.log("Sending a request ",data);
     console.log(API_URL+"/send-request");
@@ -41,5 +42,22 @@ export class ActionsService {
       targetId: data.targetId,
       sourceId: data.sourceId
     }, httpOptions);
+  }
+  //Method to cancel a request friend
+  postCancelRequestFriend(data: any): Observable<any>{
+    console.log("Cancelling a request ",data);
+    console.log(API_URL+"/cancel-request");
+    console.log(data.targetId)
+    return this.http.post(API_URL+"/cancel-request",{
+      targetId: data.targetId,
+      sourceId: data.sourceId
+    }, httpOptions);
+  }
+  //Method to get an user profile
+  //to show the user to another
+  getUserProfileById(id: number) {
+    console.log('Showing user');
+    return this.http
+      .get(`${environment.apiUrl}/actions/profile/${id}`);
   }
 }

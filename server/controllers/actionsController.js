@@ -103,8 +103,55 @@ const sendRequest = async(req, res = response) => {
 
 }
 
+const cancelRequest = async(req, res = response) => {
+    const { sourceId, targetId } = req.body;
+
+    try {
+        //User with that id and enabled
+        const user = await User.findOne({ 
+            where: {
+                id: targetId,
+                user_statusid: 1
+            }
+        });
+        //If user not found return an error
+        if ( !user ) {
+            return res.status(400).json({
+                msg: 'User are incorrect'
+            });
+        }
+        //Catch in the following table
+        const following = await UserFollowing.findOne({
+            sourceid: sourceId,
+            targetid: targetId
+        });
+        //And in the follower table
+        const follower = await UserFollower.findOne({
+            sourceid: sourceId,
+            targetid: targetId
+        });
+        //if we find both
+        if(following && follower){
+            //delete
+            await follower.destroy();
+            await following.destroy();
+            console.log("Request cancelled");
+            return res.status(200).json("Request canceled");
+        }
+        
+        return res.status(403).json("Not user found for that operation");
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
+
 const searchUsersByNickname = async(req, res = response) => {
-    const { nickname } = req.body;
+    const { nickname } = req.params;
     const { id } = req.user;
     console.log("Id "+id);
     //Query to get the users with that nickname
@@ -151,10 +198,45 @@ const searchUsersByNickname = async(req, res = response) => {
             user.pending = true;
         }
         console.log("Se conocen");
+    }else{
+        user.unknow = true;
     }
         return user;
     });
-    res.status(200).json(result);
+    return res.status(200).json(result);
+
+}
+//We return the user with that id if they are friends
+//the profile is public and is not locked
+const showProfileById = async(req, res = response) => {
+    const { targetId } = req.params;
+    const { id } = req.user;
+    console.log("Entramos a enseñar perfil "+id);
+    //Query to get the users with that id.
+    //Want that is diferent to our user
+    //and is visible or friend
+    //and not is blocked 
+    let user= await sequelize.query('SELECT * FROM user WHERE id = :targetid and id != :currentId '+
+    'and user_visibility = 1 or id in '+
+    '(select id from user_following where targetid = :targetid and sourceid = :currentId and relationship_statusid = 1)'+
+    'and NOT EXISTS (select id from user_blocked where (targetid = :targetid and sourceid = :currentId) or (targetid = :currentId and sourceid = :targetid))', {
+            replacements: { targetid: targetId,
+                currentId: id}, 
+            type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
+        })
+        .then((user) => {
+            return user;
+        })
+        .catch((error) => {
+            console.error('Error occurred during query:', error);
+        });
+    //If we find an user...
+    if(user){
+        //Succesful request
+        return res.status(200).json(user);
+    }
+    //If not, code error
+    return res.status(403).json("You are not allowed to do that");
 
 }
 const blockUser = async(req, res = response) => {
@@ -180,5 +262,7 @@ const blockUser = async(req, res = response) => {
 module.exports = {
     sendRequest,
     searchUsersByNickname,
-    blockUser
+    blockUser,
+    showProfileById,
+    cancelRequest
 }

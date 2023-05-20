@@ -16,6 +16,7 @@ import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/search-username-form.component';
 import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
+import { ShowUserProfileComponent } from './show-user-profile/show-user-profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ShowUsersSearchComponent } from './show-users-search/show-users-search.
     NavbarMenuComponent,
     RegisterFormComponent,
     SearchUsernameFormComponent,
-    ShowUsersSearchComponent
+    ShowUsersSearchComponent,
+    ShowUserProfileComponent
   ],
   imports: [
     BrowserModule,

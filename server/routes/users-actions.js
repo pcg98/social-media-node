@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { sendRequest, blockUser, searchUsersByNickname } = require('../controllers/actionsController');
+const { cancelRequest, sendRequest, blockUser, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');
 const { validateJWT } = require('../middlewares');
 const { upload } = require('../middlewares/multer');
 
@@ -10,8 +10,11 @@ const router = Router();
 
 
 router.post('/send-request',[validateJWT], sendRequest );
+router.post('/cancel-request',[validateJWT], cancelRequest );
 router.post('/block',[validateJWT], blockUser );
-router.post('/search-user',[validateJWT], searchUsersByNickname );
+router.get('/search-user/:nickname',[validateJWT], searchUsersByNickname );
+router.get('/show-user/:targetid',[validateJWT], searchUsersByNickname );
+router.get('/profile/:targetid',[validateJWT], showProfileById );
 /*userGetSearchByNickname
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),

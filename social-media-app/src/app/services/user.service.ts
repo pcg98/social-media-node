@@ -57,7 +57,7 @@ export class UserService {
   getUsersByNickname(nickname: string) {
     console.log('Enter in the service');
     return this.http
-      .get(`${API_URL}/by-nickname/${nickname}`);
+      .get(`${environment.apiUrl}/actions/search-user/${nickname}`);
   }
 }
 
