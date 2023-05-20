@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { AuthGuard } from './guards/auth.guard.ts.service';
 import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
+import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-user-profile-by-id.component';
 
 
 /*
@@ -19,8 +20,10 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterFormComponent},
+  //AuthGuard check that we are login in the frontend
   { path: 'users/search/:nickname', component: ShowUsersSearchComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'users/profile/:targetid', component: ShowUserProfileByIdComponent, canActivate: [AuthGuard] },
   /*
   { path: 'user', component: BoardUserComponent },
   { path: 'mod', component: BoardModeratorComponent },

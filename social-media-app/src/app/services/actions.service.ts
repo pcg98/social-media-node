@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from '../models/user.model';
 
 
 const API_URL = environment.apiUrl+'/actions';
@@ -49,13 +50,22 @@ export class ActionsService {
     console.log(API_URL+"/cancel-request");
     console.log(data.targetId)
     return this.http.post(API_URL+"/cancel-request",{
-      targetId: data.targetId,
-      sourceId: data.sourceId
+      targetid: data.targetid,
+      sourceid: data.sourceid
+    }, httpOptions);
+  }
+  postSendMessage(data: any): Observable<any>{
+    console.log("Sending a message ",data);
+    console.log(API_URL+"/send-message");
+    console.log(data.targetId)
+    return this.http.post(API_URL+"/send-message",{
+      targetid: data.targetid,
+      body: data.body
     }, httpOptions);
   }
   //Method to get an user profile
   //to show the user to another
-  getUserProfileById(id: number) {
+  getUserProfileById(id: number): Observable<any> {
     console.log('Showing user');
     return this.http
       .get(`${environment.apiUrl}/actions/profile/${id}`);

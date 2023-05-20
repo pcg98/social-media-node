@@ -16,7 +16,8 @@ import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/search-username-form.component';
 import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
-import { ShowUserProfileComponent } from './show-user-profile/show-user-profile.component';
+import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-user-profile-by-id.component';
+import { MessagesFormComponent } from './messages-form/messages-form.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ShowUserProfileComponent } from './show-user-profile/show-user-profile.
     RegisterFormComponent,
     SearchUsernameFormComponent,
     ShowUsersSearchComponent,
-    ShowUserProfileComponent
+    ShowUserProfileByIdComponent,
+    MessagesFormComponent
   ],
   imports: [
     BrowserModule,

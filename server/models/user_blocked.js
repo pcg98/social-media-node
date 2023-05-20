@@ -1,12 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user_blocked', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true
-    },
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -24,12 +18,7 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'id'
       }
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
-    },
+    }
   }, {
     sequelize,
     tableName: 'user_blocked',
@@ -40,16 +29,8 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
           { name: "sourceid" },
           { name: "targetid" },
-        ]
-      },
-      {
-        name: "FKuser_block824124",
-        using: "BTREE",
-        fields: [
-          { name: "sourceid" },
         ]
       },
       {

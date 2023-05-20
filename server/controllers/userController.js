@@ -147,5 +147,5 @@ module.exports = {
     userProfilebyJWT,
     userPostCreate,
     uploadProfilePicture,
-    userGetSearchByNickname
+    userGetSearchByNickname,
 }

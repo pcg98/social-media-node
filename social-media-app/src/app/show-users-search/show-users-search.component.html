@@ -1,14 +1,16 @@
-<div class="container">
+<div class="container" [class.blurred]="showMessageForm">
   <h2>User Search</h2>
   <div class="row">
     <div class="col-md-4" *ngFor="let user of users">
       <div class="card mb-3">
-        <img class="card-img-top" [src]="'assets/images/'+user.profile_picture" alt="User Profile">
+        <a class="nav-link" [href]="'users/profile/'+user.id">Profile
+          <img class="card-img-top" [src]="'assets/images/'+user.profile_picture" alt="User Profile">
+        </a>
         <div class="card-body">
           <h5 class="card-title">{{ user.name }} {{ user.last_name }}</h5>
           <p class="card-text">@{{ user.nickname }}</p>
           <div class="d-flex justify-content-between">
-
+            <!--If user is unknow for the actual user can send request-->
             <form class="form-inline" #f="ngForm" *ngIf="user.unknow" name="form" novalidate (ngSubmit)="sendRequest(f)">
               <div class="input-group">
                 <input type="hidden" id="targetId" name="targetId" [(ngModel)]="user.id">
@@ -16,6 +18,7 @@
                 <button type="submit" class="btn btn-success">Send Request</button>
               </div>
             </form>
+            <!--If actual user is pending can cancel request-->
             <form class="form-inline" #f="ngForm" *ngIf="user.pending" name="form" novalidate (ngSubmit)="cancelRequest(f)">
               <div class="input-group">
                 <input type="hidden" id="targetId" name="targetId" [(ngModel)]="user.id">
@@ -23,19 +26,14 @@
                 <button type="submit" class="btn btn-danger">Cancel Request</button>
               </div>
             </form>
-            <button class="btn btn-info" (click)="viewProfile(user.id)>Cancel Request</button>
-
-
-
-            <button class="btn btn-primary" (click)="toggleMessageForm()">Send Message</button>
+            <button class="btn btn-primary" (click)="showMessageForm()">Send Message</button>
           </div>
         </div>
       </div>
-      <!-- Message Form -->
-    <form *ngIf="showMessageForm">
-      <!-- Form fields and submit button -->
-    </form>
+       <!-- Message Form -->
+    <div *ngIf="visibleMessageForm">
+      <app-messages-form [sourceid]="id" [targetid]="user.id" (close)="showMessageForm()"></app-messages-form>
+    </div>
     </div>
   </div>
 </div>
-

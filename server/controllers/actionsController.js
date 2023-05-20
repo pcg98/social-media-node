@@ -1,7 +1,7 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 const sequelize = require('../database/config')
-const { User, UserBlocked, UserFollowing, UserFollower } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserFollower, Messages } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
@@ -60,7 +60,7 @@ const sendRequest = async(req, res = response) => {
 
 const sendRequest = async(req, res = response) => {
     const { sourceId, targetId } = req.body;
-
+    
     try {
         const user = await User.findOne({ 
             where: {
@@ -73,12 +73,6 @@ const sendRequest = async(req, res = response) => {
             });
         }
 
-        // Check if it is enabled
-        if ( !user.status != 1 ) {
-            return res.status(400).json({
-                msg: 'User disabled'
-            });
-        }
         const following = await UserFollowing.create({
             sourceid: sourceId,
             targetid: targetId
@@ -153,6 +147,7 @@ const cancelRequest = async(req, res = response) => {
 const searchUsersByNickname = async(req, res = response) => {
     const { nickname } = req.params;
     const { id } = req.user;
+    
     console.log("Id "+id);
     //Query to get the users with that nickname
     //excepts the current users and the users who block
@@ -209,18 +204,23 @@ const searchUsersByNickname = async(req, res = response) => {
 //We return the user with that id if they are friends
 //the profile is public and is not locked
 const showProfileById = async(req, res = response) => {
-    const { targetId } = req.params;
+    const { targetid } = req.params;
     const { id } = req.user;
-    console.log("Entramos a enseñar perfil "+id);
+    //If he wants herself
+    if(id == targetid){
+        //If not, code error
+        return res.status(403).json("NOthing to show");
+    }
+    console.log("Entramos a enseñar perfil "+targetid);
     //Query to get the users with that id.
     //Want that is diferent to our user
     //and is visible or friend
-    //and not is blocked 
-    let user= await sequelize.query('SELECT * FROM user WHERE id = :targetid and id != :currentId '+
-    'and user_visibility = 1 or id in '+
-    '(select id from user_following where targetid = :targetid and sourceid = :currentId and relationship_statusid = 1)'+
-    'and NOT EXISTS (select id from user_blocked where (targetid = :targetid and sourceid = :currentId) or (targetid = :currentId and sourceid = :targetid))', {
-            replacements: { targetid: targetId,
+    let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
+        'and user_visibilityid = 1 or EXISTS '+//User is public or...
+        //Actual user following the wanted 
+        '(select * from user_following where targetid = :targetid and sourceid = :currentId and relationship_statusid = 1)',
+        { 
+            replacements: { targetid: targetid,
                 currentId: id}, 
             type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
         })
@@ -236,14 +236,21 @@ const showProfileById = async(req, res = response) => {
         return res.status(200).json(user);
     }
     //If not, code error
-    return res.status(403).json("You are not allowed to do that");
+    return res.status(403).json("NOthing to show");
 
 }
 const blockUser = async(req, res = response) => {
-    const { id, idTo } = req.body;
+    const { id } = req.user;
+    const { targetId } = req.body;
+    //If something is empty or the same..
+    if(!id || !targetId || id == targetId){
+        return res.status(404).json({
+            msg: 'Wrong paramethers'
+        });
+    }
     UserBlocked.create({
         sourceid: id,
-        targetid: idTo
+        targetid: targetId
     }) .then((userBlock) => {
         console.log('User block created:', userBlock);
         return res.status(200).json({
@@ -259,10 +266,40 @@ const blockUser = async(req, res = response) => {
 
 }
 
+const sendMessage = async(req, res = response) => {
+    console.log("Enter to the message")
+    //SourceId come from our JWT
+    const { id } = req.user;
+    const { targetid, body } = req.body;
+    console.log(id,targetid,body);
+    if(!targetid || !body){
+        return res.status(404).json({
+            msg: 'Parameter was wrong'
+        });
+    }
+    
+    Messages.create({
+        targetid: targetid,
+        senderid: id,
+        body: body
+    }) .then((message) => {
+        console.log('User Message send:', message);
+        return res.status(200).json();
+      })
+      .catch((error) => {
+        console.error('Error occurred during message operation:', error);
+        return res.status(500).json({
+            msg: 'Something was wrong'
+        });
+      });
+
+}
+
 module.exports = {
     sendRequest,
     searchUsersByNickname,
     blockUser,
     showProfileById,
-    cancelRequest
+    cancelRequest,
+    sendMessage
 }

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ShowUserProfileComponent } from './show-user-profile.component';
+import { MessagesFormComponent } from './messages-form.component';
 
-describe('ShowUserProfileComponent', () => {
-  let component: ShowUserProfileComponent;
-  let fixture: ComponentFixture<ShowUserProfileComponent>;
+describe('MessagesFormComponent', () => {
+  let component: MessagesFormComponent;
+  let fixture: ComponentFixture<MessagesFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShowUserProfileComponent ]
+      declarations: [ MessagesFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ShowUserProfileComponent);
+    fixture = TestBed.createComponent(MessagesFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

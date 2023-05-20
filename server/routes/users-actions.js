@@ -2,19 +2,20 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { cancelRequest, sendRequest, blockUser, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');
-const { validateJWT } = require('../middlewares');
+const { cancelRequest, sendRequest, blockUser, sendMessage, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');
+const { validateJWT, userIsNotBlocked, isNotUserHerself, targetidExists } = require('../middlewares');
 const { upload } = require('../middlewares/multer');
 
 const router = Router();
 
-
-router.post('/send-request',[validateJWT], sendRequest );
-router.post('/cancel-request',[validateJWT], cancelRequest );
-router.post('/block',[validateJWT], blockUser );
+//Check the JWT and if it's blocked
+router.post('/send-request',[validateJWT, targetidExists, userIsNotBlocked], sendRequest );
+router.post('/cancel-request',[validateJWT, targetidExists, userIsNotBlocked], cancelRequest );
+router.post('/send-message',[validateJWT, isNotUserHerself, targetidExists, userIsNotBlocked], sendMessage );
+router.post('/block',[validateJWT, isNotUserHerself, targetidExists ], blockUser );
 router.get('/search-user/:nickname',[validateJWT], searchUsersByNickname );
-router.get('/show-user/:targetid',[validateJWT], searchUsersByNickname );
-router.get('/profile/:targetid',[validateJWT], showProfileById );
+router.get('/profile/:targetid',[validateJWT, targetidExists, userIsNotBlocked], showProfileById );
+
 /*userGetSearchByNickname
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),

@@ -3,46 +3,44 @@ import { FormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
-import { UserService } from '../services/user.service';
+
 
 @Component({
-  selector: 'show-users-search',
-  templateUrl: './show-users-search.component.html',
-  styleUrls: ['./show-users-search.component.css']
+  selector: 'app-show-user-profile-by-id',
+  templateUrl: './show-user-profile-by-id.component.html',
+  styleUrls: ['./show-user-profile-by-id.component.css']
 })
-export class ShowUsersSearchComponent implements OnInit {
+export class ShowUserProfileByIdComponent implements OnInit {
   nickname : string;
-  users : User | User[];
-  visibleMessageForm = false;
-  id : number;
+  user : User;
+  showMessageForm = false;
+  targetid : number;
   form: FormBuilder;
 
 
-  constructor(private route: ActivatedRoute, private userService: UserService,
-    private actionsService: ActionsService) { }
+  constructor(private route: ActivatedRoute, private actionsService: ActionsService) { }
 
+  //On init...
   ngOnInit() {
+    //Subscribe to get the idProfile
     this.route.paramMap.subscribe(params => {
-      this.nickname = params.get('nickname');
-      console.log("Hola")
+      //Get the idProfile required
+      this.targetid = Number(params.get('targetid'));
+      console.log(this.targetid)
+      //Fetch data, get the search user
       this.fetchData();
-      this.id = this.userService.getCurrentUserInfo().id;
     });
   }
   fetchData() {
-    this.userService.getUsersByNickname(this.nickname).subscribe(
-      (response: User | User[]) => {
+    this.actionsService.getUserProfileById(this.targetid).subscribe(
+      (response: User) => {
         console.log(response)
-        if (Array.isArray(response)) {
-          this.users = response; // Assign the array of users
-        } else {
-          this.users = [response]; // Create an array with the single user
-        }
-        console.log(this.users);
+        this.user = response;
+        console.log(this.user);
         // Do something with the user(s) data
       },
       (error: any) => {
-        // Handle error
+        console.log("Something was wrong loading the user");
       }
     );
   }
@@ -78,9 +76,8 @@ export class ShowUsersSearchComponent implements OnInit {
       // ...
     });
   }
-  //Hide or display the form
-  showMessageForm() {
-    this.visibleMessageForm = !this.visibleMessageForm;
+  toggleMessageForm() {
+    this.showMessageForm = !this.showMessageForm;
   }
   sendMessage(userToId){
 
