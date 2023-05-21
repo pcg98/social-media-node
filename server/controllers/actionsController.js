@@ -1,5 +1,4 @@
 const { response } = require('express');
-const bcryptjs = require('bcryptjs')
 const sequelize = require('../database/config')
 const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Conversation } = require('../models/index');
 
