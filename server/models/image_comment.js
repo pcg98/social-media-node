@@ -11,11 +11,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: false
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
-    },
     userid: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -31,6 +26,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user_image',
         key: 'id'
       }
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
@@ -62,4 +62,3 @@ module.exports = function(sequelize, DataTypes) {
     ]
   });
 };
-

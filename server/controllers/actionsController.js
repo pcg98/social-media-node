@@ -1,92 +1,44 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 const sequelize = require('../database/config')
-const { User, UserBlocked, UserFollowing, UserFollower, Messages } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserFollower, Messages, UserRequest } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
 
-/*
-const sendRequest = async(req, res = response) => {
-
-    const { email, password } = req.body;
-    console.log("New request");
-
-    try {
-      
-        // Check email
-        const user = await User.findOne({ 
-            where: {
-                email: email
-            }
-        });
-        if ( !user ) {
-            return res.status(400).json({
-                msg: 'User / Password are incorrect - email'
-            });
-        }
-
-        // Check if it is enabled
-        if ( !user.status != 1 ) {
-            return res.status(400).json({
-                msg: 'User / Password are incorrect - state: false'
-            });
-        }
-
-        // Check pass
-        const validPassword = bcryptjs.compareSync( password, user.password );
-        if ( !validPassword ) {
-            return res.status(400).json({
-                msg: 'User / Password are incorrect - password'
-            });
-        }
-        console.log(user);
-        // Generate the JWT
-        const token = await generateJWT( user.id, user.rol );
-        console.log(token);
-        res.json({
-            user,
-            token
-        })
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            msg: 'Talk with the admin'
-        });
-    }   
-
-}*/
 
 const sendRequest = async(req, res = response) => {
-    const { sourceId, targetId } = req.body;
+    const sourceid = req.user.id;
+    const { targetid } = req.body;
     
     try {
-        const user = await User.findOne({ 
+        //Check on request doesn't exists
+        const request = await UserRequest.findOne({ 
             where: {
-                id: targetId
+                sourceid: sourceid,
+                targetid: targetid
             }
         });
-        if ( !user ) {
-            return res.status(400).json({
-                msg: 'User are incorrect'
-            });
+        if(request){
+            return res.status(400);
         }
 
-        const following = await UserFollowing.create({
-            sourceid: sourceId,
-            targetid: targetId
-        });
-        const follower = await UserFollower.create({
-            sourceid: sourceId,
-            targetid: targetId
+        //Creating the request
+        UserRequest.create({
+            sourceid: sourceid,
+            targetid: targetid
+        }).then((request) => {
+            console.log("Request creada");
+            console.log(request);
+            return res.status(200).json({
+                request,
+            });
+        }).catch((error) => {
+            console.log("Something was wrong");
+            console.log(error);
+            return res.status(500).json("Something was wrong creating the request");
         });
         
-        console.log(follower)," creado";
-        res.status(200).json({
-            following,
-            follower
-        });
 
     } catch (error) {
         console.log(error)
@@ -98,50 +50,28 @@ const sendRequest = async(req, res = response) => {
 }
 
 const cancelRequest = async(req, res = response) => {
-    const { sourceId, targetId } = req.body;
-
+    const sourceid = req.user.id;
+    const { targetid } = req.body;
     try {
-        //User with that id and enabled
-        const user = await User.findOne({ 
+        //Check on request doesn't exists
+        const request = await UserRequest.findOne({ 
             where: {
-                id: targetId,
-                user_statusid: 1
+                sourceid: sourceid,
+                targetid: targetid
             }
         });
-        //If user not found return an error
-        if ( !user ) {
-            return res.status(400).json({
-                msg: 'User are incorrect'
-            });
+        if(!request){
+            return res.status(400);
         }
-        //Catch in the following table
-        const following = await UserFollowing.findOne({
-            sourceid: sourceId,
-            targetid: targetId
+        //Delete request
+        await request.destroy();
+        return res.status(200).json({
+            request
         });
-        //And in the follower table
-        const follower = await UserFollower.findOne({
-            sourceid: sourceId,
-            targetid: targetId
-        });
-        //if we find both
-        if(following && follower){
-            //delete
-            await follower.destroy();
-            await following.destroy();
-            console.log("Request cancelled");
-            return res.status(200).json("Request canceled");
-        }
-        
-        return res.status(403).json("Not user found for that operation");
-
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            msg: 'Talk with the admin'
-        });
-    }   
-
+    }
+    catch(e){
+        return res.status(500).json({e});
+    }
 }
 
 const searchUsersByNickname = async(req, res = response) => {
@@ -153,10 +83,10 @@ const searchUsersByNickname = async(req, res = response) => {
     //excepts the current users and the users who block
     //the user
     let users= await sequelize.query('SELECT * FROM user WHERE nickname LIKE :nickname and user_statusid = 1 '
-        +'and id != :currentId and id NOT IN'
-        +' (select sourceId from user_blocked where targetId = :currentId) ', {
+        +'and id NOT IN (select sourceid from user_blocked where targetid = :currentid) '
+        +'and (user_visibilityid = 1 or id IN (select targetid from user_following where targetid = :currentid))', {
             replacements: { nickname: `%${nickname}%`,
-                currentId: id}, 
+                currentid: id}, 
             type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
         })
         .then((users) => {
@@ -165,39 +95,36 @@ const searchUsersByNickname = async(req, res = response) => {
         .catch((error) => {
             console.error('Error occurred during query:', error);
         });
-    //Get all the user who actual user send a request and 
-    //haven't answer or is frined. !=2 2 is for rejected
-    let followings = await sequelize.query('SELECT id, relationship_statusid FROM user_following WHERE sourceid = :currentId and relationship_statusid != 2', {
+    //Get all the user who is friend
+    let followings = await sequelize.query('SELECT targetid FROM user_following WHERE sourceid = :currentId', {
         replacements: { currentId: id}, 
         type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
     })
-    .then((pendings) => {
-        return pendings;
+    .then((friends) => {
+        return friends;
     })
     .catch((error) => {
         console.error('Error occurred during query pendings:', error);
     });
     console.log(followings);
+    //Get all the pending requests
+    let pendings = await sequelize.query('SELECT targetid FROM user_request WHERE sourceid = :currentId', {
+        replacements: { currentId: id}, 
+        type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
+    })
+    .then((pending) => {
+        return pending;
+    })
+    .catch((error) => {
+        console.error('Error occurred during query pendings:', error);
+    });
     //Want all the user who have accepted or pending in our
     //current user to control that in front end
     //If there is more than one users...
     
     let result = users.map((user) => {
-    // Find the corresponding object in the second array based on the id
-    const foundFollowing = followings.find((following) => following.id === user.id);
-    if (foundFollowing) {
-        if (foundFollowing.relationship_statusid === 1) {
-            user.accepted = true;
-        }
-        if (foundFollowing.relationship_statusid === 3) {
-            user.pending = true;
-        }
-        console.log("Se conocen");
-    }else{
-        user.unknow = true;
-    }
-        return user;
-    });
+        
+    })
     return res.status(200).json(result);
 
 }
@@ -218,7 +145,7 @@ const showProfileById = async(req, res = response) => {
     let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
         'and user_visibilityid = 1 or EXISTS '+//User is public or...
         //Actual user following the wanted 
-        '(select * from user_following where targetid = :targetid and sourceid = :currentId and relationship_statusid = 1)',
+        '(select * from user_following where targetid = :targetid and sourceid = :currentId)',
         { 
             replacements: { targetid: targetid,
                 currentId: id}, 
@@ -241,16 +168,12 @@ const showProfileById = async(req, res = response) => {
 }
 const blockUser = async(req, res = response) => {
     const { id } = req.user;
-    const { targetId } = req.body;
-    //If something is empty or the same..
-    if(!id || !targetId || id == targetId){
-        return res.status(404).json({
-            msg: 'Wrong paramethers'
-        });
-    }
+    const { targetid } = req.body;
+
+
     UserBlocked.create({
         sourceid: id,
-        targetid: targetId
+        targetid: targetid
     }) .then((userBlock) => {
         console.log('User block created:', userBlock);
         return res.status(200).json({

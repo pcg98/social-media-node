@@ -30,11 +30,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: false
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
-    },
     notification_objectid: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -42,6 +37,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'notification_object',
         key: 'id'
       }
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,

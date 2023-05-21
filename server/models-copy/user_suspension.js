@@ -1,42 +1,51 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_report', {
+  return sequelize.define('user_suspension', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    sourceid: {
+    userid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
       }
     },
-    targetid: {
-      type: DataTypes.BIGINT,
+    untilDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    user_reportid: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
       references: {
-        model: 'user',
+        model: 'user_report',
         key: 'id'
       }
     },
-    reason: {
-      type: DataTypes.STRING(100),
+    user_reportsourceid: {
+      type: DataTypes.BIGINT,
       allowNull: false,
-      comment: "ENum distintos motivos en ele backend, aqui va a ser varchar"
+      references: {
+        model: 'user_report',
+        key: 'sourceid'
+      }
     },
-    explication: {
-      type: DataTypes.STRING(255),
-      allowNull: true
+    user_reporttargetid: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      references: {
+        model: 'user_report',
+        key: 'targetid'
+      }
     }
   }, {
     sequelize,
-    tableName: 'user_report',
+    tableName: 'user_suspension',
     timestamps: false,
     indexes: [
       {
@@ -45,22 +54,22 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-          { name: "sourceid" },
-          { name: "targetid" },
         ]
       },
       {
-        name: "FKuser_repor362073",
+        name: "FKuser_suspe277745",
         using: "BTREE",
         fields: [
-          { name: "sourceid" },
+          { name: "userid" },
         ]
       },
       {
-        name: "FKuser_repor918908",
+        name: "FKuser_suspe528343",
         using: "BTREE",
         fields: [
-          { name: "targetid" },
+          { name: "user_reportid" },
+          { name: "user_reportsourceid" },
+          { name: "user_reporttargetid" },
         ]
       },
     ]

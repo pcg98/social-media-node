@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_report', {
+  return sequelize.define('user_notification', {
     id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true
     },
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    targetid: {
+    targetid2: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
@@ -25,18 +25,27 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    reason: {
-      type: DataTypes.STRING(100),
+    is_see: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
-      comment: "ENum distintos motivos en ele backend, aqui va a ser varchar"
+      defaultValue: false
     },
-    explication: {
-      type: DataTypes.STRING(255),
-      allowNull: true
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal('CURDATE()'),
+    },
+    notification_objectid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'notification_object',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
-    tableName: 'user_report',
+    tableName: 'user_notification',
     timestamps: false,
     indexes: [
       {
@@ -46,21 +55,28 @@ module.exports = function(sequelize, DataTypes) {
         fields: [
           { name: "id" },
           { name: "sourceid" },
-          { name: "targetid" },
+          { name: "targetid2" },
         ]
       },
       {
-        name: "FKuser_repor362073",
+        name: "FKuser_notif8514",
         using: "BTREE",
         fields: [
           { name: "sourceid" },
         ]
       },
       {
-        name: "FKuser_repor918908",
+        name: "FKuser_notif889263",
         using: "BTREE",
         fields: [
-          { name: "targetid" },
+          { name: "targetid2" },
+        ]
+      },
+      {
+        name: "FKuser_notif219994",
+        using: "BTREE",
+        fields: [
+          { name: "notification_objectid" },
         ]
       },
     ]

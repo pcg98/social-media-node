@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_blocked', {
-    sourceid: {
+  return sequelize.define('messages', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      primaryKey: true
+    },
+    senderid: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
@@ -19,14 +25,19 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    createdAt: {
+    body: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "Body del mensaje"
+    },
+    sendAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
+      defaultValue: Sequelize.Sequelize.fn('current_timestamp')
     }
   }, {
     sequelize,
-    tableName: 'user_blocked',
+    tableName: 'messages',
     timestamps: false,
     indexes: [
       {
@@ -34,12 +45,20 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "sourceid" },
+          { name: "id" },
+          { name: "senderid" },
           { name: "targetid" },
         ]
       },
       {
-        name: "FKuser_block866483",
+        name: "FKmessages474135",
+        using: "BTREE",
+        fields: [
+          { name: "senderid" },
+        ]
+      },
+      {
+        name: "FKmessages442854",
         using: "BTREE",
         fields: [
           { name: "targetid" },

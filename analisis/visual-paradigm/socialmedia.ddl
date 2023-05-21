@@ -7,18 +7,18 @@ CREATE TABLE `user` (
   bio               varchar(100), 
   sex               enum("men","woman","other") NOT NULL comment 'It should be woman, male or other', 
   createdAt         date DEFAULT CURDATE() NOT NULL, 
-  user_statusid     tinyint(3) DEFAULT 0 NOT NULL, 
+  user_statusid     tinyint(3) DEFAULT 1 NOT NULL, 
   user_rolid        tinyint(3) DEFAULT 1 NOT NULL, 
   user_visibilityid tinyint(3) NOT NULL, 
+  name              varchar(60) NOT NULL, 
+  last_name         varchar(100) NOT NULL, 
+  profile_picture   varchar(255) DEFAULT 'default.jpg' NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_follower (
-  id                    bigint(20) NOT NULL AUTO_INCREMENT, 
-  sourceid              bigint(20) NOT NULL, 
-  targetid              bigint(20) NOT NULL, 
-  createdAt             date DEFAULT CURDATE() NOT NULL, 
-  relationship_statusid tinyint(3) NOT NULL, 
-  PRIMARY KEY (id, 
-  sourceid, 
+  sourceid  bigint(20) NOT NULL, 
+  targetid  bigint(20) NOT NULL, 
+  createdAt date DEFAULT CURDATE() NOT NULL, 
+  PRIMARY KEY (sourceid, 
   targetid));
 CREATE TABLE messages (
   id       bigint(20) NOT NULL AUTO_INCREMENT, 
@@ -61,29 +61,20 @@ CREATE TABLE user_suspension (
   user_reporttargetid bigint(20) NOT NULL, 
   PRIMARY KEY (id));
 CREATE TABLE user_following (
-  id                    bigint(20) NOT NULL AUTO_INCREMENT, 
-  sourceid              bigint(20) NOT NULL, 
-  targetid              bigint(20) NOT NULL, 
-  createdAt             date DEFAULT CURDATE() NOT NULL, 
-  relationship_statusid tinyint(3) NOT NULL, 
-  PRIMARY KEY (id, 
-  sourceid, 
-  targetid));
-CREATE TABLE user_blocked (
-  id        int(11) NOT NULL AUTO_INCREMENT, 
   sourceid  bigint(20) NOT NULL, 
   targetid  bigint(20) NOT NULL, 
   createdAt date DEFAULT CURDATE() NOT NULL, 
-  PRIMARY KEY (id, 
-  sourceid, 
+  PRIMARY KEY (sourceid, 
+  targetid));
+CREATE TABLE user_blocked (
+  sourceid  bigint(20) NOT NULL, 
+  targetid  bigint(20) NOT NULL, 
+  createdAt date DEFAULT CURDATE() NOT NULL, 
+  PRIMARY KEY (sourceid, 
   targetid));
 CREATE TABLE user_status (
   id     tinyint(3) NOT NULL AUTO_INCREMENT, 
   status varchar(50) NOT NULL, 
-  PRIMARY KEY (id));
-CREATE TABLE relationship_status (
-  id     tinyint(3) NOT NULL AUTO_INCREMENT, 
-  status varchar(50) NOT NULL comment 'It should be accepted, pending or rejected', 
   PRIMARY KEY (id));
 CREATE TABLE user_notification (
   id                    bigint(20) NOT NULL AUTO_INCREMENT, 
@@ -108,6 +99,12 @@ CREATE TABLE notification_object (
   entity    varchar(255) NOT NULL, 
   entity_id int(11) NOT NULL, 
   PRIMARY KEY (id));
+CREATE TABLE user_request (
+  sourceid  bigint(20) NOT NULL, 
+  targetid  bigint(20) NOT NULL, 
+  createdAt int(10), 
+  PRIMARY KEY (sourceid, 
+  targetid));
 ALTER TABLE user_follower ADD CONSTRAINT FKuser_follo285732 FOREIGN KEY (sourceid) REFERENCES `user` (id);
 ALTER TABLE user_follower ADD CONSTRAINT FKuser_follo995249 FOREIGN KEY (targetid) REFERENCES `user` (id);
 ALTER TABLE messages ADD CONSTRAINT FKmessages474135 FOREIGN KEY (senderid) REFERENCES `user` (id);
@@ -123,11 +120,11 @@ ALTER TABLE user_following ADD CONSTRAINT FKuser_follo659541 FOREIGN KEY (target
 ALTER TABLE user_blocked ADD CONSTRAINT FKuser_block824124 FOREIGN KEY (sourceid) REFERENCES `user` (id);
 ALTER TABLE user_blocked ADD CONSTRAINT FKuser_block866483 FOREIGN KEY (targetid) REFERENCES `user` (id);
 ALTER TABLE `user` ADD CONSTRAINT FKuser317843 FOREIGN KEY (user_statusid) REFERENCES user_status (id);
-ALTER TABLE user_following ADD CONSTRAINT FKuser_follo348156 FOREIGN KEY (relationship_statusid) REFERENCES relationship_status (id);
-ALTER TABLE user_follower ADD CONSTRAINT FKuser_follo968642 FOREIGN KEY (relationship_statusid) REFERENCES relationship_status (id);
 ALTER TABLE user_notification ADD CONSTRAINT FKuser_notif8514 FOREIGN KEY (sourceid) REFERENCES `user` (id);
 ALTER TABLE user_notification ADD CONSTRAINT FKuser_notif889263 FOREIGN KEY (targetid2) REFERENCES `user` (id);
 ALTER TABLE `user` ADD CONSTRAINT FKuser204990 FOREIGN KEY (user_rolid) REFERENCES user_rol (id);
 ALTER TABLE user_suspension ADD CONSTRAINT FKuser_suspe528343 FOREIGN KEY (user_reportid, user_reportsourceid, user_reporttargetid) REFERENCES user_report (id, sourceid, targetid);
 ALTER TABLE `user` ADD CONSTRAINT FKuser71815 FOREIGN KEY (user_visibilityid) REFERENCES user_visibility (id);
 ALTER TABLE user_notification ADD CONSTRAINT FKuser_notif219994 FOREIGN KEY (notification_objectid) REFERENCES notification_object (id);
+ALTER TABLE user_request ADD CONSTRAINT FKuser_reque307907 FOREIGN KEY (sourceid) REFERENCES `user` (id);
+ALTER TABLE user_request ADD CONSTRAINT FKuser_reque973074 FOREIGN KEY (targetid) REFERENCES `user` (id);

@@ -1,32 +1,36 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_blocked', {
-    sourceid: {
+  return sequelize.define('user_image', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
+    userid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
       }
     },
-    targetid: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'user',
-        key: 'id'
-      }
+    title: {
+      type: DataTypes.STRING(80),
+      allowNull: true
+    },
+    url: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.literal('CURDATE()'),
-    }
+    },
   }, {
     sequelize,
-    tableName: 'user_blocked',
+    tableName: 'user_image',
     timestamps: false,
     indexes: [
       {
@@ -34,15 +38,14 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "sourceid" },
-          { name: "targetid" },
+          { name: "id" },
         ]
       },
       {
-        name: "FKuser_block866483",
+        name: "FKuser_image936503",
         using: "BTREE",
         fields: [
-          { name: "targetid" },
+          { name: "userid" },
         ]
       },
     ]

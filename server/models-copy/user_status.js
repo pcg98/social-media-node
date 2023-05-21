@@ -1,19 +1,19 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_rol', {
+  return sequelize.define('user_status', {
     id: {
       autoIncrement: true,
       type: DataTypes.TINYINT,
       allowNull: false,
       primaryKey: true
     },
-    rol: {
+    status: {
       type: DataTypes.STRING(50),
       allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'user_rol',
+    tableName: 'user_status',
     timestamps: false,
     indexes: [
       {

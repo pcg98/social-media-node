@@ -9,7 +9,6 @@ var _user_following = require("./user_following");
 var _user_image = require("./user_image");
 var _user_notification = require("./user_notification");
 var _user_report = require("./user_report");
-var _user_request = require("./user_request");
 var _user_rol = require("./user_rol");
 var _user_status = require("./user_status");
 var _user_suspension = require("./user_suspension");
@@ -26,7 +25,6 @@ function initModels(sequelize) {
   var user_image = _user_image(sequelize, DataTypes);
   var user_notification = _user_notification(sequelize, DataTypes);
   var user_report = _user_report(sequelize, DataTypes);
-  var user_request = _user_request(sequelize, DataTypes);
   var user_rol = _user_rol(sequelize, DataTypes);
   var user_status = _user_status(sequelize, DataTypes);
   var user_suspension = _user_suspension(sequelize, DataTypes);
@@ -44,8 +42,6 @@ function initModels(sequelize) {
   user.belongsToMany(user, { as: 'sourceid_user_user_notifications', through: user_notification, foreignKey: "targetid2", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_reports', through: user_report, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_reports', through: user_report, foreignKey: "targetid", otherKey: "sourceid" });
-  user.belongsToMany(user, { as: 'targetid_user_user_requests', through: user_request, foreignKey: "sourceid", otherKey: "targetid" });
-  user.belongsToMany(user, { as: 'sourceid_user_user_requests', through: user_request, foreignKey: "targetid", otherKey: "sourceid" });
   user_notification.belongsTo(notification_object, { as: "notification_object", foreignKey: "notification_objectid"});
   notification_object.hasMany(user_notification, { as: "user_notifications", foreignKey: "notification_objectid"});
   image_comment.belongsTo(user, { as: "user", foreignKey: "userid"});
@@ -76,10 +72,6 @@ function initModels(sequelize) {
   user.hasMany(user_report, { as: "user_reports", foreignKey: "sourceid"});
   user_report.belongsTo(user, { as: "target", foreignKey: "targetid"});
   user.hasMany(user_report, { as: "target_user_reports", foreignKey: "targetid"});
-  user_request.belongsTo(user, { as: "source", foreignKey: "sourceid"});
-  user.hasMany(user_request, { as: "user_requests", foreignKey: "sourceid"});
-  user_request.belongsTo(user, { as: "target", foreignKey: "targetid"});
-  user.hasMany(user_request, { as: "target_user_requests", foreignKey: "targetid"});
   user_suspension.belongsTo(user, { as: "user", foreignKey: "userid"});
   user.hasMany(user_suspension, { as: "user_suspensions", foreignKey: "userid"});
   image_comment.belongsTo(user_image, { as: "user_image", foreignKey: "user_imageid"});
@@ -105,7 +97,6 @@ function initModels(sequelize) {
     UserBlocked: user_blocked,
     UserFollower: user_follower,
     UserFollowing: user_following,
-    UserRequest: user_request,
     user_image,
     user_notification,
     user_report,

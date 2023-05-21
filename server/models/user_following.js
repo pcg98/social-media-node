@@ -1,12 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user_following', {
-    id: {
-      autoIncrement: true,
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      primaryKey: true
-    },
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -25,15 +19,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    relationship_statusid: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: 3,
-      references: {
-        model: 'relationship_status',
-        key: 'id'
-      }
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -49,16 +34,8 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id" },
           { name: "sourceid" },
           { name: "targetid" },
-        ]
-      },
-      {
-        name: "FKuser_follo31067",
-        using: "BTREE",
-        fields: [
-          { name: "sourceid" },
         ]
       },
       {
@@ -68,14 +45,6 @@ module.exports = function(sequelize, DataTypes) {
           { name: "targetid" },
         ]
       },
-      {
-        name: "FKuser_follo348156",
-        using: "BTREE",
-        fields: [
-          { name: "relationship_statusid" },
-        ]
-      },
     ]
   });
 };
-
