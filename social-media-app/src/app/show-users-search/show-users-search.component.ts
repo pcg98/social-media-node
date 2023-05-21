@@ -22,6 +22,9 @@ export class ShowUsersSearchComponent implements OnInit {
     private actionsService: ActionsService) { }
 
   ngOnInit() {
+    this.inicializeComponent();
+  }
+  inicializeComponent(){
     this.route.paramMap.subscribe(params => {
       this.nickname = params.get('nickname');
       console.log("Hola")
@@ -56,6 +59,7 @@ export class ShowUsersSearchComponent implements OnInit {
       // Handle the response from the server
       console.log('Response:', response);
       alert("Send request");
+      this.inicializeComponent();
       // ...
     }, error => {
       // Handle any error that occurs during the request
@@ -71,6 +75,7 @@ export class ShowUsersSearchComponent implements OnInit {
       // Handle the response from the server
       console.log('Response:', response);
       alert("Canceled request");
+      this.inicializeComponent();
       // ...
     }, error => {
       // Handle any error that occurs during the request

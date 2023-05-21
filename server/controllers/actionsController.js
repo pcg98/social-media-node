@@ -1,7 +1,7 @@
 const { response } = require('express');
 const bcryptjs = require('bcryptjs')
 const sequelize = require('../database/config')
-const { User, UserBlocked, UserFollowing, UserFollower, Messages, UserRequest } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Conversation } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
@@ -95,8 +95,8 @@ const searchUsersByNickname = async(req, res = response) => {
         .catch((error) => {
             console.error('Error occurred during query:', error);
         });
-    //Get all the user who is friend
-    let followings = await sequelize.query('SELECT targetid FROM user_following WHERE sourceid = :currentId', {
+    //Get all the user who is friend and put targetid as id
+    let followings = await sequelize.query('SELECT targetid as id FROM user_following WHERE sourceid = :currentId', {
         replacements: { currentId: id}, 
         type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
     })
@@ -107,23 +107,36 @@ const searchUsersByNickname = async(req, res = response) => {
         console.error('Error occurred during query pendings:', error);
     });
     console.log(followings);
-    //Get all the pending requests
-    let pendings = await sequelize.query('SELECT targetid FROM user_request WHERE sourceid = :currentId', {
+    //Get all the pending requests and put target id as id
+    let pendings = await sequelize.query('SELECT targetid as id FROM user_request WHERE sourceid = :currentId', {
         replacements: { currentId: id}, 
         type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
     })
-    .then((pending) => {
-        return pending;
+    .then((result) => {
+        return result;
     })
     .catch((error) => {
         console.error('Error occurred during query pendings:', error);
     });
+    console.log(pendings);
     //Want all the user who have accepted or pending in our
     //current user to control that in front end
     //If there is more than one users...
     
     let result = users.map((user) => {
-        
+        //Check if the user is following this
+        const following = followings.some((follower) => follower.id == user.id);
+        //Check if is pending
+        const pending = pendings.some((pending) => pending.id == user.id);
+        //Check if is friend, pending or unknow
+        if(following){
+            user.following = true;
+        }else if(pending){
+            user.pending = true;
+        }else{
+            user.unknow = true;
+        }
+        return user;
     })
     return res.status(200).json(result);
 
@@ -174,7 +187,7 @@ const blockUser = async(req, res = response) => {
     UserBlocked.create({
         sourceid: id,
         targetid: targetid
-    }) .then((userBlock) => {
+    }).then((userBlock) => {
         console.log('User block created:', userBlock);
         return res.status(200).json({
             msg: 'User blocked'
@@ -192,18 +205,20 @@ const blockUser = async(req, res = response) => {
 const sendMessage = async(req, res = response) => {
     console.log("Enter to the message")
     //SourceId come from our JWT
-    const { id } = req.user;
+    const sourceid = req.user.id;
     const { targetid, body } = req.body;
-    console.log(id,targetid,body);
+    const id_conversation = req.conversation.id;
+
     if(!targetid || !body){
         return res.status(404).json({
             msg: 'Parameter was wrong'
         });
     }
     
-    Messages.create({
+    Message.create({
+        conversationid: id_conversation,
         targetid: targetid,
-        senderid: id,
+        sourceid: sourceid,
         body: body
     }) .then((message) => {
         console.log('User Message send:', message);

@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 
 
 const { cancelRequest, sendRequest, blockUser, sendMessage, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');
-const { validateJWT, userIsNotBlocked, isNotUserHerself, targetidExists } = require('../middlewares');
+const { validateJWT, userIsNotBlocked, isNotUserHerself, haveConversation, targetidExists } = require('../middlewares');
 const { upload } = require('../middlewares/multer');
 
 const router = Router();
@@ -11,7 +11,7 @@ const router = Router();
 //Check the JWT and if it's blocked
 router.post('/send-request',[validateJWT, targetidExists, userIsNotBlocked], sendRequest );
 router.post('/cancel-request',[validateJWT, targetidExists, userIsNotBlocked], cancelRequest );
-router.post('/send-message',[validateJWT, isNotUserHerself, targetidExists, userIsNotBlocked], sendMessage );
+router.post('/send-message',[validateJWT, isNotUserHerself, targetidExists, userIsNotBlocked, haveConversation], sendMessage );
 router.post('/block',[validateJWT, isNotUserHerself, targetidExists ], blockUser );
 router.get('/search-user/:nickname',[validateJWT], searchUsersByNickname );
 router.get('/profile/:targetid',[validateJWT, targetidExists, userIsNotBlocked], showProfileById );

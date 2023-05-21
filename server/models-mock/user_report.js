@@ -1,6 +1,12 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_request', {
+  return sequelize.define('user_report', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -19,14 +25,18 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    createdAt: {
-      type: DataTypes.DATE,
+    reason: {
+      type: DataTypes.STRING(100),
       allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
+      comment: "ENum distintos motivos en ele backend, aqui va a ser varchar"
+    },
+    explication: {
+      type: DataTypes.STRING(255),
+      allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'user_request',
+    tableName: 'user_report',
     timestamps: false,
     indexes: [
       {
@@ -34,12 +44,20 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
+          { name: "id" },
           { name: "sourceid" },
           { name: "targetid" },
         ]
       },
       {
-        name: "FKuser_reque973074",
+        name: "FKuser_repor362073",
+        using: "BTREE",
+        fields: [
+          { name: "sourceid" },
+        ]
+      },
+      {
+        name: "FKuser_repor918908",
         using: "BTREE",
         fields: [
           { name: "targetid" },

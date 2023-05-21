@@ -1,6 +1,12 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('user_request', {
+  return sequelize.define('conversations', {
+    id: {
+      autoIncrement: true,
+      type: DataTypes.BIGINT,
+      allowNull: false,
+      primaryKey: true
+    },
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
@@ -18,31 +24,34 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'id'
       }
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
-    tableName: 'user_request',
-    timestamps: false,
+    tableName: 'conversations',
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
         unique: true,
         using: "BTREE",
         fields: [
+          { name: "id" },
           { name: "sourceid" },
           { name: "targetid" },
         ]
       },
       {
-        name: "FKuser_reque973074",
+        name: "FKconversati606185",
         using: "BTREE",
         fields: [
           { name: "targetid" },
+        ]
+      },
+      {
+        name: "FKconversati448415",
+        using: "BTREE",
+        fields: [
+          { name: "sourceid" },
         ]
       },
     ]

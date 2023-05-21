@@ -18,16 +18,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'user',
         key: 'id'
       }
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
     tableName: 'user_request',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

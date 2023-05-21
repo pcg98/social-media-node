@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       references: {
         model: 'conversations',
-        key: 'senderid'
+        key: 'sourceid'
       }
     },
     targetid: {
@@ -39,17 +39,20 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: 0
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
     tableName: 'messages',
-    timestamps: false,
+    timestamps: true,
     indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "id" },
+        ]
+      },
       {
         name: "FKmessages361119",
         using: "BTREE",
@@ -62,4 +65,3 @@ module.exports = function(sequelize, DataTypes) {
     ]
   });
 };
-

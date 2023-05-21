@@ -1,0 +1,19 @@
+<div class="container">
+  <h1>Conversations</h1>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="conversation-list">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let conversation of conversations" (click)="selectConversation(conversation)">
+            <div class="conversation-info">
+              <div class="conversation-participant">{{ conversation.participantName }}</div>
+              <div class="conversation-last-message">{{ conversation.lastMessage }}</div>
+              <div class="conversation-date">{{ conversation.lastMessageDate | date: 'MMM dd, yyyy' }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

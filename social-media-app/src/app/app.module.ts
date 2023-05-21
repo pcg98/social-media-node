@@ -18,6 +18,8 @@ import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/
 import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
 import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-user-profile-by-id.component';
 import { MessagesFormComponent } from './messages-form/messages-form.component';
+import { MessagesConversationsComponent } from './messages-conversations/messages-conversations.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,9 @@ import { MessagesFormComponent } from './messages-form/messages-form.component';
     SearchUsernameFormComponent,
     ShowUsersSearchComponent,
     ShowUserProfileByIdComponent,
-    MessagesFormComponent
+    MessagesFormComponent,
+    MessagesConversationsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

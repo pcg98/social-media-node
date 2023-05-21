@@ -38,10 +38,10 @@ export class ActionsService {
   postSendRequestFriend(data: any): Observable<any>{
     console.log("Sending a request ",data);
     console.log(API_URL+"/send-request");
-    console.log(data.targetId)
+    console.log(data.targetid)
     return this.http.post(API_URL+"/send-request",{
-      targetId: data.targetId,
-      sourceId: data.sourceId
+      targetid: data.targetid,
+      sourceid: data.sourceid
     }, httpOptions);
   }
   //Method to cancel a request friend
