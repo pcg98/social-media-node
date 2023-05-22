@@ -9,7 +9,7 @@ import { MessagesService } from '../services/messages-service.service';
 })
 export class MessagesConversationsComponent implements OnInit {
   conversations : any;
-
+  
   constructor(private messagesService: MessagesService) { }
 
   ngOnInit() {

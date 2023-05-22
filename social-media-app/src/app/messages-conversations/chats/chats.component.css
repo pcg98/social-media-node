@@ -1,0 +1,43 @@
+.message-list .list-group-item {
+  margin-bottom: 10px;
+}
+
+.message-sender {
+  background-color: #eaf6ff;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.message-recipient {
+  background-color: #f0f0f0;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.message-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.message-header p {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.message-sender {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.message-date {
+  color: #777777;
+  font-size: 12px;
+}
+
+.message-body {
+  word-wrap: break-word;
+}
+

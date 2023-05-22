@@ -2,12 +2,11 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('messages', {
     id: {
-      autoIncrement: true,
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true
     },
-    conversationid: {
+    conversationsid: {
       type: DataTypes.BIGINT,
       allowNull: false,
       references: {
@@ -15,35 +14,22 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    sourceid: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      references: {
-        model: 'conversations',
-        key: 'senderid'
-      }
-    },
-    targetid: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-      references: {
-        model: 'conversations',
-        key: 'targetid'
-      }
-    },
     body: {
       type: DataTypes.STRING(180),
       allowNull: false
     },
-    is_see: {
-      type: DataTypes.BOOLEAN,
+    userid: {
+      type: DataTypes.BIGINT,
       allowNull: false,
-      defaultValue: 0
+      references: {
+        model: 'user',
+        key: 'id'
+      }
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),
+      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
@@ -51,15 +37,29 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "FKmessages361119",
+        name: "PRIMARY",
+        unique: true,
         using: "BTREE",
         fields: [
-          { name: "conversationid" },
-          { name: "sourceid" },
-          { name: "targetid" },
+          { name: "id" },
+        ]
+      },
+      {
+        name: "FKmessages558958",
+        using: "BTREE",
+        fields: [
+          { name: "conversationsid" },
+        ]
+      },
+      {
+        name: "FKmessages522550",
+        using: "BTREE",
+        fields: [
+          { name: "userid" },
         ]
       },
     ]
   });
 };
+
 

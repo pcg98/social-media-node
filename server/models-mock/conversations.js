@@ -10,7 +10,6 @@ module.exports = function(sequelize, DataTypes) {
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
@@ -19,16 +18,20 @@ module.exports = function(sequelize, DataTypes) {
     targetid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
       }
+    },
+    body: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      comment: "Body del mensaje"
     }
   }, {
     sequelize,
     tableName: 'conversations',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "PRIMARY",
@@ -36,8 +39,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
+        ]
+      },
+      {
+        name: "FKconversati84423",
+        using: "BTREE",
+        fields: [
           { name: "sourceid" },
-          { name: "targetid" },
         ]
       },
       {
@@ -45,13 +53,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "targetid" },
-        ]
-      },
-      {
-        name: "FKconversati448415",
-        using: "BTREE",
-        fields: [
-          { name: "sourceid" },
         ]
       },
     ]

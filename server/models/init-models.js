@@ -50,10 +50,6 @@ function initModels(sequelize) {
   user.belongsToMany(user, { as: 'sourceid_user_user_requests', through: user_request, foreignKey: "targetid", otherKey: "sourceid" });
   messages.belongsTo(conversations, { as: "conversation", foreignKey: "conversationid"});
   conversations.hasMany(messages, { as: "messages", foreignKey: "conversationid"});
-  messages.belongsTo(conversations, { as: "source", foreignKey: "sourceid"});
-  conversations.hasMany(messages, { as: "source_messages", foreignKey: "sourceid"});
-  messages.belongsTo(conversations, { as: "target", foreignKey: "targetid"});
-  conversations.hasMany(messages, { as: "target_messages", foreignKey: "targetid"});
   user_notification.belongsTo(notification_object, { as: "notification_object", foreignKey: "notification_objectid"});
   notification_object.hasMany(user_notification, { as: "user_notifications", foreignKey: "notification_objectid"});
   conversations.belongsTo(user, { as: "source", foreignKey: "sourceid"});
@@ -62,6 +58,8 @@ function initModels(sequelize) {
   user.hasMany(conversations, { as: "target_conversations", foreignKey: "targetid"});
   image_comment.belongsTo(user, { as: "user", foreignKey: "userid"});
   user.hasMany(image_comment, { as: "image_comments", foreignKey: "userid"});
+  messages.belongsTo(user, { as: "user", foreignKey: "userid"});
+  user.hasMany(messages, { as: "messages", foreignKey: "userid"});
   user_blocked.belongsTo(user, { as: "source", foreignKey: "sourceid"});
   user.hasMany(user_blocked, { as: "user_blockeds", foreignKey: "sourceid"});
   user_blocked.belongsTo(user, { as: "target", foreignKey: "targetid"});

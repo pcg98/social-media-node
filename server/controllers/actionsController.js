@@ -204,8 +204,8 @@ const blockUser = async(req, res = response) => {
 const sendMessage = async(req, res = response) => {
     console.log("Enter to the message")
     //SourceId come from our JWT
-    const sourceid = req.user.id;
-    const { targetid, body } = req.body;
+    const userid = req.user.id;
+    const { body } = req.body;
     const id_conversation = req.conversation.id;
 
     if(!targetid || !body){
@@ -216,8 +216,7 @@ const sendMessage = async(req, res = response) => {
     
     Message.create({
         conversationid: id_conversation,
-        targetid: targetid,
-        sourceid: sourceid,
+        userid: userid,
         body: body
     }) .then((message) => {
         console.log('User Message send:', message);

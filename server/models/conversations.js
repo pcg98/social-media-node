@@ -10,7 +10,6 @@ module.exports = function(sequelize, DataTypes) {
     sourceid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
@@ -19,7 +18,6 @@ module.exports = function(sequelize, DataTypes) {
     targetid: {
       type: DataTypes.BIGINT,
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'user',
         key: 'id'
@@ -27,12 +25,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     last_message: {
       type: DataTypes.STRING(50),
-      allowNull: true
+      allowNull: true,
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal('CURRENT_TIMESTAMP()'),
+      defaultValue: Sequelize.literal('CURDATE()'),
     }
   }, {
     sequelize,
@@ -45,8 +43,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "id" },
-          { name: "senderid" },
-          { name: "targetid" },
+        ]
+      },
+      {
+        name: "FKconversati84423",
+        using: "BTREE",
+        fields: [
+          { name: "sourceid" },
         ]
       },
       {
@@ -56,14 +59,6 @@ module.exports = function(sequelize, DataTypes) {
           { name: "targetid" },
         ]
       },
-      {
-        name: "FKconversati448415",
-        using: "BTREE",
-        fields: [
-          { name: "senderid" },
-        ]
-      },
     ]
   });
 };
-

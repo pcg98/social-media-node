@@ -9,6 +9,7 @@ const { User, Conversation } = require('../models/index');
 const haveConversation = async( req = request, res = response, next ) => {
     const sourceid = req.user.id;
     const targetid = req.params.targetid || req.body.targetid;
+    console.log("Esa");
     //Try to find the conversation or create a new one
     Conversation.findOrCreate({
         where: {
