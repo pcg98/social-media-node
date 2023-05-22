@@ -25,6 +25,10 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
+    last_message: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,

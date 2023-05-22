@@ -56,20 +56,18 @@ const getConversations = async(req, res = response) => {
         //If null conversations
         if(!conversations) return res.status(200).json(null) 
         //Otherwise get the other user info
-        const updatedConversations = await Promise.all(conversations.map(async (conversation) => {
+        conversations = await Promise.all(conversations.map(async (conversation) => {
             const otherUserId = (conversation.targetid !== id) ? conversation.targetid : conversation.sourceid;
+            //DataValues is a sequelize property
             conversation.dataValues.otherUser = await User.findByPk(otherUserId);
             return conversation;
-          }));
-          
-          console.log(updatedConversations);          
+        }));
+                
 
           
           
 
-        return res.status(200).json({
-            updatedConversations
-        })
+        return res.status(200).json(conversations)
         
 
     } catch (error) {
@@ -80,7 +78,62 @@ const getConversations = async(req, res = response) => {
     }   
 
 }
+//Get messages from a conversation
+const getMessages = async(req, res = response) => {
+    const conversationId = req.params.conversationid || req.body.conversationid;
+    const userid = req.user.id;
+    try {
+        /*Get the conversation info
+        const conversation = await Conversation.findOne({
+            where: {
+              id: conversationId
+            },
+            include: [
+              {
+                model: Message,
+                as: 'messages'
+              },
+              {
+                model: User,
+                as: 'target'
+              },
+              {
+                model: User,
+                as: 'source',
+              }
+            ]
+          });     */
+          const conversations = await Conversation.findOne({
+            where: {
+                id: conversationId
+            },
+            include: [
+              {
+                model: Message,
+                as: 'messages',
+                include: [
+                  { model: User, as: 'message_source', attributes: ['name', 'profile_picture'] }
+                  //{ model: User, as: 'message_target' }
+                ]
+              }
+            ]
+          });
+        /*
+        const otherUserId = (conversation.dataValues.sourceid != userid) ? conversation.sourceid : conversation.targetid 
+        conversation.dataValues.otherUserId = otherUserId;*/
+        //Return the two users and the info
+        return res.status(200).json(conversations);
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
 
 module.exports = {
-    getConversations
+    getConversations,
+    getMessages
 }

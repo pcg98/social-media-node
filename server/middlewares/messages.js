@@ -29,7 +29,32 @@ const haveConversation = async( req = request, res = response, next ) => {
     });
         
 }
+const isUserConversation = async( req = request, res = response, next ) => {
+    const userid = req.user.id;
+    const conversationid = req.params.conversationid || req.body.conversationid;
+    //Try to find the conversation
+    Conversation.findOne({
+        where: {
+            id: conversationid
+        }
+    }).then((conversation) => {
+        console.log(conversation); // Existing conversation or newly created conversation
+        //If the user don't have this conversation
+        if(conversation.sourceid != userid && conversation.targetid != userid)
+         return res.status(403).json("You musn't see this"); //One line if
+        //If not
+        //Put in the request the id
+        req.conversation = conversation;
+        //Next
+        next();
+    }).catch((error) => {
+        console.error('Error finding or creating conversation:', error);
+        return res.status(500).json("Something happens", error);
+    });
+        
+}
 
 module.exports = {
-    haveConversation
+    haveConversation,
+    isUserConversation
 }

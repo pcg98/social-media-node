@@ -104,6 +104,10 @@ function initModels(sequelize) {
   user_status.hasMany(user, { as: "users", foreignKey: "user_statusid"});
   user.belongsTo(user_visibility, { as: "user_visibility", foreignKey: "user_visibilityid"});
   user_visibility.hasMany(user, { as: "users", foreignKey: "user_visibilityid"});
+  messages.belongsTo(user, { foreignKey: 'sourceid', as: 'message_source' });
+  messages.belongsTo(user, { foreignKey: 'targetid', as: 'message_target' });
+  user.hasMany(messages, {foreignKey: 'sourceid', as: 'sentMessages' });
+  user.hasMany(messages, {foreignKey: 'targetid', as: 'receivedMessages' });
 
   return {
     ImageComment:image_comment,

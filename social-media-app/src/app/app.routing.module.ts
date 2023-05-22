@@ -9,6 +9,8 @@ import { RegisterFormComponent } from './register-form/register-form.component';
 import { AuthGuard } from './guards/auth.guard.ts.service';
 import { ShowUsersSearchComponent } from './show-users-search/show-users-search.component';
 import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-user-profile-by-id.component';
+import { MessagesConversationsComponent } from './messages-conversations/messages-conversations.component';
+import { ChatsComponent } from './messages-conversations/chats/chats.component';
 
 
 /*
@@ -20,14 +22,14 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterFormComponent},
-  //AuthGuard check that we are login in the frontend
+  //AuthGuard check that we are login with the backend
   { path: 'users/search/:nickname', component: ShowUsersSearchComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'users/profile/:targetid', component: ShowUserProfileByIdComponent, canActivate: [AuthGuard] },
-  /*
-  { path: 'user', component: BoardUserComponent },
-  { path: 'mod', component: BoardModeratorComponent },
-  { path: 'admin', component: BoardAdminComponent },*/
+
+  { path: 'chats', component: MessagesConversationsComponent, canActivate: [AuthGuard] },
+  { path: 'chats/:id', component: ChatsComponent, canActivate: [AuthGuard] },
+
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
