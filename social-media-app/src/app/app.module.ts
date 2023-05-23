@@ -20,6 +20,7 @@ import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-use
 import { MessagesFormComponent } from './messages-form/messages-form.component';
 import { MessagesConversationsComponent } from './messages-conversations/messages-conversations.component';
 import { ChatsComponent } from './messages-conversations/chats/chats.component';
+import { ShowRequestsComponent } from './show-requests/show-requests.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ChatsComponent } from './messages-conversations/chats/chats.component';
     ShowUserProfileByIdComponent,
     MessagesFormComponent,
     MessagesConversationsComponent,
-    ChatsComponent
+    ChatsComponent,
+    ShowRequestsComponent
   ],
   imports: [
     BrowserModule,

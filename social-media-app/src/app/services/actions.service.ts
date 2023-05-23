@@ -70,4 +70,10 @@ export class ActionsService {
     return this.http
       .get(`${environment.apiUrl}/actions/profile/${id}`);
   }
+  //Request when the user is the target
+  getUserTargetRequests(): Observable<any> {
+    console.log('Showing requests');
+    return this.http
+      .get(`${environment.apiUrl}/followers/requests`);
+  }
 }

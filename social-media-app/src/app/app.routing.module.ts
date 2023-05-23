@@ -11,6 +11,7 @@ import { ShowUsersSearchComponent } from './show-users-search/show-users-search.
 import { ShowUserProfileByIdComponent } from './show-user-profile-by-id/show-user-profile-by-id.component';
 import { MessagesConversationsComponent } from './messages-conversations/messages-conversations.component';
 import { ChatsComponent } from './messages-conversations/chats/chats.component';
+import { ShowRequestsComponent } from './show-requests/show-requests.component';
 
 
 /*
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'chats', component: MessagesConversationsComponent, canActivate: [AuthGuard] },
   { path: 'chats/:id', component: ChatsComponent, canActivate: [AuthGuard] },
 
+  { path: 'followers/requests', component: ShowRequestsComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];
 
