@@ -35,5 +35,14 @@ export class MessagesService {
     return this.http
       .get(`${API_URL}/${conversationid}`);
   }
+  postSendMessage(data: any): Observable<any>{
+    console.log("Sending a message ",data);
+    console.log(API_URL+"/send-message");
+    console.log(data.targetId)
+    return this.http.post(`${environment.apiUrl}/actions/send-message`,{
+      targetid: data.targetid,
+      body: data.body
+    }, httpOptions);
+  }
 
 }

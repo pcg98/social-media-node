@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('messages', {
     id: {
+      autoIncrement: true,
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true
@@ -29,7 +30,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'messages',
-    timestamps: false,
+    hasTrigger: true,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

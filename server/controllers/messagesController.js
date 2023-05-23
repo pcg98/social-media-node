@@ -83,26 +83,6 @@ const getMessages = async(req, res = response) => {
     const conversationId = req.params.conversationid || req.body.conversationid;
     const userid = req.user.id;
     try {
-        /*Get the conversation info
-        const conversation = await Conversation.findOne({
-            where: {
-              id: conversationId
-            },
-            include: [
-              {
-                model: Message,
-                as: 'messages'
-              },
-              {
-                model: User,
-                as: 'target'
-              },
-              {
-                model: User,
-                as: 'source',
-              }
-            ]
-          });     */
           const conversations = await Conversation.findOne({
             where: {
                 id: conversationId
@@ -112,7 +92,7 @@ const getMessages = async(req, res = response) => {
                 model: Message,
                 as: 'messages',
                 include: [
-                  { model: User, as: 'message_source', attributes: ['name', 'profile_picture'] }
+                  { model: User, as: 'user', attributes: ['id', 'name', 'profile_picture'] }
                   //{ model: User, as: 'message_target' }
                 ]
               }

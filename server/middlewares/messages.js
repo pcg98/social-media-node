@@ -9,15 +9,17 @@ const { User, Conversation } = require('../models/index');
 const haveConversation = async( req = request, res = response, next ) => {
     const sourceid = req.user.id;
     const targetid = req.params.targetid || req.body.targetid;
-    console.log("Esa");
+    console.log("Esam", sourceid, targetid);
     //Try to find the conversation or create a new one
+    
     Conversation.findOrCreate({
         where: {
             [Op.or]: [
                 { targetid: targetid, sourceid: sourceid },
                 { targetid: sourceid, sourceid: targetid }
             ]
-        }
+        },
+        defaults: { targetid: targetid, sourceid: sourceid } //Values to insert
     }).then(([conversation, created]) => {
         console.log(conversation); // Existing conversation or newly created conversation
         console.log(created); // true if a new conversation was created, false if an existing conversation was found
@@ -28,6 +30,23 @@ const haveConversation = async( req = request, res = response, next ) => {
         console.error('Error finding or creating conversation:', error);
         return res.status(500).json("Something happens", error);
     });
+    /*
+    const conversationExist = await Conversation.findOne({
+        where: {
+            [Op.or]: [
+                { targetid: targetid, sourceid: sourceid },
+                { targetid: sourceid, sourceid: targetid }
+            ]
+        }
+    });
+    if (conversationExist){
+        console.log("Existe");
+        req.conversation = conversationExist;
+        //Nos salimos
+        next();
+    }
+    //La creamos
+    */
         
 }
 const isUserConversation = async( req = request, res = response, next ) => {

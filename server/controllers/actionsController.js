@@ -207,15 +207,15 @@ const sendMessage = async(req, res = response) => {
     const userid = req.user.id;
     const { body } = req.body;
     const id_conversation = req.conversation.id;
-
-    if(!targetid || !body){
+    console.log("Id conversaionc", id_conversation);
+    if(!userid || !body){
         return res.status(404).json({
             msg: 'Parameter was wrong'
         });
     }
     
     Message.create({
-        conversationid: id_conversation,
+        conversationsid: id_conversation,
         userid: userid,
         body: body
     }) .then((message) => {

@@ -23,15 +23,14 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    body: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      comment: "Body del mensaje"
+    last_message: {
+      type: DataTypes.STRING(50),
+      allowNull: true
     }
   }, {
     sequelize,
     tableName: 'conversations',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",
