@@ -33,16 +33,16 @@ export class ShowRequestsComponent implements OnInit {
       }
     );
   }
-  //Send the form to the server
-  //through the service
-  sendRequest(form: NgForm) {
+
+  acceptRequest(form: NgForm){
     const formValues = form.value;
+    formValues.answer = "accepted"
     console.log('Form Data:', formValues);
-    this.actionsService.postSendRequestFriend(form.value)
+    this.actionsService.postResponseRequestFriend(formValues)
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Send request");
+      alert("Answering request");
       this.fetchData();
       // ...
     }, error => {
@@ -51,14 +51,33 @@ export class ShowRequestsComponent implements OnInit {
       // ...
     });
   }
-  cancelRequest(form: NgForm) {
+
+  rejectRequest(form: NgForm){
     const formValues = form.value;
-    console.log('Form Data Cancel:', formValues);
-    this.actionsService.postCancelRequestFriend(formValues)
+    formValues.answer = "rejected"
+    console.log('Form Data:', formValues);
+    this.actionsService.postResponseRequestFriend(formValues)
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Canceled request");
+      alert("Answering request");
+      this.fetchData();
+      // ...
+    }, error => {
+      // Handle any error that occurs during the request
+      console.error('Error:', error);
+      // ...
+    });
+  }
+
+  sendAnswer(form: NgForm){
+    const formValues = form.value;
+    console.log('Form Data:', formValues);
+    this.actionsService.postResponseRequestFriend(formValues)
+    .subscribe(response => {
+      // Handle the response from the server
+      console.log('Response:', response);
+      alert("Answering request");
       this.fetchData();
       // ...
     }, error => {

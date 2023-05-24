@@ -54,6 +54,15 @@ export class ActionsService {
       sourceid: data.sourceid
     }, httpOptions);
   }
+  postResponseRequestFriend(data: any): Observable<any>{
+    console.log("Answering a request ",data);
+    console.log(`${environment.apiUrl}/followers/requests/answer`);
+    console.log(data.sourceid)
+    return this.http.post(`${environment.apiUrl}/followers/requests/answer`,{
+      answer: data.answer,
+      sourceid: data.sourceid
+    }, httpOptions);
+  }
   postSendMessage(data: any): Observable<any>{
     console.log("Sending a message ",data);
     console.log(API_URL+"/send-message");

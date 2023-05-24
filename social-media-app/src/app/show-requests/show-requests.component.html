@@ -11,18 +11,16 @@
           <p class="card-text">@{{ request.source.nickname }}</p>
           <div class="d-flex justify-content-between">
             <!--If user is unknow for the actual user can send request-->
-            <form class="form-inline" #f="ngForm" name="form" novalidate (ngSubmit)="sendRequest(f)">
+            <form class="form-inline" #f="ngForm" name="form" novalidate (ngSubmit)="acceptRequest(f)">
               <div class="input-group">
-                <input type="hidden" id="targetid" name="targetid" [(ngModel)]="request.id">
-                <input type="hidden" id="sourceId" name="sourceId" [(ngModel)]="id">
+                <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="request.sourceid">
                 <button type="submit" class="btn btn-success">Accept Request</button>
               </div>
             </form>
             <!--If actual user is pending can cancel request-->
-            <form class="form-inline" #f="ngForm" name="form" novalidate (ngSubmit)="cancelRequest(f)">
+            <form class="form-inline" #f="ngForm" name="form" novalidate (ngSubmit)="rejectRequest(f)">
               <div class="input-group">
-                <input type="hidden" id="targetid" name="targetid" [(ngModel)]="request.id">
-                <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
+                <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="request.sourceid">
                 <button type="submit" class="btn btn-danger">Reject Request</button>
               </div>
             </form>
