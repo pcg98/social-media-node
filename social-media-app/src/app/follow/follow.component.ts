@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
 
 
@@ -10,7 +11,7 @@ import { ActionsService } from '../services/actions.service';
 })
 export class FollowComponent implements OnInit {
   type: string;
-  follow: any;
+  follows: User[];
 
 
   constructor(private route: ActivatedRoute,
@@ -35,8 +36,7 @@ export class FollowComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response following:', response);
-      this.follow = response;
-      alert("Followings load");
+      this.follows = response.map((res) => res.target );
       // ...
     }, error => {
       // Handle any error that occurs during the request
@@ -49,8 +49,7 @@ export class FollowComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response followers:', response);
-      this.follow = response;
-      alert("Followers load");
+      this.follows = response.map((res) => res.source );
       // ...
     }, error => {
       // Handle any error that occurs during the request

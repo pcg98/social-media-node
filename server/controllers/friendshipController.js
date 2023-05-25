@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { User, UserRequest, UserFollower } = require('../models/index');
+const { User, UserRequest, UserFollower, UserFollowing } = require('../models/index');
 
 const getRequests = async(req, res = response) => {
     //Catch the current user thanks to the JWT
@@ -72,6 +72,33 @@ const responseRequest = async(req, res = response) => {
     }   
 
 }
+const getFollowing = async(req, res = response) => {
+    //Catch the current user thanks to the JWT
+    const sourceid = req.user.id;
+
+    try {
+        //Catch the request and user source
+        const following = await UserFollowing.findAll({
+            where: {
+                sourceid: sourceid //Target current user
+            },
+            include: {
+                model: User,
+                as: 'target',
+                attributes: ['name','last_name','nickname','profile_picture']
+            }
+        });   
+        return res.status(200).json(following);
+        
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
 const getFollowers = async(req, res = response) => {
     //Catch the current user thanks to the JWT
     const targetid = req.user.id;
@@ -103,5 +130,6 @@ const getFollowers = async(req, res = response) => {
 module.exports = {
     getRequests,
     responseRequest,
-    getFollowers
+    getFollowers,
+    getFollowing
 }

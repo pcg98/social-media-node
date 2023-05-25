@@ -17,13 +17,17 @@
       <div class="col-md-4">
         <div class="statistic">
           <div class="statistic-value">{{ numberFollowers }}</div>
-          <div class="statistic-label">Followers</div>
+          <a routerLink="/followers">
+            <div class="statistic-label">Followers</div>
+          </a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="statistic">
           <div class="statistic-value">{{ numberFollowing }}</div>
-          <div class="statistic-label">Following</div>
+          <a routerLink="/following">
+            <div class="statistic-label">Following</div>
+          </a>
         </div>
       </div>
     </div>

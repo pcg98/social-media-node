@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs';
 export class ProfileComponent implements OnInit {
   user: any;
   successMessage: string;
-  following: number;
-  followers: number;
+  numberFollowing: number;
+  numberFollowers: number;
   numberPictures: number;
 
   private subscription: Subscription;
@@ -28,9 +28,9 @@ export class ProfileComponent implements OnInit {
     this.userService.getCurrentUser(jwt)
     .subscribe((data: any) => {
       this.user = data.currentUser;
-      this.following = data.numberFollowing;
-      this.followers = data.numberFollowers;
-      this.numberPictures = data.numberPicture;
+      this.numberFollowing = data.numberFollowing;
+      this.numberFollowers = data.numberFollowers;
+      this.numberPictures = data.numberPicture || 0;
     });
   }
 
