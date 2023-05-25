@@ -111,7 +111,7 @@ function initModels(sequelize) {
     UserFollower: user_follower,
     UserFollowing: user_following,
     UserRequest: user_request,
-    user_image,
+    UserImage: user_image,
     user_notification,
     user_report,
     user_rol,

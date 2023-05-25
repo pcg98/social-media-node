@@ -5,6 +5,29 @@
 <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
 <ng-container *ngIf="user">
   <div class="container">
+
+    <!-- Statistics row -->
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <div class="statistic">
+          <div class="statistic-value">{{ numberPictures }}</div>
+          <div class="statistic-label">Pictures</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="statistic">
+          <div class="statistic-value">{{ numberFollowers }}</div>
+          <div class="statistic-label">Followers</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="statistic">
+          <div class="statistic-value">{{ numberFollowing }}</div>
+          <div class="statistic-label">Following</div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-md-4">
         <div class="card mb-3">

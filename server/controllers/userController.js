@@ -1,9 +1,10 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/index');
+const { User, UserFollower, UserFollowing, UserImage } = require('../models/index');
 const { Op } = require('sequelize');
 const fs = require('fs');
+const user_image = require('../models/user_image');
 
 const usersGet = async(req = request, res = response) => {
     //From 0 to 5
@@ -23,10 +24,16 @@ const usersGet = async(req = request, res = response) => {
     });
 }
 const userProfilebyJWT = async(req = request, res = response) => {
-   const currentUser = req.user; 
-        res.json(
-            currentUser
-        );
+    const currentUser = req.user; 
+    const currentId = currentUser.id;
+    const numberFollowers = await UserFollower.count({ where: { targetid: currentId } });
+    console.log(numberFollowers);
+    const numberFollowing = await UserFollowing.count({ where: { sourceid: currentId } });
+    const numberPictures = await UserImage.count({ where: {userid: currentId}});       
+    res.json({currentUser,
+                numberFollowers,
+                numberFollowing,
+                numberPictures});
 }
 
 const usersGetById = async(req = request, res = response) => {

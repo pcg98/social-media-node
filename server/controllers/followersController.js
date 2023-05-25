@@ -72,8 +72,36 @@ const responseRequest = async(req, res = response) => {
     }   
 
 }
+const getFollowers = async(req, res = response) => {
+    //Catch the current user thanks to the JWT
+    const targetid = req.user.id;
+
+    try {
+        //Catch the request and user source
+        const followers = await UserFollower.findAll({
+            where: {
+                targetid: targetid //Target current user
+            },
+            include: {
+                model: User,
+                as: 'source',
+                attributes: ['name','last_name','nickname','profile_picture']
+            }
+        });   
+        return res.status(200).json(followers);
+        
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
 
 module.exports = {
     getRequests,
-    responseRequest
+    responseRequest,
+    getFollowers
 }

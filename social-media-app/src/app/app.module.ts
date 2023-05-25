@@ -22,6 +22,8 @@ import { MessagesConversationsComponent } from './messages-conversations/message
 import { ChatsComponent } from './messages-conversations/chats/chats.component';
 import { ShowRequestsComponent } from './show-requests/show-requests.component';
 
+import { FollowComponent } from './follow/follow.component';
+
 
 @NgModule({
   declarations: [
@@ -29,10 +31,6 @@ import { ShowRequestsComponent } from './show-requests/show-requests.component';
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    /*
-    BoardAdminComponent,
-    BoardUserComponent,
-    BoardModeratorComponent,*/
     ProfileComponent,
     NavbarMenuComponent,
     RegisterFormComponent,
@@ -42,7 +40,8 @@ import { ShowRequestsComponent } from './show-requests/show-requests.component';
     MessagesFormComponent,
     MessagesConversationsComponent,
     ChatsComponent,
-    ShowRequestsComponent
+    ShowRequestsComponent,
+    FollowComponent
   ],
   imports: [
     BrowserModule,

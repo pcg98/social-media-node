@@ -85,4 +85,16 @@ export class ActionsService {
     return this.http
       .get(`${environment.apiUrl}/followers/requests`);
   }
+  //Get the followers from the actual user
+  getUserFollowers(): Observable<any> {
+    console.log('Showing followers');
+    return this.http
+      .get(`${environment.apiUrl}/followers`);
+  }
+  //Get the followings from the actual user
+  getUserFollowing(): Observable<any> {
+    console.log('Showing following');
+    return this.http
+      .get(`${environment.apiUrl}/following`);
+  }
 }

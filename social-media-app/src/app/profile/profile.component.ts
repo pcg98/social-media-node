@@ -10,8 +10,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: User;
+  user: any;
   successMessage: string;
+  following: number;
+  followers: number;
+  numberPictures: number;
+
   private subscription: Subscription;
 
   constructor(private userService: UserService, private MessagesService: MessagesService) { }
@@ -22,9 +26,11 @@ export class ProfileComponent implements OnInit {
     });
     const jwt = sessionStorage.getItem('auth-token');
     this.userService.getCurrentUser(jwt)
-    .subscribe((data: User) => {
-      this.user = new User(data.name, data.last_name, data.email, data.nickname,
-        data.telephone, data.password, data.sex, data.user_statusid, data.user_rolid, data.profile_picture, data.id);
+    .subscribe((data: any) => {
+      this.user = data.currentUser;
+      this.following = data.numberFollowing;
+      this.followers = data.numberFollowers;
+      this.numberPictures = data.numberPicture;
     });
   }
 
