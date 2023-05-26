@@ -126,6 +126,75 @@ const getFollowers = async(req, res = response) => {
     }   
 
 }
+const deleteFollower = async(req, res = response) => {
+    //Catch the current user thanks to the JWT
+    const targetid = req.user.id;
+    //Catch the user to delete
+    const sourceid = req.body.sourceid;
+
+    try {
+        //Catch the request and user source
+        const follower = await UserFollower.findOne({
+            where: {
+                targetid: targetid, //Target current user
+                sourceid: sourceid
+            }
+        }); 
+        if(!follower)  return res.status(404)
+        const following = await UserFollowing.findOne({
+            where: {
+                targetid: targetid, //Target current user
+                sourceid: sourceid
+            }
+        }); 
+        following.destroy();
+        follower.destroy();
+
+        return res.status(200).json({"ok":true});
+        
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
+const deleteFollowing = async(req, res = response) => {
+    //Catch the current user thanks to the JWT
+    const targetid = req.body.targetid;
+    const sourceid = req.user.id;
+
+    try {
+        //Catch the request and user source
+        const follower = await UserFollower.findOne({
+            where: {
+                targetid: targetid, //Target current user
+                sourceid: sourceid
+            }
+        }); 
+        if(!follower)  return res.status(404)
+        const following = await UserFollowing.findOne({
+            where: {
+                targetid: targetid, //Target current user
+                sourceid: sourceid
+            }
+        }); 
+        following.destroy();
+        follower.destroy();
+
+        return res.status(200).json({"ok":true});
+        
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            msg: 'Talk with the admin'
+        });
+    }   
+
+}
 
 module.exports = {
     getRequests,
