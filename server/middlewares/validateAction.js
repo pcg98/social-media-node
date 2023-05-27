@@ -33,13 +33,18 @@ const notFollowingOrPendingTarget = async( req = request, res = response, next )
   const sourceid = req.user.id;
   //Check if is following
   const isFollowing = await UserFollowing.findOne({
-    targetid, sourceid
+    where:{
+      targetid,
+      sourceid
+    }
   });
   if(isFollowing) return res.status(403).json("Forbidden");
-
   //Check if is pending
   const isPending = await UserRequest.findOne({
-    targetid, sourceid
+    where:{
+      targetid,
+      sourceid
+    }
   });
   if(isPending) return res.status(403).json("Forbidden");
   next();  

@@ -97,4 +97,20 @@ export class ActionsService {
     return this.http
       .get(`${environment.apiUrl}/following`);
   }
+  deleteUserFollowing(targetid: number): Observable<any> {
+    console.log('Deleting following');
+    return this.http
+      .delete(`${environment.apiUrl}/following/delete/${targetid}`);
+  }
+  deleteUserFollow(id: number, type: string): Observable<any> {
+    console.log('Deleting follower');
+    if(type == "following"){
+      return this.http
+      .delete(`${environment.apiUrl}/following/delete/${id}`);
+    }
+    if(type == "followers"){
+      return this.http
+      .delete(`${environment.apiUrl}/followers/delete/${id}`);
+    }
+  }
 }

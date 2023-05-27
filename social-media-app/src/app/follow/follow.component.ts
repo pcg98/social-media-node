@@ -57,5 +57,21 @@ export class FollowComponent implements OnInit {
       // ...
     });
   }
+  deleteUser(id:number){
+    //Pass the id of the other user and it's a follower or following
+    this.actionsService.deleteUserFollow(id, this.type)
+    .subscribe(response => {
+      // Handle the response from the server
+      console.log('Response:', response);
+      alert("Deleting user");
+      if(this.type == "followers") this.inicializateFollowers();
+      if(this.type == "following") this.inicializateFollowing();
+      // ...
+    }, error => {
+      // Handle any error that occurs during the request
+      console.error('Error:', error);
+      // ...
+    });
+  }
 
 }

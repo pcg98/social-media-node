@@ -85,7 +85,7 @@ const getFollowing = async(req, res = response) => {
             include: {
                 model: User,
                 as: 'target',
-                attributes: ['name','last_name','nickname','profile_picture']
+                attributes: ['id','name','last_name','nickname','profile_picture']
             }
         });   
         return res.status(200).json(following);
@@ -112,7 +112,7 @@ const getFollowers = async(req, res = response) => {
             include: {
                 model: User,
                 as: 'source',
-                attributes: ['name','last_name','nickname','profile_picture']
+                attributes: ['id','name','last_name','nickname','profile_picture']
             }
         });   
         return res.status(200).json(followers);
@@ -130,7 +130,7 @@ const deleteFollower = async(req, res = response) => {
     //Catch the current user thanks to the JWT
     const targetid = req.user.id;
     //Catch the user to delete
-    const sourceid = req.body.sourceid;
+    const sourceid = req.params.sourceid;
 
     try {
         //Catch the request and user source
@@ -163,7 +163,7 @@ const deleteFollower = async(req, res = response) => {
 }
 const deleteFollowing = async(req, res = response) => {
     //Catch the current user thanks to the JWT
-    const targetid = req.body.targetid;
+    const targetid = req.params.targetid;
     const sourceid = req.user.id;
 
     try {
@@ -196,9 +196,12 @@ const deleteFollowing = async(req, res = response) => {
 
 }
 
+
 module.exports = {
     getRequests,
     responseRequest,
     getFollowers,
-    getFollowing
+    getFollowing,
+    deleteFollowing,
+    deleteFollower
 }

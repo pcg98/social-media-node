@@ -14,12 +14,12 @@ router.get('/followers/requests',[validateJWT], getRequests );
 router.post('/followers/requests/answer',[validateJWT, isNotUserHerself], responseRequest );
 router.delete('/followers',[validateJWT], getFollowers);
 router.get('/followers',[validateJWT], getFollowers);
-router.delete('/followers/unfollow',[validateJWT], deleteFollower);
+router.delete('/followers/delete/:sourceid',[validateJWT], deleteFollower);
 
 // FOLLOWING PART
 //router.get('/following/request',[validateJWT], sendRequests );
 router.get('/following',[validateJWT], getFollowing);
-router.delete('/following/delete',[validateJWT], deleteFollowing);
+router.delete('/following/delete/:targetid',[validateJWT], deleteFollowing);
 
 
 module.exports = router;
