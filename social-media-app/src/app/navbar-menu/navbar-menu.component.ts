@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActionsService } from '../services/actions.service';
 import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
@@ -8,10 +9,29 @@ import { TokenStorageService } from '../services/token-storage.service';
 })
 export class NavbarMenuComponent implements OnInit {
 
-  constructor(private tokenStorageService: TokenStorageService) { }
+  hasNewNotifications: boolean = false;
+
+  constructor(private tokenStorageService: TokenStorageService,
+    private actionsService: ActionsService) { }
 
   ngOnInit() {
+    this.hasNotifications();
   }
+
+  hasNotifications(){
+    this.actionsService.hasNotifications().subscribe(
+      (result: boolean) => {
+        console.log(result)
+        this.hasNewNotifications = result;
+        console.log(result);
+      },
+      (error: any) => {
+        console.error('An error occurred:', error);
+        // Handle the error if the API request encounters an error
+      }
+    );
+  }
+
   logout() {
     this.tokenStorageService.signOut();
     window.location.reload();

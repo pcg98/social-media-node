@@ -1,0 +1,24 @@
+<div class="container">
+  <h2>Notifications</h2>
+  <div class="notification-list">
+    <div class="notification" *ngFor="let notification of notifications">
+      <div class="notification-header">
+        <h4 class="notification-title">{{ notification.source.nickname }}</h4>
+        <span class="notification-date">{{ notification.createdAt | date: 'mediumDate' }}</span>
+      </div>
+      <!--If is a message -->
+      <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 1">
+        @{{ notification.source.nickname }} <a [href]="'/chats/' + notification.entity_id"> {{ notification.notification_object.description }} </a>
+      </p>
+      <!--If is a request -->
+      <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 2">
+        @{{ notification.source.nickname }} <a href="followers/requests'"> {{ notification.notification_object.description }} </a>
+      </p>
+      <!--If is a comment in a photo -->
+      <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 3">
+        @{{ notification.source.nickname }} <a [href]="'/images/' + notification.entity_id"> {{ notification.notification_object.description }} </a>
+      </p>
+    </div>
+  </div>
+</div>
+

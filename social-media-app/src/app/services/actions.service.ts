@@ -113,4 +113,15 @@ export class ActionsService {
       .delete(`${environment.apiUrl}/followers/delete/${id}`);
     }
   }
+
+  getNotifications() {
+    console.log('Enter in the service to get the notification');
+    return this.http.get(`${API_URL}/notifications`);
+  }
+
+  hasNotifications(): Observable<boolean> {
+    return this.http
+      .get<boolean>(`${API_URL}/notifications/has`);
+  }
+
 }

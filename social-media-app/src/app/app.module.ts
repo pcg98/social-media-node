@@ -23,6 +23,7 @@ import { ChatsComponent } from './messages-conversations/chats/chats.component';
 import { ShowRequestsComponent } from './show-requests/show-requests.component';
 
 import { FollowComponent } from './follow/follow.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { FollowComponent } from './follow/follow.component';
     MessagesConversationsComponent,
     ChatsComponent,
     ShowRequestsComponent,
-    FollowComponent
+    FollowComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

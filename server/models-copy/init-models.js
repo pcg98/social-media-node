@@ -38,7 +38,7 @@ function initModels(sequelize) {
   user.belongsToMany(user, { as: 'sourceid_user_user_followers', through: user_follower, foreignKey: "targetid", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_followings', through: user_following, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_followings', through: user_following, foreignKey: "targetid", otherKey: "sourceid" });
-  user.belongsToMany(user, { as: 'targetid2_users', through: user_notification, foreignKey: "sourceid", otherKey: "targetid2" });
+  user.belongsToMany(user, { as: 'targetid_users', through: user_notification, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_notifications', through: user_notification, foreignKey: "targetid2", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_reports', through: user_report, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_reports', through: user_report, foreignKey: "targetid", otherKey: "sourceid" });

@@ -3,6 +3,7 @@ const { check } = require('express-validator');
 
 
 const { cancelRequest, sendRequest, blockUser, sendMessage, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');
+const { getNotifications, hasNotifications } = require('../controllers/notificationController');
 const { validateJWT, userIsNotBlocked, isNotUserHerself, haveConversation, targetidExists, notFollowingOrPendingTarget } = require('../middlewares');
 const { upload } = require('../middlewares/multer');
 
@@ -15,6 +16,10 @@ router.post('/send-message',[validateJWT, isNotUserHerself, targetidExists, user
 router.post('/block',[validateJWT, isNotUserHerself, targetidExists ], blockUser );
 router.get('/search-user/:nickname',[validateJWT], searchUsersByNickname );
 router.get('/profile/:targetid',[validateJWT, targetidExists, userIsNotBlocked], showProfileById );
+
+router.get('/notifications',[validateJWT], getNotifications );
+router.get('/notifications/has',[validateJWT], hasNotifications );
+
 
 /*userGetSearchByNickname
 router.put('/:id',[
