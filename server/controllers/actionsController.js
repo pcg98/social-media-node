@@ -4,6 +4,7 @@ const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Co
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
+const { newNotification } = require('../helpers/userFunctions');
 
 
 const sendRequest = async(req, res = response) => {
@@ -26,9 +27,11 @@ const sendRequest = async(req, res = response) => {
         UserRequest.create({
             sourceid: sourceid,
             targetid: targetid
-        }).then((request) => {
+        }).then(async (request) => {
             console.log("Request creada");
             console.log(request);
+            //Create notification
+            await newNotification(sourceid, targetid, 2);
             return res.status(200).json({
                 request,
             });
@@ -220,7 +223,10 @@ const sendMessage = async(req, res = response) => {
         body: body
     }) .then((message) => {
         console.log('User Message send:', message);
-        return res.status(200).json();
+        targetid = (req.conversation.sourceid != userid)? req.conversation.sourceid : req.conversation.targetid
+        //Create notification
+        newNotification(message.userid, targetid, 1, message.conversationsid);
+        return res.status(200).json({ok: true});
       })
       .catch((error) => {
         console.error('Error occurred during message operation:', error);

@@ -12,7 +12,7 @@
       </p>
       <!--If is a request -->
       <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 2">
-        @{{ notification.source.nickname }} <a href="followers/requests'"> {{ notification.notification_object.description }} </a>
+        @{{ notification.source.nickname }} <a href="/followers/requests"> {{ notification.notification_object.description }} </a>
       </p>
       <!--If is a comment in a photo -->
       <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 3">

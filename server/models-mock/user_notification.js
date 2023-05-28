@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    targetid2: {
+    targetid: {
       type: DataTypes.BIGINT,
       allowNull: false,
       primaryKey: true,
@@ -37,6 +37,10 @@ module.exports = function(sequelize, DataTypes) {
         model: 'notification_object',
         key: 'id'
       }
+    },
+    entity_id: {
+      type: DataTypes.BIGINT,
+      allowNull: true
     }
   }, {
     sequelize,
@@ -50,7 +54,7 @@ module.exports = function(sequelize, DataTypes) {
         fields: [
           { name: "id" },
           { name: "sourceid" },
-          { name: "targetid2" },
+          { name: "targetid" },
         ]
       },
       {
@@ -64,7 +68,7 @@ module.exports = function(sequelize, DataTypes) {
         name: "FKuser_notif889263",
         using: "BTREE",
         fields: [
-          { name: "targetid2" },
+          { name: "targetid" },
         ]
       },
       {

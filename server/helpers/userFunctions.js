@@ -1,4 +1,5 @@
-const { User, UserBlocked, UserFollowing } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserNotification } = require('../models/index');
+
 //We check if the user is blocked by other
 const userIsNotBlocked = (sourceId, targetId) => {
     //Return true or false
@@ -9,7 +10,13 @@ const userIsNotBlocked = (sourceId, targetId) => {
         }
     });
 }
+const newNotification = async (sourceid, targetid, notification_objectid, entity_id = null) => {
+
+    await UserNotification.create({sourceid, targetid, notification_objectid, entity_id});
+
+}
 
 module.exports = {
-    userIsNotBlocked
+    userIsNotBlocked,
+    newNotification
 }

@@ -40,8 +40,8 @@ function initModels(sequelize) {
   user.belongsToMany(user, { as: 'sourceid_user_user_followers', through: user_follower, foreignKey: "targetid", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_followings', through: user_following, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_followings', through: user_following, foreignKey: "targetid", otherKey: "sourceid" });
-  user.belongsToMany(user, { as: 'targetid2_users', through: user_notification, foreignKey: "sourceid", otherKey: "targetid2" });
-  user.belongsToMany(user, { as: 'sourceid_user_user_notifications', through: user_notification, foreignKey: "targetid2", otherKey: "sourceid" });
+  user.belongsToMany(user, { as: 'targetid_user_user_notifications', through: user_notification, foreignKey: "sourceid", otherKey: "targetid" });
+  user.belongsToMany(user, { as: 'sourceid_user_user_notifications', through: user_notification, foreignKey: "targetid", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_reports', through: user_report, foreignKey: "sourceid", otherKey: "targetid" });
   user.belongsToMany(user, { as: 'sourceid_user_user_reports', through: user_report, foreignKey: "targetid", otherKey: "sourceid" });
   user.belongsToMany(user, { as: 'targetid_user_user_requests', through: user_request, foreignKey: "sourceid", otherKey: "targetid" });
@@ -74,8 +74,8 @@ function initModels(sequelize) {
   user.hasMany(user_image, { as: "user_images", foreignKey: "userid"});
   user_notification.belongsTo(user, { as: "source", foreignKey: "sourceid"});
   user.hasMany(user_notification, { as: "user_notifications", foreignKey: "sourceid"});
-  user_notification.belongsTo(user, { as: "targetid2_user", foreignKey: "targetid2"});
-  user.hasMany(user_notification, { as: "targetid2_user_notifications", foreignKey: "targetid2"});
+  user_notification.belongsTo(user, { as: "target", foreignKey: "targetid"});
+  user.hasMany(user_notification, { as: "target_user_notifications", foreignKey: "targetid"});
   user_report.belongsTo(user, { as: "source", foreignKey: "sourceid"});
   user.hasMany(user_report, { as: "user_reports", foreignKey: "sourceid"});
   user_report.belongsTo(user, { as: "target", foreignKey: "targetid"});
