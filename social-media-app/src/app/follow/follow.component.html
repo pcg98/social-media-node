@@ -4,16 +4,18 @@
     <div class="col-12" *ngIf="follows">
       <div class="card mb-3" *ngFor="let follow of follows">
         <div class="card-body">
-          <div class="row">
+          <div class="row align-items-center">
             <div class="col-2">
               <img class="img-fluid rounded-circle" [src]="'assets/images/' +follow.profile_picture" alt="Profile Picture">
             </div>
-            <div class="col-10">
+            <div class="col-8">
               <h5 class="card-title">{{ follow.name }}</h5>
               <p class="card-text">{{ follow.username }}</p>
             </div>
+            <div class="col-2 text-right">
+              <button class="unfollow-button btn btn-danger" (click)="deleteUser(follow.id)">Delete</button>
+            </div>
           </div>
-          <button class="unfollow-button" (click)="deleteUser(follow.id)">Delete</button>
         </div>
       </div>
     </div>

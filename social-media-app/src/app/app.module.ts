@@ -24,6 +24,7 @@ import { ShowRequestsComponent } from './show-requests/show-requests.component';
 
 import { FollowComponent } from './follow/follow.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ChatsComponent,
     ShowRequestsComponent,
     FollowComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    UploadImageComponent
   ],
   imports: [
     BrowserModule,
