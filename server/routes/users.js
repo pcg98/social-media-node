@@ -4,17 +4,31 @@ const { check } = require('express-validator');
 
 const { usersGet, usersGetById, userProfilebyJWT, userPostCreate, uploadProfilePicture, userGetSearchByNickname } = require('../controllers/userController');
 const { validateJWT, emailIsUnique, telephoneIsUnique, nicknameIsUnique } = require('../middlewares');
-const { upload } = require('../middlewares/multer');
-
+const { getListFiles, uploadOne, listOwnImages } = require('../controllers/imagesController');
 const router = Router();
+const  { upload } = require("../middlewares/multer");
 
 
 router.get('/', usersGet );
 router.get("/user-by-id/:id",[validateJWT] ,usersGetById);
 router.get("/home",[validateJWT] ,userProfilebyJWT);
 router.post("/create",[emailIsUnique, nicknameIsUnique, telephoneIsUnique] ,userPostCreate);
-router.post('/profile-picture', [validateJWT, upload.single('profilePicture')], uploadProfilePicture);
+//router.post('/profile-picture', [validateJWT, uploadFileMiddleware], uploadProfilePicture);
 router.get("/by-nickname/:nickname",[validateJWT] ,userGetSearchByNickname);
+
+//Upload photo
+router.post('/images/upload',[validateJWT, upload.single("image")], uploadOne );
+//See its own photos
+router.get('/images',[validateJWT], listOwnImages );
+//See photos from another user
+//router.get('/images',[validateJWT], listUserImages );
+//get the photo
+/*
+router.get('/image/:id',[validateJWT], getPhoto );
+
+//delete a photo
+router.delete('/image/:id', [validateJWT], deleteImage );
+*/
 /*userGetSearchByNickname
 router.put('/:id',[
     check('id', 'No es un ID válido').isMongoId(),

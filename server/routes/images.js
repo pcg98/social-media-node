@@ -9,10 +9,12 @@ const { upload } = require('../middlewares/multer');
 const router = Router();
 
 // FOLLLOWERS PART
-
-router.get('/upload',[validateJWT], uploadPhoto );
+/*
+router.post('/upload',[validateJWT], uploadPhoto );
 //get the photo
 router.get('/:id',[validateJWT, isNotUserHerself], getPhoto );
 
-
+//delete a
+router.delete('/:id', [validateJWT], deleteImage );
+*/
 module.exports = router;

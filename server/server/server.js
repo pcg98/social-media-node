@@ -46,6 +46,7 @@ class Server {
 
         // Directorio Público
         this.app.use( express.static('public') );
+        
 
     }
 

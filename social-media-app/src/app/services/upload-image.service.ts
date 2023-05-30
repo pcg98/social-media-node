@@ -9,14 +9,14 @@ import { environment } from 'src/environments/environment';
 })
 export class UploadImageService {
 
-  private baseUrl =  `${environment.apiUrl}/images`;
+  private baseUrl =  `${environment.apiUrl}/users/images`;
 
   constructor(private http: HttpClient) { }
 
   upload(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
-    formData.append('file', file);
+    formData.append('image', file);
 
     const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
       responseType: 'json'

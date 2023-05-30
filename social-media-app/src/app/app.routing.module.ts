@@ -14,6 +14,7 @@ import { ChatsComponent } from './messages-conversations/chats/chats.component';
 import { ShowRequestsComponent } from './show-requests/show-requests.component';
 import { FollowComponent } from './follow/follow.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { UploadImageComponent } from './upload-image/upload-image.component';
 
 
 /*
@@ -39,6 +40,8 @@ const routes: Routes = [
   { path: 'followers/requests', component: ShowRequestsComponent, canActivate: [AuthGuard] },
 
   { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
+
+  { path: 'images/upload', component: UploadImageComponent /*canActivate: [AuthGuard]*/ },
 
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

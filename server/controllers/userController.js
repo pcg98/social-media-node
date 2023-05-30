@@ -65,7 +65,7 @@ const userPostCreate = async(req, res = response) => {
     await user.save();
     console.log(user);
     //Create the route for the user folder
-    const userFolder = process.env.FOLDER_IMAGES+`/${user.id}`;
+    const userFolder = process.env.FOLDER_IMAGES_USERS+`/${user.id}`;
     //If user with that id don't have any folder...
     if(!fs.existsSync(userFolder)){
         //Create a folder
