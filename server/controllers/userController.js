@@ -29,11 +29,11 @@ const userProfilebyJWT = async(req = request, res = response) => {
     const numberFollowers = await UserFollower.count({ where: { targetid: currentId } });
     console.log(numberFollowers);
     const numberFollowing = await UserFollowing.count({ where: { sourceid: currentId } });
-    const numberPictures = await UserImage.count({ where: {userid: currentId}});       
+    const userPictures = await UserImage.findAll({ where: {userid: currentId}});       
     res.json({currentUser,
                 numberFollowers,
                 numberFollowing,
-                numberPictures});
+                userPictures});
 }
 
 const usersGetById = async(req = request, res = response) => {

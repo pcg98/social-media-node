@@ -3,6 +3,9 @@ import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { MessagesService } from '../services/messages-service.service';
 import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { ImageserviceService } from '../services/imageservice.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -14,11 +17,15 @@ export class ProfileComponent implements OnInit {
   successMessage: string;
   numberFollowing: number;
   numberFollowers: number;
-  numberPictures: number;
+  userPictures: number;
+  picturesUrl: string[];
 
   private subscription: Subscription;
 
-  constructor(private userService: UserService, private MessagesService: MessagesService) { }
+
+  constructor(private userService: UserService, private MessagesService: MessagesService,
+    private imageService: ImageserviceService)
+   { }
 
   ngOnInit() {
     this.subscription = this.MessagesService.message$.subscribe(message => {
@@ -30,10 +37,22 @@ export class ProfileComponent implements OnInit {
       this.user = data.currentUser;
       this.numberFollowing = data.numberFollowing;
       this.numberFollowers = data.numberFollowers;
-      this.numberPictures = data.numberPicture || 0;
+      this.userPictures = data.userPictures || 0;
     });
+    this.loadImages();
   }
-
+  
+  loadImages(){
+    this.imageService.getImageUrls().subscribe(
+      (urls) => {
+        this.picturesUrl = urls;
+        console.log(this.picturesUrl);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

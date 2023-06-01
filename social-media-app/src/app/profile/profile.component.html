@@ -1,12 +1,10 @@
-<p>
-  {{ user | json }}
 
-</p>
+<!--
 <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
 <ng-container *ngIf="user">
   <div class="container">
 
-    <!-- Statistics row -->
+    <!-- Statistics row
     <div class="row mt-4">
       <div class="col-md-4">
         <div class="statistic">
@@ -59,10 +57,60 @@
               <img class="card-img-top" src="path-to-photo3.jpg" alt="Photo 3">
             </div>
           </div>
-          <!-- Add more photo cards as needed -->
+          <!-- Add more photo cards as needed -
         </div>
       </div>
     </div>
   </div>
-</ng-container>
+</ng-container> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Add custom CSS styles here */
+  </style>
+</head>
+
+<body>
+  <ng-container *ngIf="user">
+
+  <p>
+    {{ user | json }}
+
+  </p>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-4">
+          <img [src]="picturesUrl + user.profile_picture" alt="Profile Picture" class="img-fluid mb-3">
+          <h4>{{ user.name }} {{ user.last_name }}</h4>
+          <h5>{{ user.nickname }}</h5>
+          <p *ngIf="user.bio">{{ user.bio }}</p>
+          <p>Followers:
+             <a routerLink="/followers"><strong>{{ numberFollowers }}</strong></a>
+          </p>
+          <p>Following:
+            <a routerLink="/following"><strong>{{ numberFollowing }}</strong></a>
+          </p>
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div *ngFor="let image of userPictures" class="col-md-4 mb-4">
+              <img [src]="'assets/images/' + image.url" [alt]="image.title" class="img-fluid">
+            </div>
+            <div *ngIf="userPictures.length === 0" class="col-md-12">
+              <p>No images to display.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</body>
+
+</html>
+
 

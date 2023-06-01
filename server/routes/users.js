@@ -2,9 +2,10 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
+
 const { usersGet, usersGetById, userProfilebyJWT, userPostCreate, uploadProfilePicture, userGetSearchByNickname } = require('../controllers/userController');
-const { validateJWT, emailIsUnique, telephoneIsUnique, nicknameIsUnique } = require('../middlewares');
-const { getListFiles, uploadOne, listOwnImages } = require('../controllers/imagesController');
+const { validateJWT, emailIsUnique, telephoneIsUnique, nicknameIsUnique, listOwnImages } = require('../middlewares');
+const { getListFiles, uploadOne, /*listOwnImages*/ } = require('../controllers/imagesController');
 const router = Router();
 const  { upload } = require("../middlewares/multer");
 
@@ -19,7 +20,7 @@ router.get("/by-nickname/:nickname",[validateJWT] ,userGetSearchByNickname);
 //Upload photo
 router.post('/images/upload',[validateJWT, upload.single("image")], uploadOne );
 //See its own photos
-router.get('/images',[validateJWT], listOwnImages );
+router.get('/images',[validateJWT, listOwnImages] );
 //See photos from another user
 //router.get('/images',[validateJWT], listUserImages );
 //get the photo

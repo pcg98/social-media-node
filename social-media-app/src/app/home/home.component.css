@@ -1,0 +1,32 @@
+/* Custom CSS Styles */
+
+/* Header */
+.navbar {
+  padding: 1rem 0;
+}
+
+/* Hero Section */
+.hero {
+  padding: 4rem 0;
+}
+
+/* Features Section */
+.features .card {
+  height: 100%;
+}
+
+/* Testimonials Section */
+.testimonials .card {
+  min-height: 300px;
+}
+
+/* Sign Up / Registration Form */
+.signup form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Footer */
+footer {
+  padding: 1rem 0;
+}

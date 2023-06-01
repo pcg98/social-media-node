@@ -1,8 +1,11 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
 const { UserImage } = require("../models");
-const directoryImages = process.env.FOLDER_IMAGES_USERS;
-const path = require('path');
+const fs = require('fs');
 const express = require('express');
+const path = require('path');
+
+const directoryImages = process.env.FOLDER_IMAGES_USERS;
+
 
 //Method for upload a photo
 const upload = async (req, res) => {
@@ -47,17 +50,12 @@ const uploadOne = (req, res) => {
   }
 }
 const listOwnImages = (req, res) => {
-  const userId = req.user.userid;
-  const folderPath = directoryImages+"/"+userId;
+  const userId = req.user.id;
+  const folderPath = directoryImages + "/" + userId;
 
+  const staticFilesDirectory = path.join(__dirname, 'static', req.user.id.toString());
+  return express.static(staticFilesDirectory)(req, res);
 
-  // Use express.static middleware to serve the photos from the folder
-  return express.static(folderPath)(req, res, function (err) {
-    if (err) {
-      console.error(err);
-      res.status(404).send('Photos not found');
-    }
-  });
 }
 //Get the files from a site
 const getListFiles = (req, res) => {

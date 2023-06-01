@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('../database/config');
+const path = require('path');
 
 class Server {
 
@@ -45,7 +46,7 @@ class Server {
         this.app.use( express.json() );
 
         // Directorio Público
-        this.app.use( express.static('public') );
+        this.app.use(express.static(path.join(__dirname, 'static')));
         
 
     }

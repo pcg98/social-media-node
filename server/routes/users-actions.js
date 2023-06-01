@@ -15,7 +15,10 @@ router.post('/cancel-request',[validateJWT, targetidExists, userIsNotBlocked], c
 router.post('/send-message',[validateJWT, isNotUserHerself, targetidExists, userIsNotBlocked, haveConversation], sendMessage );
 router.post('/block',[validateJWT, isNotUserHerself, targetidExists ], blockUser );
 router.get('/search-user/:nickname',[validateJWT], searchUsersByNickname );
+
 router.get('/profile/:targetid',[validateJWT, targetidExists, userIsNotBlocked], showProfileById );
+
+//router.get('/profile/:targetid/images/:imageid',[validateJWT, targetidExists, userIsNotBlocked], showImageProfileById );
 
 router.get('/notifications',[validateJWT], getNotifications );
 router.get('/notifications/has',[validateJWT], hasNotifications );

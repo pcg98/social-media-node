@@ -1,5 +1,9 @@
 const { User, UserBlocked, UserFollowing, UserRequest } = require('../models/index');
 const { Op } = require('sequelize');
+const express = require('express');
+const path = require('path');
+
+const directoryImages = process.env.FOLDER_IMAGES_USERS;
 
 //We check if the user is blocked by other
 const userIsNotBlocked = async( req = request, res = response, next ) => {
@@ -88,6 +92,14 @@ const sourceidExists = async( req = request, res = response, next ) => {
   console.log("User exists")
   next();  
 }
+const listOwnImages = (req, res, next) => {
+  const userId = req.user.id;
+  const folderPath = directoryImages + "/" + userId;
+
+  const staticFilesDirectory = path.join(__dirname, 'static', req.user.id.toString());
+  express.static(staticFilesDirectory)(req, res, next);
+
+}
 
 
 module.exports = {
@@ -95,5 +107,6 @@ module.exports = {
     isNotUserHerself,
     targetidExists,
     sourceidExists,
-    notFollowingOrPendingTarget
+    notFollowingOrPendingTarget,
+    listOwnImages
 }
