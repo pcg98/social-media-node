@@ -49,14 +49,15 @@ const uploadOne = (req, res) => {
       res.status(500).send({ error: 'Internal Server Error! Try again, please!' })
   }
 }
+/*
 const listOwnImages = (req, res) => {
   const userId = req.user.id;
   const folderPath = directoryImages + "/" + userId;
 
   const staticFilesDirectory = path.join(__dirname, 'static', req.user.id.toString());
-  return express.static(staticFilesDirectory)(req, res);
-
-}
+  express.static(staticFilesDirectory)(req, res);
+ 
+}*/
 //Get the files from a site
 const getListFiles = (req, res) => {
     //Read the user folder
@@ -94,11 +95,32 @@ const download = (req, res) => {
     }
   });
 };
+const serveImage = async (req, res) => {
+  const id_image = req.params.id_image;
+  const image = await UserImage.findByPk(id_image);
+  console.log(image);
+  const imagePath = path.join(__dirname, '../static/files', image.url);
+  return res.sendFile(imagePath);
+}
+const listImage = async (req, res) => {
+  const id_image = req.params.id_image;
+  const image = await UserImage.findByPk(id_image);
+  console.log(image);
+  const imagePath = path.join(__dirname, '../static/files', image.url);
+  const responseData = {
+    imageUrl: `/images/${imageName}`,
+    title: imageTitle,
+    description: imageDescription
+  };
+  return res.sendFile(imagePath);
+}
 
 module.exports = {
   upload,
   getListFiles,
   download,
   uploadOne,
-  listOwnImages
+  //listOwnImagesMiddl,
+  listImage,
+  serveImage
 };

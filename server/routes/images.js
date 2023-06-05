@@ -8,6 +8,7 @@ const { upload } = require('../middlewares/multer');
 
 const router = Router();
 
+
 // FOLLLOWERS PART
 /*
 router.post('/upload',[validateJWT], uploadPhoto );
