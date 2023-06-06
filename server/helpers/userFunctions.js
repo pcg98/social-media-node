@@ -1,4 +1,4 @@
-const { User, UserBlocked, UserFollowing, UserNotification } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserNotification, UserImage } = require('../models/index');
 
 //We check if the user is blocked by other
 const userIsNotBlocked = (sourceId, targetId) => {
@@ -10,6 +10,28 @@ const userIsNotBlocked = (sourceId, targetId) => {
         }
     });
 }
+const getImagesFromUser = async (id) => {
+    
+    const images = await UserImage.findAll({
+      where:{
+        userid: id
+      }
+    });
+  
+    if(!images){
+      return
+    }
+  
+    //We fullfill this with info of every image
+    const responseData = images.map(image => {
+      return {
+        imageUrl: `/images/${image.id}`,
+        title: image.title,
+        createdAt: image.createdAt
+      };
+    });
+    return responseData;
+};
 const newNotification = async (sourceid, targetid, notification_objectid, entity_id = null) => {
 
     await UserNotification.create({sourceid, targetid, notification_objectid, entity_id});
@@ -18,5 +40,6 @@ const newNotification = async (sourceid, targetid, notification_objectid, entity
 
 module.exports = {
     userIsNotBlocked,
-    newNotification
+    newNotification,
+    getImagesFromUser
 }

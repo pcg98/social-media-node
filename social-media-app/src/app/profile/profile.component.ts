@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
   numberFollowers: number;
   userPictures: number;
   picturesUrl: string[];
+  serverImages =  "http://localhost:8000/api/images/"
 
   private subscription: Subscription;
 
@@ -39,10 +40,10 @@ export class ProfileComponent implements OnInit {
       this.numberFollowers = data.numberFollowers;
       this.userPictures = data.userPictures || 0;
     });
-    this.loadImages();
+    this.loadImagesInfo();
   }
-  
-  loadImages(){
+
+  loadImagesInfo(){
     this.imageService.getImageUrls().subscribe(
       (urls) => {
         this.picturesUrl = urls;

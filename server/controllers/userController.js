@@ -5,6 +5,8 @@ const { User, UserFollower, UserFollowing, UserImage } = require('../models/inde
 const { Op } = require('sequelize');
 const fs = require('fs');
 const user_image = require('../models/user_image');
+const { getImagesFromUser } = require('../helpers/userFunctions');
+
 
 const usersGet = async(req = request, res = response) => {
     //From 0 to 5
@@ -30,6 +32,7 @@ const userProfilebyJWT = async(req = request, res = response) => {
     console.log(numberFollowers);
     const numberFollowing = await UserFollowing.count({ where: { sourceid: currentId } });
     const userPictures = await UserImage.findAll({ where: {userid: currentId}});       
+    const pictures = getImagesFromUser(currentId);
     res.json({currentUser,
                 numberFollowers,
                 numberFollowing,

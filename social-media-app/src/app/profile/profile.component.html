@@ -84,7 +84,8 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-4">
-          <img [src]="picturesUrl + user.profile_picture" alt="Profile Picture" class="img-fluid mb-3">
+
+          <img [src]="serverImages + user.profile_picture" alt="Profile Picture" class="img-fluid mb-3">
           <h4>{{ user.name }} {{ user.last_name }}</h4>
           <h5>{{ user.nickname }}</h5>
           <p *ngIf="user.bio">{{ user.bio }}</p>
@@ -98,7 +99,7 @@
         <div class="col-md-8">
           <div class="row">
             <div *ngFor="let image of userPictures" class="col-md-4 mb-4">
-              <img [src]="'assets/images/' + image.url" [alt]="image.title" class="img-fluid">
+              <img [src]="serverImages + image.id" [alt]="image.title" class="img-fluid">
             </div>
             <div *ngIf="userPictures.length === 0" class="col-md-12">
               <p>No images to display.</p>

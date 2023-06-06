@@ -1,7 +1,6 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
 const { UserImage } = require("../models");
 const fs = require('fs');
-const express = require('express');
 const path = require('path');
 
 const directoryImages = process.env.FOLDER_IMAGES_USERS;
@@ -30,7 +29,7 @@ const upload = async (req, res) => {
 const uploadOne = (req, res) => {
 
   try {
-
+      console.log("Hola")
       if (req.file == undefined) {
           return res.status(400).send({ message: "Please upload a file!" });
       }
@@ -98,22 +97,73 @@ const download = (req, res) => {
 const serveImage = async (req, res) => {
   const id_image = req.params.id_image;
   const image = await UserImage.findByPk(id_image);
-  console.log(image);
+  if(!image) return res.status(404);
   const imagePath = path.join(__dirname, '../static/files', image.url);
-  return res.sendFile(imagePath);
-}
+  try {
+    //If file exists in the storage...
+    if (fs.existsSync(imagePath)) {
+      console.log("Existe");
+      return res.status(200).sendFile(imagePath);
+    }
+  } catch(err) {
+    return res.status(404);
+  }
+};
+const getImagesFromUser = async (req, res) => {
+  const id_user = req.user.id;
+  const images = await UserImage.findAll({
+    where:{
+      userid: id_user
+    }
+  });
+
+  if(!images){
+    return res.status(404);
+  }
+
+  //We fullfill this with info of every image
+  const responseData = images.map(image => {
+    return {
+      imageUrl: `/images/${image.id}`,
+      title: image.title,
+      createdAt: image.createdAt
+    };
+  });
+  return res.status(200).send(responseData);
+};
+
+//Get a image info
 const listImage = async (req, res) => {
   const id_image = req.params.id_image;
   const image = await UserImage.findByPk(id_image);
-  console.log(image);
-  const imagePath = path.join(__dirname, '../static/files', image.url);
+  if(!image){
+    return res.status(404);
+  }
+
   const responseData = {
-    imageUrl: `/images/${imageName}`,
-    title: imageTitle,
-    description: imageDescription
+    imageUrl: `/images/${id_image}`,
+    title: image.title,
+    createdAt: image.createdAt
   };
-  return res.sendFile(imagePath);
-}
+  return res.status(200).send(responseData);
+};
+
+//Get all the info of pictures from a user
+
+
+
+const publicImage = async (req, res) => {
+  const url_image = req.params.image;
+  const imagePath = path.join(__dirname, '../static/public', url_image);
+  try {
+    //If file exists...
+    if (fs.existsSync(imagePath)) {
+      return res.status(200).sendFile(imagePath);
+    }
+  } catch(err) {
+    return res.status(404);
+  }
+}; 
 
 module.exports = {
   upload,
@@ -122,5 +172,7 @@ module.exports = {
   uploadOne,
   //listOwnImagesMiddl,
   listImage,
-  serveImage
+  serveImage,
+  publicImage,
+  getImagesFromUser
 };

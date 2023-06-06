@@ -19,8 +19,9 @@ router.get("/by-nickname/:nickname",[validateJWT] ,userGetSearchByNickname);
 //Upload photo
 router.post('/images/upload',[validateJWT, upload.single("image")], uploadOne );
 //See its own photos
-router.get('/images/:id_image',[validateJWT], serveImage);
+router.get('/images',[validateJWT], serveImage);
 router.get('/friend/images/:id_image',[validateJWT], listImage );
+
 //See photos from another user
 //router.get('/images',[validateJWT], listUserImages );
 //get the photo
