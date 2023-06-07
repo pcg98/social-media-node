@@ -13,12 +13,26 @@ export class UploadImageService {
 
   constructor(private http: HttpClient) { }
 
-  upload(file: File): Observable<HttpEvent<any>> {
+  upload(file: File, title: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
 
     formData.append('image', file);
+    formData.append('title', title);
 
     const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  changeProfilePicture(file: File, title: string): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+
+    formData.append('image', file);
+    formData.append('title', title);
+
+    const req = new HttpRequest('POST', `${environment.apiUrl}/profile/picture`, formData, {
       responseType: 'json'
     });
 

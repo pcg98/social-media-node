@@ -2,9 +2,9 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 const express = require('express');
-const { usersGet, usersGetById, userProfilebyJWT, userPostCreate, uploadProfilePicture, userGetSearchByNickname } = require('../controllers/userController');
+const { usersGet, usersGetById, userProfilebyJWT, userPostCreate , userGetSearchByNickname } = require('../controllers/userController');
 const { validateJWT, emailIsUnique, telephoneIsUnique, nicknameIsUnique } = require('../middlewares');
-const { getListFiles, uploadOne, listImage, serveImage } = require('../controllers/imagesController');
+const { getListFiles, uploadOne, listImage, serveImage, uploadProfilePicture } = require('../controllers/imagesController');
 const router = Router();
 const  { upload } = require("../middlewares/multer");
 
@@ -18,6 +18,8 @@ router.get("/by-nickname/:nickname",[validateJWT] ,userGetSearchByNickname);
 
 //Upload photo
 router.post('/images/upload',[validateJWT, upload.single("image")], uploadOne );
+//Upload profile picture
+router.post('/profile/picture',[validateJWT, upload.single("image")], uploadProfilePicture );
 //See its own photos
 router.get('/images',[validateJWT], serveImage);
 router.get('/friend/images/:id_image',[validateJWT], listImage );

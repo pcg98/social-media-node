@@ -1,5 +1,5 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
-const { UserImage } = require("../models");
+const { UserImage, User } = require("../models");
 const fs = require('fs');
 const path = require('path');
 
@@ -26,7 +26,28 @@ const upload = async (req, res) => {
     });
   }
 };
-const uploadOne = (req, res) => {
+const uploadOne = async (req, res) => {
+  try {
+      if (req.file == undefined) {
+          return res.status(400).send({ message: "Please upload a file!" });
+      }
+      //Catch the data for the db
+      const url = `${req.user.id}/${req.file.filename}`;
+      const userid = req.user.id;
+      const title = req.body.title;
+
+      await UserImage.create({url, userid, title});
+      
+      return res.status(201).send({
+          image: req.file,
+          message: 'Image uploaded successfully'
+      });
+
+  } catch (error) {
+      res.status(500).send({ error: 'Internal Server Error! Try again, please!' })
+  }
+}
+const uploadProfilePicture = async (req, res) => {
 
   try {
       console.log("Hola")
@@ -37,15 +58,21 @@ const uploadOne = (req, res) => {
       const url = `${req.user.id}/${req.file.filename}`;
       const userid = req.user.id;
 
-      UserImage.create({url, userid});
-      
+      //Create the image
+      const profilePicture = await UserImage.create({url, userid});
+      //Change the picture profile from a user
+      await User.update(
+        {profile_picture: profilePicture.id},
+        {where:{
+          id: userid
+        }}
+      );
       return res.status(201).send({
-          image: req.file,
-          message: 'Image uploaded successfully'
+          message: 'Profile picture changed successfully'
       });
 
   } catch (error) {
-      res.status(500).send({ error: 'Internal Server Error! Try again, please!' })
+      res.status(400).send({ error: 'Something happens' })
   }
 }
 /*
@@ -182,5 +209,6 @@ module.exports = {
   listImage,
   serveImage,
   publicImage,
-  getImagesFromUser
+  getImagesFromUser,
+  uploadProfilePicture
 };

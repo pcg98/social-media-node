@@ -18,7 +18,8 @@ export class UserService {
   //Get the current user by a server
   //request with the JWT
 
-  getCurrentUser(jwt: string):Observable<User> {
+  getCurrentUser():Observable<User> {
+    const jwt = sessionStorage.getItem('auth-token');
     const headers = { 'x-token': jwt }; // Set the Authorization header with the JWT
     return this.http.get<User>(API_URL+"/home", { headers });
   }

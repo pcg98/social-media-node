@@ -3,6 +3,9 @@
 <label class="btn btn-default">
   <input type="file" name="image" (change)="selectFile($event)" />
 </label>
+<label>
+  Title: <input type="text" name="title" [(ngModel)]="title" />
+</label>
 
 <button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
   Upload
@@ -13,6 +16,7 @@
 <!DOCTYPE html>
 <form action="/upload" method="POST" enctype="multipart/form-data">
     <input type="file" name="image" />
+    <input type="text" name="title" />
     <button type="submit">Upload</button>
 </form>
 

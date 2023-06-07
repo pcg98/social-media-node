@@ -14,6 +14,7 @@ export class UploadImageComponent implements OnInit {
   selectedFiles: FileList;
   currentFile: File;
   message = '';
+  title = '';
 
   fileInfos: Observable<any>;
 
@@ -29,7 +30,7 @@ export class UploadImageComponent implements OnInit {
   upload() {
 
     this.currentFile = this.selectedFiles.item(0);
-    this.uploadImageService.upload(this.currentFile).subscribe(
+    this.uploadImageService.upload(this.currentFile, this.title).subscribe(
       event => {
         if (event instanceof HttpResponse) {
           this.message = event.body.message;

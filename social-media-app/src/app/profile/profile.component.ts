@@ -34,8 +34,7 @@ export class ProfileComponent implements OnInit {
     this.subscription = this.MessagesService.message$.subscribe(message => {
       this.successMessage = message;
     });
-    const jwt = sessionStorage.getItem('auth-token');
-    this.userService.getCurrentUser(jwt)
+    this.userService.getCurrentUser()
     .subscribe((data: any) => {
       console.log(data);
       this.user = data.currentUser;
