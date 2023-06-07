@@ -4,7 +4,7 @@
     <div class="col-md-4" *ngFor="let user of users">
       <div class="card mb-3">
         <a class="nav-link" [href]="'users/profile/'+user.id">Profile
-          <img class="card-img-top" [src]="'assets/images/'+user.profile_picture" alt="User Profile">
+          <img class="card-img-top" [src]="serverImages + user.profile_picture" alt="User Profile">
         </a>
         <div class="card-body">
           <h5 class="card-title">{{ user.name }} {{ user.last_name }}</h5>

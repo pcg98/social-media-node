@@ -28,6 +28,7 @@ const usersGet = async(req = request, res = response) => {
 const userProfilebyJWT = async(req = request, res = response) => {
     const currentUser = req.user; 
     const currentId = currentUser.id;
+    console.log("Hola");
     const numberFollowers = await UserFollower.count({ where: { targetid: currentId } });
     console.log(numberFollowers);
     const numberFollowing = await UserFollowing.count({ where: { sourceid: currentId } });

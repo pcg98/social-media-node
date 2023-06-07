@@ -13,5 +13,12 @@ export class ImageserviceService {
   getImageUrls(): Observable<string[]> {
     const url = environment.apiUrl+"/users/images"; // Replace with your server's API endpoint
     return this.http.get<string[]>(url);
+  };
+
+  getImageById(id: string) {
+    console.log(`Getting ${environment.apiUrl}/images/${id}`);
+    return this.http.get(`${environment.apiUrl}/images/${id}`, {
+      responseType: 'blob'
+    });
   }
 }

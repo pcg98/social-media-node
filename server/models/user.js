@@ -73,7 +73,7 @@ module.exports = function(sequelize, DataTypes) {
     profile_picture: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      defaultValue: "default.jpg"
+      defaultValue: "public/default.jpg"
     },
     createdAt: {
       type: DataTypes.DATE,

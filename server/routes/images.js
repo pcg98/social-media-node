@@ -9,7 +9,9 @@ const { upload } = require('../middlewares/multer');
 
 const router = Router();
 
-router.get('/public/:image', publicImage )
-router.get('/:id', serveImage )
-router.get('/user/:id', publicImage )
+router.get('/public/:image', publicImage );
+router.get('/:id', [validateJWT], serveImage );
+router.get('/user/:id', publicImage );
+
+
 module.exports = router;

@@ -3,6 +3,7 @@ import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { MessagesService } from '../services/messages-service.service';
 import { Subscription } from 'rxjs';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { ImageserviceService } from '../services/imageservice.service';
 
@@ -17,7 +18,8 @@ export class ProfileComponent implements OnInit {
   successMessage: string;
   numberFollowing: number;
   numberFollowers: number;
-  userPictures: number;
+  userPictures: any;
+  photoUrl: SafeUrl;
   picturesUrl: string[];
   serverImages =  "http://localhost:8000/api/images/"
 
@@ -25,7 +27,7 @@ export class ProfileComponent implements OnInit {
 
 
   constructor(private userService: UserService, private MessagesService: MessagesService,
-    private imageService: ImageserviceService)
+    private imageService: ImageserviceService, private sanitizer: DomSanitizer)
    { }
 
   ngOnInit() {
@@ -35,24 +37,31 @@ export class ProfileComponent implements OnInit {
     const jwt = sessionStorage.getItem('auth-token');
     this.userService.getCurrentUser(jwt)
     .subscribe((data: any) => {
+      console.log(data);
       this.user = data.currentUser;
       this.numberFollowing = data.numberFollowing;
       this.numberFollowers = data.numberFollowers;
-      this.userPictures = data.userPictures || 0;
+      this.userPictures = data.userPictures || null;
+      this.loadImagesInfo();
     });
-    this.loadImagesInfo();
   }
 
-  loadImagesInfo(){
-    this.imageService.getImageUrls().subscribe(
-      (urls) => {
-        this.picturesUrl = urls;
-        console.log(this.picturesUrl);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+  loadImagesInfo() {
+    this.userPictures.forEach((image) => {
+      this.fetchImageById(image.id).subscribe(
+        (data) => {
+          const photoUrl = URL.createObjectURL(data);
+          image.result = this.sanitizer.bypassSecurityTrustUrl(photoUrl);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    });
+  }
+
+  fetchImageById(id){
+    return this.imageService.getImageById(id);
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();

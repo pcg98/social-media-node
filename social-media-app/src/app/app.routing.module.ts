@@ -41,7 +41,7 @@ const routes: Routes = [
 
   { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
 
-  { path: 'images/upload', component: UploadImageComponent /*canActivate: [AuthGuard]*/ },
+  { path: 'images/upload', component: UploadImageComponent, canActivate: [AuthGuard] },
 
   { path: '', redirectTo: 'home', pathMatch: 'full' }
 ];

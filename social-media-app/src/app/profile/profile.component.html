@@ -1,68 +1,3 @@
-
-<!--
-<div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
-<ng-container *ngIf="user">
-  <div class="container">
-
-    <!-- Statistics row
-    <div class="row mt-4">
-      <div class="col-md-4">
-        <div class="statistic">
-          <div class="statistic-value">{{ numberPictures }}</div>
-          <div class="statistic-label">Pictures</div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="statistic">
-          <div class="statistic-value">{{ numberFollowers }}</div>
-          <a routerLink="/followers">
-            <div class="statistic-label">Followers</div>
-          </a>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="statistic">
-          <div class="statistic-value">{{ numberFollowing }}</div>
-          <a routerLink="/following">
-            <div class="statistic-label">Following</div>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card mb-3">
-          <img class="card-img-top" [src]="'assets/images/' + user.profile_picture" alt="Profile Picture">
-          <div class="card-body">
-            <h5 class="card-title">{{ user.nickname }}</h5>
-            <p class="card-text">{{user.bio}}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card mb-3">
-              <img class="card-img-top" src="path-to-photo1.jpg" alt="Photo 1">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card mb-3">
-              <img class="card-img-top" src="path-to-photo2.jpg" alt="Photo 2">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="card mb-3">
-              <img class="card-img-top" src="path-to-photo3.jpg" alt="Photo 3">
-            </div>
-          </div>
-          <!-- Add more photo cards as needed -
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-container> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,10 +12,10 @@
 <body>
   <ng-container *ngIf="user">
 
-  <p>
-    {{ user | json }}
+    <p>
+      {{ user | json }}
 
-  </p>
+    </p>
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-4">
@@ -99,7 +34,7 @@
         <div class="col-md-8">
           <div class="row">
             <div *ngFor="let image of userPictures" class="col-md-4 mb-4">
-              <img [src]="serverImages + image.id" [alt]="image.title" class="img-fluid">
+              <img [src]="image.result" [alt]="image.title" class="img-fluid">
             </div>
             <div *ngIf="userPictures.length === 0" class="col-md-12">
               <p>No images to display.</p>

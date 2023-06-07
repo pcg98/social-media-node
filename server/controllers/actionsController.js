@@ -1,6 +1,6 @@
 const { response } = require('express');
 const sequelize = require('../database/config')
-const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Conversation } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Conversation, UserImage } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
@@ -158,27 +158,36 @@ const showProfileById = async(req, res = response) => {
     //Want that is diferent to our user
     //and is visible or friend
     let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
-        'and user_visibilityid = 1 or EXISTS '+//User is public or...
+        'and (user_visibilityid = 1 or EXISTS '+//User is public or...
         //Actual user following the wanted 
-        '(select * from user_following where targetid = :targetid and sourceid = :currentId)',
+        '(select * from user_following where targetid = :targetid and sourceid = :currentId))',
         { 
             replacements: { targetid: targetid,
                 currentId: id}, 
             type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
         })
         .then((user) => {
+            console.log(user);
             return user;
         })
         .catch((error) => {
             console.error('Error occurred during query:', error);
         });
     //If we find an user...
-    if(user){
-        //Succesful request
-        return res.status(200).json(user);
+    if(!user){
+        //If not, code error
+        return res.status(403).json("NOthing to show");
     }
-    //If not, code error
-    return res.status(403).json("NOthing to show");
+    //If user exists
+    //FInd his images
+    const userImages = await UserImage.findAll({
+        where: {
+            userid: user.id
+        }
+    });
+    if(userImages.length != 0) user.userPictures = userImages;
+    //Succesful request
+    return res.status(200).json(user);
 
 }
 const blockUser = async(req, res = response) => {

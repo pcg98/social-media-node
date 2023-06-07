@@ -95,15 +95,23 @@ const download = (req, res) => {
   });
 };
 const serveImage = async (req, res) => {
-  const id_image = req.params.id_image;
+  const id_image = req.params.id;
+  console.log("Hola");
   const image = await UserImage.findByPk(id_image);
-  if(!image) return res.status(404);
+  console.log("Hola");
+  if(!image){
+    return res.status(404);
+  } 
+  console.log("Hola");
   const imagePath = path.join(__dirname, '../static/files', image.url);
+  console.log(imagePath);
   try {
     //If file exists in the storage...
     if (fs.existsSync(imagePath)) {
       console.log("Existe");
       return res.status(200).sendFile(imagePath);
+    }else{
+      return res.status(500);
     }
   } catch(err) {
     return res.status(404);

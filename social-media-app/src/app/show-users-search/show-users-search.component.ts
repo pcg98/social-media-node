@@ -16,6 +16,7 @@ export class ShowUsersSearchComponent implements OnInit {
   visibleMessageForm = false;
   id : number;
   form: FormBuilder;
+  serverImages =  "http://localhost:8000/api/images/"
 
 
   constructor(private route: ActivatedRoute, private userService: UserService,

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, NgForm } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
+import { ImageserviceService } from '../services/imageservice.service';
 
 
 @Component({
@@ -16,9 +18,13 @@ export class ShowUserProfileByIdComponent implements OnInit {
   showMessageForm = false;
   targetid : number;
   form: FormBuilder;
+  serverImages =  "http://localhost:8000/api/images/";
+  userPictures: any;
+  photoUrl: SafeUrl;
 
 
-  constructor(private route: ActivatedRoute, private actionsService: ActionsService) { }
+  constructor(private route: ActivatedRoute, private actionsService: ActionsService,
+    private imageService: ImageserviceService, private sanitizer: DomSanitizer) { }
 
   //On init...
   ngOnInit() {
@@ -36,6 +42,8 @@ export class ShowUserProfileByIdComponent implements OnInit {
       (response: User) => {
         console.log(response)
         this.user = response;
+        this.userPictures = response.userPictures || null;
+        this.loadImagesInfo();
         console.log(this.user);
         // Do something with the user(s) data
       },
@@ -44,6 +52,23 @@ export class ShowUserProfileByIdComponent implements OnInit {
       }
     );
   }
+  loadImagesInfo() {
+    this.userPictures.forEach((image) => {
+      this.fetchImageById(image.id).subscribe(
+        (data) => {
+          const photoUrl = URL.createObjectURL(data);
+          image.result = this.sanitizer.bypassSecurityTrustUrl(photoUrl);
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    });
+  }
+  fetchImageById(id){
+    return this.imageService.getImageById(id);
+  }
+  
   //Send the form to the server
   //through the service
   sendRequest(form: NgForm) {
