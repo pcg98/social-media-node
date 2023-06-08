@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../models/user.model';
 import { TokenStorageService } from './token-storage.service';
 import { catchError, map, tap } from 'rxjs/operators';
+import * as internal from 'assert';
 
 
 const API_URL = environment.apiUrl+'/users';
@@ -60,5 +61,23 @@ export class UserService {
     return this.http
       .get(`${environment.apiUrl}/actions/search-user/${nickname}`);
   }
+  updateUser(data){
+    console.log('Updating user '+data);
+    return this.http
+      .patch(`${environment.apiUrl}/actions/update`, data);
+  }
+
+  changeProfilePicture(file: File): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+
+    formData.append('image', file);
+
+    const req = new HttpRequest('POST', `${environment.apiUrl}/users/profile/picture`, formData, {
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+  
 }
 

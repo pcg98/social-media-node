@@ -32,7 +32,11 @@ const userProfilebyJWT = async(req = request, res = response) => {
     const numberFollowers = await UserFollower.count({ where: { targetid: currentId } });
     console.log(numberFollowers);
     const numberFollowing = await UserFollowing.count({ where: { sourceid: currentId } });
-    const userPictures = await UserImage.findAll({ where: {userid: currentId}});       
+    const userPictures = await UserImage.findAll({ where:
+        {userid: currentId,
+        url: {
+            [Op.notLike]: '%profile_picture/%'
+            }} });       
     const pictures = getImagesFromUser(currentId);
     res.json({currentUser,
                 numberFollowers,
@@ -74,6 +78,8 @@ const userPostCreate = async(req, res = response) => {
     if(!fs.existsSync(userFolder)){
         //Create a folder
         fs.mkdirSync(userFolder);
+        //Create another
+        fs.mkdirSync(`${userFolder}/profile_picture`)
     }
     //Return the user as a JSON
     res.status(200).json({
@@ -87,10 +93,15 @@ const userPostCreate = async(req, res = response) => {
 const userGetSearchByNickname = async(req, res = response) => {
     try{
         const { nickname } = req.params;
+        const userid = req.user.id;
+        console.log(userid)
         const users = await User.findAll({
             where: {
               nickname: {
                 [Op.like]: `%${nickname}%`
+              },
+              id:{
+                [Op.ne]: userid
               }
             }
         });

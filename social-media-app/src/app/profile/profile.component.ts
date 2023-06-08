@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
   userPictures: any;
   photoUrl: SafeUrl;
   picturesUrl: string[];
+  profilePicture;
   serverImages =  "http://localhost:8000/api/images/"
 
   private subscription: Subscription;
@@ -41,6 +42,7 @@ export class ProfileComponent implements OnInit {
       this.numberFollowing = data.numberFollowing;
       this.numberFollowers = data.numberFollowers;
       this.userPictures = data.userPictures || null;
+      this.loadProfilePicture();
       this.loadImagesInfo();
     });
   }
@@ -57,6 +59,15 @@ export class ProfileComponent implements OnInit {
         }
       );
     });
+  }
+  loadProfilePicture(){
+      this.fetchImageById(this.user.profile_picture)
+      .subscribe(
+        (data) =>{
+          const photoUrl = URL.createObjectURL(data);
+          this.profilePicture = this.sanitizer.bypassSecurityTrustUrl(photoUrl);
+        }
+      )
   }
 
   fetchImageById(id){

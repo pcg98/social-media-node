@@ -18,6 +18,18 @@ const storage = multer.diskStorage({
   },
 });
 
+const profilePicturestorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    //In the folder of the user
+    cb(null, `${imageFolder}/${req.user.id}/profile_picture`);
+  },
+  filename: function (req, file, cb) {
+    //We put the title
+    console.log(file.originalname);
+    cb(null, Date.now()+file.originalname);
+  },
+});
+
 const fileFilter = (req, file, cb) => {
   const allowedMimes = [
     "image/jpeg",
@@ -40,5 +52,6 @@ const fileLimits = {
 
 const upload  = multer({ storage: storage, fileFilter: fileFilter, limits: fileLimits });
 
+const uploadProfilePictureMult  = multer({ storage: profilePicturestorage, fileFilter: fileFilter, limits: fileLimits });
 
-module.exports = { upload };
+module.exports = { upload, uploadProfilePictureMult };

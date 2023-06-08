@@ -15,6 +15,7 @@ import { ShowRequestsComponent } from './show-requests/show-requests.component';
 import { FollowComponent } from './follow/follow.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UploadImageComponent } from './upload-image/upload-image.component';
+import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 
 
 /*
@@ -30,7 +31,8 @@ const routes: Routes = [
   { path: 'users/search/:nickname', component: ShowUsersSearchComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'users/profile/:targetid', component: ShowUserProfileByIdComponent, canActivate: [AuthGuard] },
-
+  { path: 'profile/settings', component: ProfileSettingsComponent, canActivate: [AuthGuard] },
+  
   { path: 'chats', component: MessagesConversationsComponent, canActivate: [AuthGuard] },
   { path: 'chats/:id', component: ChatsComponent, canActivate: [AuthGuard] },
 

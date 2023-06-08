@@ -1,5 +1,5 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
-const { UserImage, User } = require("../models");
+const { UserImage, User, ImageComment } = require("../models");
 const fs = require('fs');
 const path = require('path');
 
@@ -50,19 +50,19 @@ const uploadOne = async (req, res) => {
 const uploadProfilePicture = async (req, res) => {
 
   try {
-      console.log("Hola")
+      console.log("Hello, we are trying to change is photo")
       if (req.file == undefined) {
           return res.status(400).send({ message: "Please upload a file!" });
       }
       //Catch the data for the db
-      const url = `${req.user.id}/${req.file.filename}`;
+      const url = `${req.user.id}/profile_picture/${req.file.filename}`;
       const userid = req.user.id;
 
       //Create the image
       const profilePicture = await UserImage.create({url, userid});
       //Change the picture profile from a user
       await User.update(
-        {profile_picture: profilePicture.id},
+        {profile_picture: `profile_picture/${profilePicture.id}`},
         {where:{
           id: userid
         }}
@@ -144,12 +144,72 @@ const serveImage = async (req, res) => {
     return res.status(404);
   }
 };
+const serveProfilePicture = async (req, res) => {
+  const id_image = req.params.id;
+  console.log("Hola");
+  const image = await UserImage.findOne({
+    where:{
+      id: id_image     
+    }
+  });
+  console.log(image);
+  if(!image || !image.dataValues.url.includes("/profile_picture/")){
+    return res.status(404);
+  } 
+  console.log("Hola");
+  const imagePath = path.join(__dirname, '../static/files', image.url);
+  console.log(imagePath);
+  try {
+    //If file exists in the storage...
+    if (fs.existsSync(imagePath)) {
+      console.log("Existe");
+      return res.status(200).sendFile(imagePath);
+    }else{
+      return res.status(500);
+    }
+  } catch(err) {
+    return res.status(404);
+  }
+};
 const getImagesFromUser = async (req, res) => {
   const id_user = req.user.id;
   const images = await UserImage.findAll({
     where:{
       userid: id_user
     }
+  });
+
+  if(!images){
+    return res.status(404);
+  }
+
+  //We fullfill this with info of every image
+  const responseData = images.map(image => {
+    return {
+      imageUrl: `/images/${image.id}`,
+      title: image.title,
+      createdAt: image.createdAt
+    };
+  });
+  return res.status(200).send(responseData);
+};
+//Show the picture with its comments
+const showImage = async (req, res) => {
+  const id_image = req.param.id;
+  const images = await UserImage.findOne({
+    where:{
+      id: id_image
+    },
+    include: {
+      model: ImageComment, //Model
+      as : 'user_imageid', //Name relationship
+      attributes: ['id', 'body', 	'createdAt' ], //Attributes that we want
+      include:{
+        model: User,
+        as: 'user',
+        attributes: ['name', 'last_name']
+      }
+  }
   });
 
   if(!images){
@@ -210,5 +270,6 @@ module.exports = {
   serveImage,
   publicImage,
   getImagesFromUser,
-  uploadProfilePicture
+  uploadProfilePicture,
+  serveProfilePicture
 };

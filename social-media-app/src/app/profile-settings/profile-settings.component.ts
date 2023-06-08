@@ -12,6 +12,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ProfileSettingsComponent implements OnInit {
   user: User;
   form: FormGroup;
+  visibilyOptions: any;
+  imageFile: File;
 
   constructor(private userService: UserService, private formBuilder: FormBuilder) { }
 
@@ -19,10 +21,10 @@ export class ProfileSettingsComponent implements OnInit {
 
     //Create the form
     this.form = this.formBuilder.group({
-      name: ['', Validators.required, Validators.minLength(3)],
+      name: ['', [Validators.minLength(3)] ],
       last_name: ['', [Validators.required, Validators.minLength(3)]],
-      profile_picture: ['', [Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(3)]]
+      password: ['', [Validators.minLength(3), Validators.nullValidator]],
+      user_visibilityid: ['', [Validators.required]],
       // Add more form controls as needed
     });
     //Get the user
@@ -34,7 +36,19 @@ export class ProfileSettingsComponent implements OnInit {
     .subscribe((data: any) => {
       console.log(data);
       this.user = data.currentUser;
+      this.form.patchValue({
+        name: data.name,
+        last_name: data.last_name,
+        password: ""
+      })
+    },
+    err => {
+      console.log("Ha habido un error en el fetch");
     });
+    this.visibilyOptions = [
+      { id: 1, visibility: "public" },
+      { id: 2, visibility: "private" }
+    ];
   }
 
   saveSettings() {
@@ -43,10 +57,44 @@ export class ProfileSettingsComponent implements OnInit {
     this.fetchData();
   }
 
-  onFileSelected(event: any) {
-    // Logic to handle the selected profile picture file
-    const file = event.target.files[0];
-    this.fetchData();
+  onSubmit() {
+
+    // stop here if form is invalid
+    if (this.form.invalid) {
+        return;
+    }
+
+    this.updateUser();
+  }
+
+  private updateUser() {
+    this.userService.updateUser(this.form.value)
+    .subscribe((response) => {
+      console.log("Succesful request", response)
+    },
+    error => {
+        console.log("Ha habido un error", error);
+    });
+  }
+
+  onFileChange(event: any) {
+    this.imageFile = event.target.files[0];
+  }
+  changeProfilePicture() {
+    const formData = new FormData();
+    formData.append('image', this.imageFile);
+
+    this.userService.changeProfilePicture(this.imageFile)
+      .subscribe(
+        response => {
+          console.log('Image uploaded successfully', response);
+          // Handle success response
+        },
+        error => {
+          console.error('Error uploading image', error);
+          // Handle error response
+        }
+      );
   }
 
 }

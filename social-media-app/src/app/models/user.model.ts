@@ -18,7 +18,9 @@ export class User {
       public user_rolid: number = 1,
       public profilePicture: string,
       public id?: Number,
-      public userPictures?
+      public userPictures?,
+      public user_visibilityid?: number,
+      public bio?: string
   ) {}
 
 

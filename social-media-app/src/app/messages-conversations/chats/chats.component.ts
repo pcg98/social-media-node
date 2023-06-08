@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages-service.service';
@@ -15,6 +15,12 @@ export class ChatsComponent implements OnInit {
   messages: any[];
   currentUserId: Number;
   targetid: Number; //Other user
+  isAtBottom: boolean = true;
+
+    @ViewChild('messageList') messageList: ElementRef;
+
+
+
   constructor(private messagesService: MessagesService, private route: ActivatedRoute,
     private tokenStorageService: TokenStorageService) { }
 
@@ -35,6 +41,7 @@ export class ChatsComponent implements OnInit {
         this.targetid = (this.conversation.sourceid != this.currentUserId) ? this.conversation.sourceid : this.conversation.targetid
         console.log(this.targetid)
         console.log(this.messages);
+        this.scrollToBottom();
         // Do something with the user(s) data
       },
       (error: any) => {
@@ -42,6 +49,7 @@ export class ChatsComponent implements OnInit {
       }
     );
   }
+  
   inicializeComponent(){
     this.route.paramMap.subscribe(params => {
       this.chatid = params.get('id');
@@ -49,6 +57,16 @@ export class ChatsComponent implements OnInit {
       this.fetchData();
     });
   }
+
+  scrollToBottom(): void {
+    const messageListContainer = this.messageList.nativeElement;
+    messageListContainer.scrollTop = messageListContainer.scrollHeight;
+  }
+
+
+
+
+
   sendMessage(form: NgForm){
     const message = form.value;
     console.log("Message:");

@@ -26,18 +26,7 @@ export class UploadImageService {
     return this.http.request(req);
   }
 
-  changeProfilePicture(file: File, title: string): Observable<HttpEvent<any>> {
-    const formData: FormData = new FormData();
-
-    formData.append('image', file);
-    formData.append('title', title);
-
-    const req = new HttpRequest('POST', `${environment.apiUrl}/profile/picture`, formData, {
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
-  }
+  
 
   getFiles(): Observable<any> {
     return this.http.get(`${this.baseUrl}/files`);

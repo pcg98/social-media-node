@@ -84,7 +84,7 @@ const searchUsersByNickname = async(req, res = response) => {
     //Query to get the users with that nickname
     //excepts the current users and the users who block
     //the user
-    let users= await sequelize.query('SELECT * FROM user WHERE nickname LIKE :nickname and user_statusid = 1 '
+    let users= await sequelize.query('SELECT * FROM user WHERE nickname LIKE :nickname and user_statusid = 1 and id != :currentid '
         +'and id NOT IN (select sourceid from user_blocked where targetid = :currentid) '
         +'and (user_visibilityid = 1 or id IN (select targetid from user_following where targetid = :currentid))', {
             replacements: { nickname: `%${nickname}%`,

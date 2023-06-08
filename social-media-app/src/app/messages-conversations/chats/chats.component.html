@@ -2,7 +2,7 @@
   <h1>Chat with </h1>
 
   <div class="chat-container" *ngIf="messages">
-    <div class="message-list">
+    <div class="message-list"  #messageList >
       <ul class="list-group">
         <li class="list-group-item message-item" *ngFor="let message of messages"
           [ngClass]="{

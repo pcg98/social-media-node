@@ -26,6 +26,7 @@ import { FollowComponent } from './follow/follow.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UploadImageComponent } from './upload-image/upload-image.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
+import { ShowImageComponent } from './show-image/show-image.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
     FollowComponent,
     NotificationsComponent,
     UploadImageComponent,
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    ShowImageComponent
   ],
   imports: [
     BrowserModule,
