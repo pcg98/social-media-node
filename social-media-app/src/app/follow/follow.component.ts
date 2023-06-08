@@ -12,17 +12,22 @@ import { ActionsService } from '../services/actions.service';
 export class FollowComponent implements OnInit {
   type: string;
   follows: User[];
-
+  serverImages =  "http://localhost:8000/api/images/"
 
   constructor(private route: ActivatedRoute,
     private actionsService :ActionsService) { }
 
   ngOnInit() {
+    this.fetchData();
+  }
+  fetchData(){
     //Catch the type of user who want to retrieve
     //information
-    this.route.url.subscribe(url => {
-      this.type = url[0].path;
-    });
+    if(!this.type){
+      this.route.url.subscribe(url => {
+        this.type = url[0].path;
+      });
+    }
     if(this.type == 'following'){
       this.inicializateFollowing();
     }
@@ -64,8 +69,7 @@ export class FollowComponent implements OnInit {
       // Handle the response from the server
       console.log('Response:', response);
       alert("Deleting user");
-      if(this.type == "followers") this.inicializateFollowers();
-      if(this.type == "following") this.inicializateFollowing();
+      this.fetchData();
       // ...
     }, error => {
       // Handle any error that occurs during the request

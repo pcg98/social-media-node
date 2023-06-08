@@ -13,7 +13,7 @@
       </div>
       <div class="comment-input">
         <form (ngSubmit)="submitForm()">
-          <textarea [(ngModel)]="newComment" placeholder="Add a comment"></textarea>
+          <textarea name="body"  [(ngModel)]="newComment" placeholder="Add a comment"></textarea>
           <input type="hidden" name="imageid" [ngModel]="imageId" [value]="image.id">
           <button type="submit">Post</button>
         </form>

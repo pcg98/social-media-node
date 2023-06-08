@@ -27,8 +27,8 @@ export class ShowImageComponent implements OnInit {
       console.log("Hola")
       this.fetchData();
     });
-    this.fetchData();
   }
+
   submitForm() {
     const formData = {
       imageid: this.imageId,
@@ -38,12 +38,14 @@ export class ShowImageComponent implements OnInit {
     console.log(formData);
     this.imageserviceService.postCommentInImage(formData)
     .subscribe((response) => {
-      console.log("Success creating a new comment")
+      console.log("Success creating a new comment");
+      this.fetchData();
     },
     error => {
       console.log("Error creating a new comment "+error);
     })
   }
+  
   fetchData(){
     this.imageserviceService.getImageUrlsAndCommentsByPictureId(this.imageId)
     .subscribe((response) => {

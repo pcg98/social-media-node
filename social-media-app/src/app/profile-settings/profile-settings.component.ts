@@ -58,13 +58,43 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.form.valid) {
+      const formValue = this.form.value;
 
-    // stop here if form is invalid
-    if (this.form.invalid) {
-        return;
+      // Create a new object for the modified fields
+      const updatedFields = {};
+
+      // Check each field if it has been modified and add it to the updatedFields object
+      if (this.form.controls.firstName.dirty) {
+        updatedFields['firstName'] = formValue.firstName;
+      }
+
+      if (this.form.controls.lastName.dirty) {
+        updatedFields['lastName'] = formValue.lastName;
+      }
+
+      if (this.form.controls.password.dirty) {
+        updatedFields['password'] = formValue.password;
+      }
+      if (this.form.controls.user_visibilityid.dirty) {
+        updatedFields['user_visibilityid'] = formValue.user_visibilityid;
+      }
+
+      // Send the updatedFields object to the server
+      this.userService.updateUser(updatedFields).subscribe(
+        response => {
+          // Handle the server response if needed
+          console.log('Update successful');
+        },
+        error => {
+          // Handle any errors that occurred during the server update
+          console.error('Update failed', error);
+        }
+      );
+    } else {
+      // Form is invalid, handle validation errors
+      console.log('Form is invalid');
     }
-
-    this.updateUser();
   }
 
   private updateUser() {

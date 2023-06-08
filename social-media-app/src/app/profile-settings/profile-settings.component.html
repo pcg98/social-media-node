@@ -1,13 +1,13 @@
 <div class="container">
   <h2>Settings</h2>
-  <form (ngSubmit)="saveSettings()" [formGroup]="form" #settingsForm="ngForm">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" #settingsForm="ngForm">
     <div class="form-group">
       <label for="firstName">First Name</label>
-      <input type="text" class="form-control" id="firstName" name="firstName" formControlName="name" >
+      <input type="text" class="form-control" id="firstName" name="name" formControlName="name" >
     </div>
     <div class="form-group">
       <label for="lastName">Last Name</label>
-      <input type="text" class="form-control" id="lastName" name="lastName" formControlName="last_name" >
+      <input type="text" class="form-control" id="lastName" name="last_name" formControlName="last_name" >
     </div>
     <div class="form-group">
       <label for="password">Password</label>
@@ -15,7 +15,7 @@
     </div>
     <div class="form-group">
       <label for="visibility">Visibility</label>
-      <select class="form-select" formControlName="user_visibilityid">
+      <select class="form-select" name="user_visibilityid" formControlName="user_visibilityid">
         <option value="">  Select Visibility   </option>
         <option *ngFor="let visibility of visibilyOptions" [value]="visibility.id">{{ visibility.visibility }}</option>
       </select>
