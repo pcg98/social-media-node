@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <!-- User Info -->
       <div class="user-profile">
-        <img class="profile-picture" [src]="serverImages + user.profile_picture" alt="Profile Picture">
+        <img class="profile-picture" [src]="profilePicture" alt="Profile Picture">
         <h2 class="user-name">{{ user.name }}</h2>
         <p class="user-description">{{ user.bio }}</p>
 
@@ -44,13 +44,14 @@
         <div class="photo-grid">
           <ng-container *ngIf="userPictures">
             <div *ngFor="let image of userPictures" class="photo">
-              <img [src]="image.result" [alt]="image.title" class="img-fluid">
+              <a [href]="'/images/show/' +image.id">
+                <img [src]="image.result" [alt]="image.title" class="img-fluid">
+              </a>
             </div>
           </ng-container>
           <div *ngIf="!userPictures" class="col-md-12">
             <p>No images to display.</p>
           </div>
-          <!-- Add more photo items as needed -->
         </div>
       </div>
     </div>

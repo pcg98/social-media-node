@@ -34,7 +34,9 @@
         <div class="col-md-8">
           <div class="row">
             <div *ngFor="let image of userPictures" class="col-md-4 mb-4">
-              <img [src]="image.result" [alt]="image.title" class="img-fluid">
+              <a [href]="'/images/show/' + image.id">
+                <img [src]="image.result" [alt]="image.title" class="img-fluid">
+              </a>
             </div>
             <div *ngIf="userPictures.length === 0" class="col-md-12">
               <p>No images to display.</p>

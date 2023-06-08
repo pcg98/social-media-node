@@ -14,13 +14,14 @@ import { ImageserviceService } from '../services/imageservice.service';
 })
 export class ShowUserProfileByIdComponent implements OnInit {
   nickname : string;
-  user : User;
+  user ;
   showMessageForm = false;
   targetid : number;
   form: FormBuilder;
   serverImages =  "http://localhost:8000/api/images/";
   userPictures: any;
   photoUrl: SafeUrl;
+  profilePicture;
 
 
   constructor(private route: ActivatedRoute, private actionsService: ActionsService,
@@ -43,6 +44,7 @@ export class ShowUserProfileByIdComponent implements OnInit {
         console.log(response)
         this.user = response;
         this.userPictures = response.userPictures || null;
+        this.loadProfilePicture();
         this.loadImagesInfo();
         console.log(this.user);
         // Do something with the user(s) data
@@ -65,10 +67,20 @@ export class ShowUserProfileByIdComponent implements OnInit {
       );
     });
   }
+  loadProfilePicture(){
+    this.imageService.getProfileImageById(this.user.profile_picture)
+      .subscribe(
+        (photoBlob) =>{
+          const photoUrl = URL.createObjectURL(photoBlob);
+          console.log("cargada")
+          this.profilePicture = this.sanitizer.bypassSecurityTrustUrl(photoUrl);
+        }
+      )
+  }
   fetchImageById(id){
     return this.imageService.getImageById(id);
   }
-  
+
   //Send the form to the server
   //through the service
   sendRequest(form: NgForm) {

@@ -16,9 +16,25 @@ export class ImageserviceService {
   };
 
   getImageById(id: string) {
+    console.log(`Getting ${environment.apiUrl}/images/get/${id}`);
+    return this.http.get(`${environment.apiUrl}/images/get/${id}`, {
+      responseType: 'blob'
+    });
+  }
+  getProfileImageById(id: string) {
     console.log(`Getting ${environment.apiUrl}/images/${id}`);
     return this.http.get(`${environment.apiUrl}/images/${id}`, {
       responseType: 'blob'
     });
+  }
+  getImageUrlsAndCommentsByPictureId(id: string): Observable<any> {
+    const url = `${environment.apiUrl}/images/show/${id}`
+    console.log(`Getting ${url}`);
+    return this.http.get<any>(`${url}`);
+  }
+  postCommentInImage(formData){
+    const url = `${environment.apiUrl}/images/new-comment`;
+    console.log(formData);
+    return this.http.post<any>(`${url}`, formData);
   }
 }

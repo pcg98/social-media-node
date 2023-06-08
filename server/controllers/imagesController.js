@@ -47,6 +47,22 @@ const uploadOne = async (req, res) => {
       res.status(500).send({ error: 'Internal Server Error! Try again, please!' })
   }
 }
+const newComment = async (req, res) => {
+  const userid = req.user.id;
+  const user_imageid = req.body.imageid;
+  const body = req.body.body;
+  console.log(req);
+  try{
+    //Create the comment
+    await ImageComment.create({userid, user_imageid, body});
+
+    res.status(200).send({ok: true});
+  }catch(err){
+    res.status(403).send({ok: false,
+      message: "Something was wrong "+err
+    });
+  }
+}
 const uploadProfilePicture = async (req, res) => {
 
   try {
@@ -108,7 +124,36 @@ const getListFiles = (req, res) => {
         res.status(200).send(fileInfos);
     });
 };
+const getImageAndComments = async (req, res) => {
+  const id_image = req.params.id;
+  console.log("Entramos a cargar imagen con sus comentarios");
+  const image = await UserImage.findByPk(id_image, {
+    include: [
+        {
+          model: ImageComment, //Model
+          as : 'image_comments', //Name relationship
+          attributes: ['id', 'body', 	'createdAt' ], //Attributes that we want
+          include:{
+            model: User,
+            as: 'user',
+            attributes: ['id','name', 'last_name', 'nickname', 'profile_picture']
+          },
+        },
+        {
+          model: User, //Model
+          as : 'user', //Name relationship
+          attributes: ['id','nickname'], //Attributes that we want
+        }
+    ]
+  });
+  console.log("Hola");
+  if(!image){
+    return res.status(404);
+  } 
+  console.log("Hola");
 
+  return res.status(200).send(image);
+}
 const download = (req, res) => {
   const fileName = req.params.name;
   const directoryPath = __basedir + "/resources/static/assets/uploads/";
@@ -271,5 +316,7 @@ module.exports = {
   publicImage,
   getImagesFromUser,
   uploadProfilePicture,
-  serveProfilePicture
+  serveProfilePicture,
+  getImageAndComments,
+  newComment
 };

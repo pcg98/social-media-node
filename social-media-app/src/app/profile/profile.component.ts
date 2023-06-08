@@ -61,10 +61,10 @@ export class ProfileComponent implements OnInit {
     });
   }
   loadProfilePicture(){
-      this.fetchImageById(this.user.profile_picture)
+    this.imageService.getProfileImageById(this.user.profile_picture)
       .subscribe(
-        (data) =>{
-          const photoUrl = URL.createObjectURL(data);
+        (photoBlob) =>{
+          const photoUrl = URL.createObjectURL(photoBlob);
           this.profilePicture = this.sanitizer.bypassSecurityTrustUrl(photoUrl);
         }
       )
