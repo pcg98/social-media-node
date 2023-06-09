@@ -21,10 +21,10 @@ export class ProfileSettingsComponent implements OnInit {
 
     //Create the form
     this.form = this.formBuilder.group({
-      name: ['', [Validators.minLength(3)] ],
-      last_name: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.minLength(3), Validators.nullValidator]],
-      user_visibilityid: ['', [Validators.required]],
+      name: ['', [Validators.nullValidator, Validators.minLength(3)] ],
+      last_name: ['', [Validators.nullValidator, Validators.minLength(3)]],
+      password: ['', [Validators.nullValidator, Validators.minLength(3)]],
+      user_visibilityid: ['', [Validators.nullValidator]],
       // Add more form controls as needed
     });
     //Get the user
@@ -65,12 +65,12 @@ export class ProfileSettingsComponent implements OnInit {
       const updatedFields = {};
 
       // Check each field if it has been modified and add it to the updatedFields object
-      if (this.form.controls.firstName.dirty) {
-        updatedFields['firstName'] = formValue.firstName;
+      if (this.form.controls.name.dirty) {
+        updatedFields['name'] = formValue.name;
       }
 
-      if (this.form.controls.lastName.dirty) {
-        updatedFields['lastName'] = formValue.lastName;
+      if (this.form.controls.last_name.dirty) {
+        updatedFields['last_name'] = formValue.last_name;
       }
 
       if (this.form.controls.password.dirty) {
@@ -85,6 +85,7 @@ export class ProfileSettingsComponent implements OnInit {
         response => {
           // Handle the server response if needed
           console.log('Update successful');
+          console.log(response);
         },
         error => {
           // Handle any errors that occurred during the server update

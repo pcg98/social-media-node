@@ -124,6 +124,27 @@ const uploadProfilePicture = (req, res, next) => {
     }
 };
 
+const updateUser = async (req, res) => {
+    try{
+        const id_user = req.user.id;
+        const { id, email, nickname, password, user_rolid, ...rest } = req.body;
+        console.log(rest)
+
+        if ( password ) {
+            // Encriptar la contraseña
+            const salt = bcryptjs.genSaltSync();
+            rest.password = bcryptjs.hashSync( password, salt );
+        }
+        console.log("Not is the password" +rest);
+        const user = await User.findByPk(id_user);
+        await user.update(rest);
+        console.log(user);
+        res.status(200).json(user);
+    }catch(e){
+        res.status(500).json("Something was wrong");
+    }
+}
+
 /*
 const usuariosPut = async(req, res = response) => {
 
@@ -170,4 +191,5 @@ module.exports = {
     userPostCreate,
     uploadProfilePicture,
     userGetSearchByNickname,
+    updateUser
 }

@@ -64,7 +64,7 @@ export class UserService {
   updateUser(data){
     console.log('Updating user '+data);
     return this.http
-      .patch(`${environment.apiUrl}/actions/update`, data);
+      .patch(`${environment.apiUrl}/users/update`, data);
   }
 
   changeProfilePicture(file: File): Observable<HttpEvent<any>> {
@@ -78,6 +78,6 @@ export class UserService {
 
     return this.http.request(req);
   }
-  
+
 }
 
