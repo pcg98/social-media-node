@@ -8,15 +8,15 @@
         <p class="user-description">{{ user.bio }}</p>
 
         <!-- Friend Request OR Cancel Button -->
-        <form class="form-inline" #f="ngForm" *ngIf="user.pending" name="form" novalidate (ngSubmit)="cancelRequest(f)">
+        <form class="form-inline" #f="ngForm" *ngIf="user.relationship=='pending'" name="form" novalidate (ngSubmit)="cancelRequest(f)">
           <div class="input-group">
             <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
             <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
             <button type="submit" class="btn btn-danger">Cancel Request</button>
           </div>
         </form>
-
-        <form class="form-inline" #f="ngForm" *ngIf="user.unknow" name="form" novalidate (ngSubmit)="sendRequest(f)">
+        <div class="row">
+        <form class="form-inline" #f="ngForm" *ngIf="user.relationship=='unknows'" name="form" novalidate (ngSubmit)="sendRequest(f)">
           <div class="input-group">
             <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
             <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
@@ -27,7 +27,7 @@
 
         <!-- Send Message Button -->
         <button class="btn btn-primary" (click)="toggleMessageForm()">Send Message</button>
-
+      </div>
         <!-- Options -->
         <div class="options">
           <button class="btn btn-link" (click)="reportUser(user.id)">Report User</button>
@@ -56,5 +56,8 @@
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="showMessageForm">
+  <app-messages-form [targetid]="user.id" (close)="toggleMessageForm()"></app-messages-form>
 </div>
 

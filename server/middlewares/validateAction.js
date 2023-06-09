@@ -1,4 +1,4 @@
-const { User, UserBlocked, UserFollowing, UserRequest } = require('../models/index');
+const { User, UserBlocked, UserFollowing, UserRequest, UserImage, UserFollower } = require('../models/index');
 const { Op } = require('sequelize');
 const express = require('express');
 const path = require('path');
@@ -100,6 +100,53 @@ const listOwnImages = (req, res, next) => {
   express.static(staticFilesDirectory)(req, res, next);
 
 }
+const userHaveAccessToPhoto = async (req, res, next) => {
+  const userid = req.user.id;
+  const photoid = req.params.image_id || req.body.imageid;
+  //Firt, get info about the user uploader
+  const photo = await UserImage.findByPk(photoid,{
+    include:{
+      model: User,
+      as: "user"
+    }
+  });
+  req.photo = photo;
+  const uploader = photo.user;
+  console.log("Uploader")
+  console.log(uploader);
+  const uploaderid = uploader.id;
+  if(userid == uploaderid){
+    next(); //If there are the same person..
+  }
+  //Now check if the user is blocked by him or viceversa
+  const isBlocked = await UserBlocked.findOne({
+    where:{
+      [Op.or]:[
+        { targetid: userid, sourceid: uploaderid},
+        { targetid: uploaderid, sourceid: userid},
+      ]
+    }
+  });
+
+  if(isBlocked){
+    console.log("BLOCKED");
+    return res.status(400);
+  }
+  //Check if the user is public or if they are friends
+  console.log(uploader.id);
+  //CHeck if user is follower of the uploader
+  const userAreFollower = await UserFollower.findOne({
+    where:
+    { sourceid: userid, targetid: uploaderid }
+  });
+  //If uploader is public...
+  if(uploader.user_visibilityid!=1 && !userAreFollower){
+    console.log("Is neither friend or public")
+    return res.status(400);
+  }
+  //If not, the user is private and don't have access to that.
+  next();
+}
 
 
 module.exports = {
@@ -108,5 +155,6 @@ module.exports = {
     targetidExists,
     sourceidExists,
     notFollowingOrPendingTarget,
-    listOwnImages
+    listOwnImages,
+    userHaveAccessToPhoto
 }

@@ -4,8 +4,7 @@ const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Co
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
-const { newNotification } = require('../helpers/userFunctions');
-
+const { newNotification, knowrelationship } = require('../helpers/userFunctions');
 
 const sendRequest = async(req, res = response) => {
     const sourceid = req.user.id;
@@ -55,7 +54,7 @@ const cancelRequest = async(req, res = response) => {
     const sourceid = req.user.id;
     const { targetid } = req.body;
     try {
-        //Check on request doesn't exists
+        //Check on  if request exists
         const request = await UserRequest.findOne({ 
             where: {
                 sourceid: sourceid,
@@ -97,49 +96,12 @@ const searchUsersByNickname = async(req, res = response) => {
         .catch((error) => {
             console.error('Error occurred during query:', error);
         });
-    //Get all the user who is friend and put targetid as id
-    let followings = await sequelize.query('SELECT targetid as id FROM user_following WHERE sourceid = :currentId', {
-        replacements: { currentId: id}, 
-        type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
-    })
-    .then((friends) => {
-        return friends;
-    })
-    .catch((error) => {
-        console.error('Error occurred during query pendings:', error);
-    });
-    console.log(followings);
-    //Get all the pending requests and put target id as id
-    let pendings = await sequelize.query('SELECT targetid as id FROM user_request WHERE sourceid = :currentId', {
-        replacements: { currentId: id}, 
-        type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
-    })
-    .then((result) => {
-        return result;
-    })
-    .catch((error) => {
-        console.error('Error occurred during query pendings:', error);
-    });
-    console.log(pendings);
-    //Want all the user who have accepted or pending in our
-    //current user to control that in front end
-    //If there is more than one users...
-    
-    let result = users.map((user) => {
-        //Check if the user is following this
-        const following = followings.some((follower) => follower.id == user.id);
-        //Check if is pending
-        const pending = pendings.some((pending) => pending.id == user.id);
-        //Check if is friend, pending or unknow
-        if(following){
-            user.following = true;
-        }else if(pending){
-            user.pending = true;
-        }else{
-            user.unknow = true;
-        }
-        return user;
-    })
+    const result = [];
+    for(let i = 0; i<users.length; i++){
+        users[i].relationship = await knowrelationship(id, users[i].id);
+        result.push(users[i]);
+    }
+
     return res.status(200).json(result);
 
 }
@@ -157,37 +119,43 @@ const showProfileById = async(req, res = response) => {
     //Query to get the users with that id.
     //Want that is diferent to our user
     //and is visible or friend
-    let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
-        'and (user_visibilityid = 1 or EXISTS '+//User is public or...
-        //Actual user following the wanted 
-        '(select * from user_following where targetid = :targetid and sourceid = :currentId))',
-        { 
-            replacements: { targetid: targetid,
-                currentId: id}, 
-            type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
-        })
-        .then((user) => {
-            console.log(user);
-            return user;
-        })
-        .catch((error) => {
-            console.error('Error occurred during query:', error);
-        });
-    //If we find an user...
-    if(!user){
-        //If not, code error
-        return res.status(403).json("NOthing to show");
-    }
-    //If user exists
-    //FInd his images
-    const userImages = await UserImage.findAll({
-        where: {
-            userid: user.id
+    try{
+        let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
+            'and (user_visibilityid = 1 or EXISTS '+//User is public or...
+            //Actual user following the wanted 
+            '(select * from user_following where targetid = :targetid and sourceid = :currentId))',
+            { 
+                replacements: { targetid: targetid,
+                    currentId: id}, 
+                type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
+            })
+            .then((user) => {
+                console.log(user);
+                return user;
+            })
+            .catch((error) => {
+                console.error('Error occurred during query:', error);
+            });
+        //If we find an user...
+        if(!user){
+            //If not, code error
+            return res.status(403).json("Nothing to show");
         }
-    });
-    if(userImages.length != 0) user.userPictures = userImages;
-    //Succesful request
-    return res.status(200).json(user);
+        //If user exists
+        //FInd his images
+        const userImages = await UserImage.findAll({
+            where: {
+                userid: targetid
+            }
+        });
+        if(userImages.length != 0) user.userPictures = userImages;
+        //FInd his relationship
+        user.relationship = await knowrelationship(id, targetid);
+        //Succesful request
+        return res.status(200).json(user);
+    }catch(e){
+        return res.status(500).json("Something was wrong fetching the user by id")
+    }
 
 }
 const blockUser = async(req, res = response) => {

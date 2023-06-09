@@ -88,9 +88,7 @@ export class ShowUsersSearchComponent implements OnInit {
   showMessageForm() {
     this.visibleMessageForm = !this.visibleMessageForm;
   }
-  sendMessage(userToId){
-
-  }
+  
 
 
 }

@@ -1,7 +1,8 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
-const { UserImage, User, ImageComment } = require("../models");
+const { UserImage, User, ImageComment, UserNotification } = require("../models");
 const fs = require('fs');
 const path = require('path');
+const { newNotification } = require("../helpers/userFunctions");
 
 const directoryImages = process.env.FOLDER_IMAGES_USERS;
 
@@ -50,11 +51,15 @@ const uploadOne = async (req, res) => {
 const newComment = async (req, res) => {
   const userid = req.user.id;
   const user_imageid = req.body.imageid;
+  const uploaderid = req.photo.user.id;
   const body = req.body.body;
   console.log(req);
   try{
+
     //Create the comment
     await ImageComment.create({userid, user_imageid, body});
+    
+    await newNotification(userid, uploaderid, 3, user_imageid);
 
     res.status(200).send({ok: true});
   }catch(err){
@@ -125,7 +130,7 @@ const getListFiles = (req, res) => {
     });
 };
 const getImageAndComments = async (req, res) => {
-  const id_image = req.params.id;
+  const id_image = req.photo.id ||req.params.image_id;
   console.log("Entramos a cargar imagen con sus comentarios");
   const image = await UserImage.findByPk(id_image, {
     include: [
@@ -167,10 +172,11 @@ const download = (req, res) => {
   });
 };
 const serveImage = async (req, res) => {
-  const id_image = req.params.id;
+  const id_image = req.params.image_id;
   console.log("Hola");
-  const image = await UserImage.findByPk(id_image);
-  console.log("Hola");
+  const image = req.photo || await UserImage.findByPk(id_image);
+
+  console.log(image);
   if(!image){
     return res.status(404);
   } 
@@ -222,39 +228,6 @@ const getImagesFromUser = async (req, res) => {
     where:{
       userid: id_user
     }
-  });
-
-  if(!images){
-    return res.status(404);
-  }
-
-  //We fullfill this with info of every image
-  const responseData = images.map(image => {
-    return {
-      imageUrl: `/images/${image.id}`,
-      title: image.title,
-      createdAt: image.createdAt
-    };
-  });
-  return res.status(200).send(responseData);
-};
-//Show the picture with its comments
-const showImage = async (req, res) => {
-  const id_image = req.param.id;
-  const images = await UserImage.findOne({
-    where:{
-      id: id_image
-    },
-    include: {
-      model: ImageComment, //Model
-      as : 'user_imageid', //Name relationship
-      attributes: ['id', 'body', 	'createdAt' ], //Attributes that we want
-      include:{
-        model: User,
-        as: 'user',
-        attributes: ['name', 'last_name']
-      }
-  }
   });
 
   if(!images){

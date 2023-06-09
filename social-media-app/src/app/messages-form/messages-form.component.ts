@@ -9,7 +9,6 @@ import { ActionsService } from '../services/actions.service';
 })
 export class MessagesFormComponent implements OnInit {
   @Input() targetid: string;
-  @Input() sourceid: string;
   @Output() close = new EventEmitter<void>();
 
 

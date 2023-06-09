@@ -16,7 +16,7 @@
       </p>
       <!--If is a comment in a photo -->
       <p class="notification-message" [ngClass]="{'new-notification': !notification.is_see}" *ngIf="notification.notification_objectid == 3">
-        @{{ notification.source.nickname }} <a [href]="'/images/' + notification.entity_id"> {{ notification.notification_object.description }} </a>
+        @{{ notification.source.nickname }} <a [href]="'/images/show/' + notification.entity_id"> {{ notification.notification_object.description }} </a>
       </p>
     </div>
   </div>

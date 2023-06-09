@@ -22,7 +22,7 @@
 
           <img [src]="profilePicture" alt="Profile Picture" class="img-fluid mb-3">
           <h4>{{ user.name }} {{ user.last_name }}</h4>
-          <h5>{{ user.nickname }}</h5>
+          <h5>@{{ user.nickname }}</h5>
           <p *ngIf="user.bio">{{ user.bio }}</p>
           <p>Followers:
              <a routerLink="/followers"><strong>{{ numberFollowers }}</strong></a>

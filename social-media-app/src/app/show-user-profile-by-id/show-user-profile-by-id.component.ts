@@ -15,7 +15,7 @@ import { ImageserviceService } from '../services/imageservice.service';
 export class ShowUserProfileByIdComponent implements OnInit {
   nickname : string;
   user ;
-  showMessageForm = false;
+  showMessageForm: boolean = false;
   targetid : number;
   form: FormBuilder;
   serverImages =  "http://localhost:8000/api/images/";
@@ -45,7 +45,9 @@ export class ShowUserProfileByIdComponent implements OnInit {
         this.user = response;
         this.userPictures = response.userPictures || null;
         this.loadProfilePicture();
-        this.loadImagesInfo();
+        if(this.userPictures){
+          this.loadImagesInfo();
+        }
         console.log(this.user);
         // Do something with the user(s) data
       },
@@ -90,6 +92,7 @@ export class ShowUserProfileByIdComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
+      this.fetchData();
       alert("Send request");
       // ...
     }, error => {
@@ -105,6 +108,7 @@ export class ShowUserProfileByIdComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
+      this.fetchData();
       alert("Canceled request");
       // ...
     }, error => {
@@ -115,9 +119,6 @@ export class ShowUserProfileByIdComponent implements OnInit {
   }
   toggleMessageForm() {
     this.showMessageForm = !this.showMessageForm;
-  }
-  sendMessage(userToId){
-
   }
 
 

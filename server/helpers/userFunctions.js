@@ -1,4 +1,5 @@
-const { User, UserBlocked, UserFollowing, UserNotification, UserImage } = require('../models/index');
+const { Op } = require('sequelize');
+const { User, UserBlocked, UserFollowing, UserNotification, UserImage, UserFollower, UserRequest } = require('../models/index');
 
 //We check if the user is blocked by other
 const userIsNotBlocked = (sourceId, targetId) => {
@@ -37,9 +38,50 @@ const newNotification = async (sourceid, targetid, notification_objectid, entity
     await UserNotification.create({sourceid, targetid, notification_objectid, entity_id});
 
 }
+//With this method we know if the actual user is
+//unknow, blocked, friend or pending from another
+const knowrelationship = async(userid, targetid) => {
+  if(userid == targetid){
+    return "herself"; //If there are the same person..
+  }
+  //Now check if the user is blocked by him or viceversa
+  const isBlocked = await UserBlocked.findOne({
+    where:{
+      [Op.or]:[
+        { targetid: userid, sourceid: targetid},
+        { targetid: targetid, sourceid: userid},
+      ]
+    }
+  });
+
+  if(isBlocked){
+    return "blocked";
+  }
+  //CHeck if user is follower of the uploader
+  const userAreFollower = await UserFollower.findOne({
+    where:
+    { sourceid: userid, targetid: targetid }
+  });
+  //If target is friend...
+  if(userAreFollower){
+    return "follower";
+  }
+  const arePending = await UserRequest.findOne({
+    where:{
+      sourceid: userid, targetid: targetid
+    }
+  });
+
+  if(arePending){
+    return "pending";
+  }
+  //If nothing they are unknows
+  return "unknows";
+}
 
 module.exports = {
     userIsNotBlocked,
     newNotification,
-    getImagesFromUser
+    getImagesFromUser,
+    knowrelationship
 }
