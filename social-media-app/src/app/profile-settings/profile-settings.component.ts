@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { TokenStorageService } from '../services/token-storage.service';
 import { UserService } from '../services/user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-profile-settings',
@@ -12,8 +12,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ProfileSettingsComponent implements OnInit {
   user: User;
   form: FormGroup;
-  visibilyOptions: any;
+  visibilyOptions: any = [];
   imageFile: File;
+
 
   constructor(private userService: UserService, private formBuilder: FormBuilder) { }
 
@@ -24,8 +25,8 @@ export class ProfileSettingsComponent implements OnInit {
       name: ['', [Validators.nullValidator, Validators.minLength(3)] ],
       last_name: ['', [Validators.nullValidator, Validators.minLength(3)]],
       password: ['', [Validators.nullValidator, Validators.minLength(3)]],
-      user_visibilityid: ['', [Validators.nullValidator]],
-      // Add more form controls as needed
+      user_visibilityid: ['', [Validators.nullValidator, this.visibilityOptionValidator]],
+      // Add more form controls
     });
     //Get the user
     this.fetchData();
@@ -41,9 +42,8 @@ export class ProfileSettingsComponent implements OnInit {
         last_name: data.last_name,
         password: ""
       })
-    },
-    err => {
-      console.log("Ha habido un error en el fetch");
+    },err => {
+      console.log("Ha habido un error en el fetch data "+err);
     });
     this.visibilyOptions = [
       { id: 1, visibility: "public" },
@@ -63,6 +63,7 @@ export class ProfileSettingsComponent implements OnInit {
 
       // Create a new object for the modified fields
       const updatedFields = {};
+      console.log(formValue);
 
       // Check each field if it has been modified and add it to the updatedFields object
       if (this.form.controls.name.dirty) {
@@ -98,15 +99,6 @@ export class ProfileSettingsComponent implements OnInit {
     }
   }
 
-  private updateUser() {
-    this.userService.updateUser(this.form.value)
-    .subscribe((response) => {
-      console.log("Succesful request", response)
-    },
-    error => {
-        console.log("Ha habido un error", error);
-    });
-  }
 
   onFileChange(event: any) {
     this.imageFile = event.target.files[0];
@@ -127,5 +119,16 @@ export class ProfileSettingsComponent implements OnInit {
         }
       );
   }
+
+  //Check that the visibilty value is inside
+  visibilityOptionValidator = (control: AbstractControl): { [key: string]: any } | null => {
+    const selectedOption = control.value;
+    console.log(this.visibilyOptions);
+
+    const isValidOption = this.visibilyOptions.some(option => option.id === selectedOption);
+    console.log(isValidOption+ " final")
+    return isValidOption ? null : { invalidVisibilityOption: true };
+  }
+
 
 }

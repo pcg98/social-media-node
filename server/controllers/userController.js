@@ -127,6 +127,7 @@ const uploadProfilePicture = (req, res, next) => {
 const updateUser = async (req, res) => {
     try{
         const id_user = req.user.id;
+        //Things that can't change
         const { id, email, nickname, password, user_rolid, ...rest } = req.body;
         console.log(rest)
 
@@ -135,7 +136,6 @@ const updateUser = async (req, res) => {
             const salt = bcryptjs.genSaltSync();
             rest.password = bcryptjs.hashSync( password, salt );
         }
-        console.log("Not is the password" +rest);
         const user = await User.findByPk(id_user);
         await user.update(rest);
         console.log(user);
