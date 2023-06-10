@@ -1,22 +1,27 @@
 <div class="picture-container">
   <ng-container *ngIf="image">
-    <img [src]="image.blob" alt="Picture">
     <div class="picture-info">
-      <p>Uploaded by: <a [href]="'users/profile/' +uploader.id"> {{ uploader.nickname }} </a></p>
+      <h2 *ngIf="image.title">Title: {{ image.title }}</h2>
+      <p>Uploaded by: <a [href]="'users/profile/' + uploader.id"> {{ uploader.nickname }} </a></p>
       <p>Upload date: {{ image.createdAt }}</p>
     </div>
-    <div class="comments-section">
-      <h3>Comments</h3>
-      <div class="comment" *ngFor="let comment of comments">
-        <p><strong><a [href]="'users/profile/' +comment.user.id">{{ comment.user.nickname }} </a></strong> - {{ comment.createdAt }}</p>
-        <p>{{ comment.body }}</p>
+    <div class="content-container">
+      <div class="photo-container">
+        <img [src]="image.blob" alt="Picture">
       </div>
-      <div class="comment-input">
-        <form (ngSubmit)="submitForm()">
-          <textarea name="body"  [(ngModel)]="newComment" placeholder="Add a comment"></textarea>
-          <input type="hidden" name="imageid" [ngModel]="imageId" [value]="image.id">
-          <button type="submit">Post</button>
-        </form>
+      <div class="comments-container">
+        <h3>Comments</h3>
+        <div class="comment" *ngFor="let comment of comments">
+          <p><strong><a [href]="'users/profile/' + comment.user.id">{{ comment.user.nickname }} </a></strong> - {{ comment.createdAt }}</p>
+          <p>{{ comment.body }}</p>
+        </div>
+        <div class="comment-input">
+          <form (ngSubmit)="submitForm()">
+            <textarea name="body" [(ngModel)]="newComment" placeholder="Add a comment"></textarea>
+            <input type="hidden" name="imageid" [ngModel]="imageId" [value]="image.id">
+            <button type="submit">Post</button>
+          </form>
+        </div>
       </div>
     </div>
   </ng-container>

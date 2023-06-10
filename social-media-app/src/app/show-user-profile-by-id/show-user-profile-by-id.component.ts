@@ -4,8 +4,8 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
 import { ImageserviceService } from '../services/imageservice.service';
-
 
 @Component({
   selector: 'app-show-user-profile-by-id',
@@ -25,7 +25,8 @@ export class ShowUserProfileByIdComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private actionsService: ActionsService,
-    private imageService: ImageserviceService, private sanitizer: DomSanitizer) { }
+    private imageService: ImageserviceService, private sanitizer: DomSanitizer,
+    private flashMessagesService: FlashMessagesService) { }
 
   //On init...
   ngOnInit() {
@@ -52,7 +53,7 @@ export class ShowUserProfileByIdComponent implements OnInit {
         // Do something with the user(s) data
       },
       (error: any) => {
-        console.log("Something was wrong loading the user");
+        this.flashMessagesService.showError('Something was wrong loading the user' +error);
       }
     );
   }
@@ -92,13 +93,10 @@ export class ShowUserProfileByIdComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
+      this.flashMessagesService.showSuccess('Request send');
       this.fetchData();
-      alert("Send request");
-      // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong sending the request' +error);
     });
   }
   cancelRequest(form: NgForm) {
@@ -106,19 +104,27 @@ export class ShowUserProfileByIdComponent implements OnInit {
     console.log('Form Data Cancel:', formValues);
     this.actionsService.postCancelRequestFriend(formValues)
     .subscribe(response => {
-      // Handle the response from the server
-      console.log('Response:', response);
+      this.flashMessagesService.showSuccess('Request canceled');
       this.fetchData();
-      alert("Canceled request");
       // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong cancelling' +error);
     });
   }
   toggleMessageForm() {
     this.showMessageForm = !this.showMessageForm;
+  }
+
+  unfollow(){
+    this.actionsService.deleteUserFollowing(this.targetid)
+    .subscribe((data) => {
+      this.flashMessagesService.showSuccess('Unfollow user');
+      console.log(data)
+      this.fetchData();
+    },
+    (error) => {
+      this.flashMessagesService.showError('Something was wrong unfollowing ' +error);
+    })
   }
 
 

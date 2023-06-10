@@ -1,49 +1,91 @@
+/* Custom CSS styles for the picture page */
 .picture-container {
-  display: flex;
-  align-items: flex-start;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.picture-info {
   margin-bottom: 20px;
 }
 
-.picture {
-  flex: 0 0 40%;
-  margin-right: 20px;
+.picture-info h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-.picture img {
-  width: 100%;
+.picture-info p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.content-container {
+  display: flex;
+}
+
+.photo-container {
+  flex: 1;
+}
+
+.photo-container img {
+  max-width: 100%;
   height: auto;
 }
 
-.comments-section {
+.comments-container {
   flex: 1;
+  margin-left: 20px;
+}
+
+.comments-container h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .comment {
   margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f5f5f5;
 }
 
 .comment p {
-  margin: 0;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.comment p a {
+  text-decoration: none;
+  color: #337ab7;
+}
+
+.comment-input {
+  margin-top: 20px;
+}
+
+.comment-input form {
+  display: flex;
+  align-items: center;
 }
 
 .comment-input textarea {
   width: 100%;
-  min-height: 80px;
-  margin-bottom: 10px;
+  height: 60px;
+  resize: none;
   padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+.comment-input input[type="hidden"] {
+  display: none;
 }
 
 .comment-input button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
   background-color: #337ab7;
   color: #fff;
   border: none;
-  padding: 5px 10px;
   cursor: pointer;
-}
-
-.comment-input button:hover {
-  background-color: #286090;
 }
 

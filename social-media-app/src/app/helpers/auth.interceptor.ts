@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 
 import { TokenStorageService } from '../services/token-storage.service';
-import { environment } from 'src/environments/environment';
 
 const TOKEN_HEADER_KEY = 'x-token';
 

@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { FlashMessagesService } from './flash-messages.service';
 const API_URL = environment.apiUrl+'/messages';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,11 +17,15 @@ export class MessagesService {
   private messageSubject = new BehaviorSubject<string>(''); // Initialize with an empty string
   message$ = this.messageSubject.asObservable();
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient,
+    private flashMessagesService: FlashMessagesService) { }
 
-  sendMessageAndRedirect(message: string, component: string) {
+  sendMessageAndRedirect(message: string, url: string) {
     this.messageSubject.next(message);
-    this.router.navigate([component]);
+    this.router.navigateByUrl(url).then(() => {
+      window.location.reload();
+      this.flashMessagesService.showSuccess('Loggin succesful');
+    });
   }
 
   getUserConversations(): Observable<any> {

@@ -27,6 +27,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { UploadImageComponent } from './upload-image/upload-image.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { ShowImageComponent } from './show-image/show-image.component';
+import { FlashMessageComponent } from './flash-message/flash-message.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ShowImageComponent } from './show-image/show-image.component';
     NotificationsComponent,
     UploadImageComponent,
     ProfileSettingsComponent,
-    ShowImageComponent
+    ShowImageComponent,
+    FlashMessageComponent
   ],
   imports: [
     BrowserModule,

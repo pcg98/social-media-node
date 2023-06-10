@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, NgForm } from '@angular/forms';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
 
 @Component({
   selector: 'app-show-requests',
@@ -15,7 +16,8 @@ export class ShowRequestsComponent implements OnInit {
   form: FormBuilder;
 
 
-  constructor(private actionsService: ActionsService) { }
+  constructor(private actionsService: ActionsService,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     this.fetchData();
@@ -29,7 +31,7 @@ export class ShowRequestsComponent implements OnInit {
         console.log(this.requests);
       },
       (error: any) => {
-        // Handle error
+        this.flashMessagesService.showError('Something was wrong '+error);
       }
     );
   }
@@ -42,13 +44,12 @@ export class ShowRequestsComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Answering request");
+      this.flashMessagesService.showSuccess("Request answered");
       this.fetchData();
       // ...
     }, error => {
       // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong '+error);
     });
   }
 
@@ -60,29 +61,12 @@ export class ShowRequestsComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Answering request");
+      this.flashMessagesService.showSuccess("Request rejected");
       this.fetchData();
       // ...
     }, error => {
       // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
-    });
-  }
-
-  sendAnswer(form: NgForm){
-    const formValues = form.value;
-    console.log('Form Data:', formValues);
-    this.actionsService.postResponseRequestFriend(formValues)
-    .subscribe(response => {
-      // Handle the response from the server
-      console.log('Response:', response);
-      alert("Answering request");
-      this.fetchData();
-      // ...
-    }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
+      this.flashMessagesService.showError("Something was wrong "+error);
       // ...
     });
   }

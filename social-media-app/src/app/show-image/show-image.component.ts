@@ -45,7 +45,7 @@ export class ShowImageComponent implements OnInit {
       console.log("Error creating a new comment "+error);
     })
   }
-  
+
   fetchData(){
     this.imageserviceService.getImageUrlsAndCommentsByPictureId(this.imageId)
     .subscribe((response) => {
@@ -59,6 +59,7 @@ export class ShowImageComponent implements OnInit {
       console.log("Error while fetch the data for show the image "+error);
     })
   }
+  
   fetchImage(imageData){
     this.imageserviceService.getImageById(imageData.id)
     .subscribe((photoBlob) => {

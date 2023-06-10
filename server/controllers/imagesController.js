@@ -157,7 +157,7 @@ const getImageAndComments = async (req, res) => {
   } 
   console.log("Hola");
 
-  return res.status(200).send(image);
+  return res.status(200).json(image);
 }
 const download = (req, res) => {
   const fileName = req.params.name;

@@ -48,7 +48,7 @@ export class ActionsService {
   postCancelRequestFriend(data: any): Observable<any>{
     console.log("Cancelling a request ",data);
     console.log(API_URL+"/cancel-request");
-    console.log(data.targetId)
+    console.log(data.targetid);
     return this.http.post(API_URL+"/cancel-request",{
       targetid: data.targetid,
       sourceid: data.sourceid

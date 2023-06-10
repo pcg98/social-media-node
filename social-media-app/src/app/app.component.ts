@@ -9,11 +9,8 @@ import { TokenStorageService } from './services/token-storage.service';
 export class AppComponent implements OnInit {
   private role: number;
   isLoggedIn = false;
-  showAdminBoard = false;
-  showModeratorBoard = false;
   username: string;
   currentUserId: number
-  title: 'Social Media App'
 
   constructor(private tokenStorageService: TokenStorageService) { }
 
@@ -23,10 +20,6 @@ export class AppComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       console.log(user," desde app");
       this.role = user.rol_id;
-      /*
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
-      this.showModeratorBoard = this.roles.includes('ROLE_MODERATOR');
-      */
       this.username = user.username;
     }
   }

@@ -1,0 +1,31 @@
+.flash-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 9999;
+}
+
+.success {
+  background-color: #55a355;
+}
+
+.error {
+  background-color: #d9534f;
+}
+
+.flash-message .icon {
+  margin-right: 8px;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.flash-message .message {
+  vertical-align: middle;
+}
+

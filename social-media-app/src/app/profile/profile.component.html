@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     /* Add custom CSS styles here */
   </style>
@@ -12,31 +13,35 @@
 <body>
   <ng-container *ngIf="user">
 
-    <p>
-      {{ user | json }}
-
-    </p>
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-4">
-
-          <img [src]="profilePicture" alt="Profile Picture" class="img-fluid mb-3">
-          <h4>{{ user.name }} {{ user.last_name }}</h4>
-          <h5>@{{ user.nickname }}</h5>
-          <p *ngIf="user.bio">{{ user.bio }}</p>
-          <p>Followers:
-             <a routerLink="/followers"><strong>{{ numberFollowers }}</strong></a>
-          </p>
-          <p>Following:
-            <a routerLink="/following"><strong>{{ numberFollowing }}</strong></a>
-          </p>
+          <div class="card mb-3">
+            <img [src]="profilePicture" alt="Profile Picture" class="card-img-top">
+            <div class="card-body">
+              <h4 class="card-title">{{ user.name }} {{ user.last_name }}</h4>
+              <h5 class="card-subtitle">@{{ user.nickname }}</h5>
+              <p class="card-text" *ngIf="user.bio">{{ user.bio }}</p>
+              <p class="card-text">Followers:
+                <a routerLink="/followers"><strong>{{ numberFollowers }}</strong></a>
+              </p>
+              <p class="card-text">Following:
+                <a routerLink="/following"><strong>{{ numberFollowing }}</strong></a>
+              </p>
+            </div>
+          </div>
         </div>
         <div class="col-md-8">
           <div class="row">
             <div *ngFor="let image of userPictures" class="col-md-4 mb-4">
-              <a [href]="'/images/show/' + image.id">
-                <img [src]="image.result" [alt]="image.title" class="img-fluid">
-              </a>
+              <div class="card">
+                <a [href]="'/images/show/' + image.id">
+                  <img [src]="image.result" [alt]="image.title" class="card-img-top">
+                </a>
+                <div class="card-body">
+                  <p class="card-text">{{ image.title }}</p>
+                </div>
+              </div>
             </div>
             <div *ngIf="userPictures.length === 0" class="col-md-12">
               <p>No images to display.</p>
@@ -47,6 +52,7 @@
     </div>
 
   </ng-container>
+
 </body>
 
 </html>

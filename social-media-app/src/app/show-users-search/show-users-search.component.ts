@@ -3,7 +3,9 @@ import { FormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
 import { UserService } from '../services/user.service';
+
 
 @Component({
   selector: 'show-users-search',
@@ -20,7 +22,7 @@ export class ShowUsersSearchComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private userService: UserService,
-    private actionsService: ActionsService) { }
+    private actionsService: ActionsService, private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     this.inicializeComponent();
@@ -43,10 +45,9 @@ export class ShowUsersSearchComponent implements OnInit {
           this.users = [response]; // Create an array with the single user
         }
         console.log(this.users);
-        // Do something with the user(s) data
       },
       (error: any) => {
-        // Handle error
+        this.flashMessagesService.showError('Something was wrong getting the users '+error);
       }
     );
   }
@@ -59,13 +60,10 @@ export class ShowUsersSearchComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Send request");
+      this.flashMessagesService.showSuccess('Success sending the request');
       this.inicializeComponent();
-      // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong sending the request '+error);
     });
   }
   cancelRequest(form: NgForm) {
@@ -73,22 +71,18 @@ export class ShowUsersSearchComponent implements OnInit {
     console.log('Form Data Cancel:', formValues);
     this.actionsService.postCancelRequestFriend(formValues)
     .subscribe(response => {
-      // Handle the response from the server
       console.log('Response:', response);
-      alert("Canceled request");
+      this.flashMessagesService.showSuccess('Success cancelling the request');
       this.inicializeComponent();
-      // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong cancelling the request '+error);
     });
   }
   //Hide or display the form
   showMessageForm() {
     this.visibleMessageForm = !this.visibleMessageForm;
   }
-  
+
 
 
 }

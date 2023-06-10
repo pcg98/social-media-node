@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActionsService } from '../services/actions.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
+
 
 @Component({
   selector: 'app-messages-form',
@@ -12,7 +14,8 @@ export class MessagesFormComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
 
-  constructor(private actionsService: ActionsService) { }
+  constructor(private actionsService: ActionsService,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
   }
@@ -28,14 +31,12 @@ export class MessagesFormComponent implements OnInit {
     .subscribe(response => {
       // Handle the response from the server
       console.log('Response:', response);
-      alert("Message was sent");
+      this.flashMessagesService.showSuccess('Message was sent');
       //Close the messages form
       this.closeMessages();
       // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong sending the message '+error);
     });
   }
 

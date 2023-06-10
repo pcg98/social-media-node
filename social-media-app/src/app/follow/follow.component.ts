@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ActionsService } from '../services/actions.service';
-
+import { FlashMessagesService } from '../services/flash-messages.service';
 
 @Component({
   selector: 'app-follow',
@@ -15,7 +15,8 @@ export class FollowComponent implements OnInit {
   serverImages =  "http://localhost:8000/api/images/"
 
   constructor(private route: ActivatedRoute,
-    private actionsService :ActionsService) { }
+    private actionsService :ActionsService,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     this.fetchData();
@@ -42,39 +43,29 @@ export class FollowComponent implements OnInit {
       // Handle the response from the server
       console.log('Response following:', response);
       this.follows = response.map((res) => res.target );
-      // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong '+error);
     });
   }
   inicializateFollowers(){
     this.actionsService.getUserFollowers()
     .subscribe(response => {
-      // Handle the response from the server
       console.log('Response followers:', response);
       this.follows = response.map((res) => res.source );
-      // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong '+error);
     });
   }
   deleteUser(id:number){
     //Pass the id of the other user and it's a follower or following
     this.actionsService.deleteUserFollow(id, this.type)
     .subscribe(response => {
-      // Handle the response from the server
+      this.flashMessagesService.showSuccess('Success in the operation');
       console.log('Response:', response);
-      alert("Deleting user");
       this.fetchData();
       // ...
     }, error => {
-      // Handle any error that occurs during the request
-      console.error('Error:', error);
-      // ...
+      this.flashMessagesService.showError('Something was wrong '+error);
     });
   }
 

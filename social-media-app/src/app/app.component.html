@@ -1,10 +1,11 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    Welcome to {{ title }}!
+    Welcome to Social Media App!
   </h1>
 </div>
-  <app-navbar-menu *ngIf="isLoggedIn">
-  </app-navbar-menu>
-  <router-outlet></router-outlet>
+  <app-navbar-menu *ngIf="isLoggedIn"></app-navbar-menu>
+
+<app-flash-message></app-flash-message>
+<router-outlet></router-outlet>
 

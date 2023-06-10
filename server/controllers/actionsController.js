@@ -52,7 +52,7 @@ const sendRequest = async(req, res = response) => {
 
 const cancelRequest = async(req, res = response) => {
     const sourceid = req.user.id;
-    const { targetid } = req.body;
+    const targetid = req.params.targetid || req.body.targetid;
     try {
         //Check on  if request exists
         const request = await UserRequest.findOne({ 

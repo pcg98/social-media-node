@@ -3,6 +3,7 @@ import { User } from '../models/user.model';
 import { TokenStorageService } from '../services/token-storage.service';
 import { UserService } from '../services/user.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FlashMessagesService } from '../services/flash-messages.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -16,7 +17,8 @@ export class ProfileSettingsComponent implements OnInit {
   imageFile: File;
 
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder) { }
+  constructor(private userService: UserService, private formBuilder: FormBuilder,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
 
@@ -43,7 +45,7 @@ export class ProfileSettingsComponent implements OnInit {
         password: ""
       })
     },err => {
-      console.log("Ha habido un error en el fetch data "+err);
+      this.flashMessagesService.showError("Ha habido un error en el fetch data "+err);
     });
     this.visibilyOptions = [
       { id: 1, visibility: "public" },
@@ -51,11 +53,6 @@ export class ProfileSettingsComponent implements OnInit {
     ];
   }
 
-  saveSettings() {
-    // Logic to save the settings to the server
-    console.log('Saving settings:', this.user);
-    this.fetchData();
-  }
 
   onSubmit() {
     if (this.form.valid) {
@@ -85,17 +82,17 @@ export class ProfileSettingsComponent implements OnInit {
       this.userService.updateUser(updatedFields).subscribe(
         response => {
           // Handle the server response if needed
-          console.log('Update successful');
+          this.flashMessagesService.showSuccess('Update successful');
           console.log(response);
         },
         error => {
           // Handle any errors that occurred during the server update
-          console.error('Update failed', error);
+          this.flashMessagesService.showError('Update failed' +error);
         }
       );
     } else {
       // Form is invalid, handle validation errors
-      console.log('Form is invalid');
+      this.flashMessagesService.showError('Invalid form');
     }
   }
 
@@ -110,11 +107,11 @@ export class ProfileSettingsComponent implements OnInit {
     this.userService.changeProfilePicture(this.imageFile)
       .subscribe(
         response => {
-          console.log('Image uploaded successfully', response);
+          this.flashMessagesService.showSuccess('Image uploaded successfully');
           // Handle success response
         },
         error => {
-          console.error('Error uploading image', error);
+          this.flashMessagesService.showError('Error uploading image' +error);
           // Handle error response
         }
       );

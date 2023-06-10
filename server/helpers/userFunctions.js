@@ -58,13 +58,13 @@ const knowrelationship = async(userid, targetid) => {
     return "blocked";
   }
   //CHeck if user is follower of the uploader
-  const userAreFollower = await UserFollower.findOne({
+  const userAreFollowingTarget = await UserFollower.findOne({
     where:
     { sourceid: userid, targetid: targetid }
   });
-  //If target is friend...
-  if(userAreFollower){
-    return "follower";
+  //If target is following by the user...
+  if(userAreFollowingTarget){
+    return "following";
   }
   const arePending = await UserRequest.findOne({
     where:{

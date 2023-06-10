@@ -30,10 +30,12 @@
           </div>
         </div>
       </div>
-       <!-- Message Form -->
-    <div *ngIf="visibleMessageForm">
-      <app-messages-form [targetid]="user.id" (close)="showMessageForm()"></app-messages-form>
-    </div>
+      <!-- Message Form -->
+      <div *ngIf="visibleMessageForm">
+        <app-messages-form [targetid]="user.id" (close)="showMessageForm()"></app-messages-form>
+      </div>
     </div>
   </div>
 </div>
+
+
