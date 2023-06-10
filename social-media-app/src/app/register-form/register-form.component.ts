@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { FlashMessagesService } from '../services/flash-messages.service';
 import { MessagesService } from '../services/messages-service.service';
 import { UserService } from '../services/user.service';
 import { CustomValidators } from './custom-validatiors';
+
 
 
 @Component({
@@ -13,55 +15,81 @@ import { CustomValidators } from './custom-validatiors';
   styleUrls: ['./register-form.component.css']
 })
 export class RegisterFormComponent implements OnInit {
-  sexes :string[] = ['man','woman','other'];
-  user : any = {};
+  sexes: string[] = ['man', 'woman', 'other'];
+  user: any = {};
   userForm: FormGroup;
   httpAnswerMessageError: string;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private router: Router, private MessagesService: MessagesService) { }
+  constructor(
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private MessagesService: MessagesService,
+    private customValidators: CustomValidators,
+    private flashMessagesService: FlashMessagesService
+  ) {}
 
   ngOnInit() {
     this.userForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      last_name: ['', [Validators.required, Validators.minLength(3)]],
-      username: ['', [Validators.required, Validators.minLength(3)], [CustomValidators.uniqueUsername(this.userService)]],
-      telephone: ['', [Validators.required, Validators.minLength(3), CustomValidators.phoneValidator()]],
-      email: ['', [Validators.required, Validators.email, /*CustomValidators.uniqueEmail()*/]],
+      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      nickname: [
+        '',
+        [Validators.required, Validators.minLength(3)],
+        [this.customValidators.uniquenicknameValidator()]
+      ],
+      telephone: [
+        '',
+        [Validators.required, Validators.minLength(3),
+        this.customValidators.phoneValidator()]//After send the form
+      ],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       sex: ['', [Validators.required]],
       bio: ['', Validators.maxLength(100)]
     });
   }
-  onSubmit(){
 
-    this.userService.createUser(this.user) // pass the user object to the createUser() method in the UserService
-      .subscribe(() => {
-        console.log('User created successfully!');
+  onSubmit() {
+    //If the form is invalid we show error message
+    if(!this.userForm.valid){
+      //If it's invalid we show the error
+      this.flashMessagesService.showError('The form is invalid');
+    }
+    //If it's correct
+    this.userService.createUser(this.user).subscribe(
+      () => {
+        this.flashMessagesService.showSuccess('User created successfully!');
         this.MessagesService.sendMessageAndRedirect('Login successful', '/home');
-      }, error => {
+      },
+      (error) => {
         console.log(error);
         console.log(error.nicknameTaken);
-        if(error.error.nicknameTaken){
-          alert("Nickname taken")
+        if (error.error.nicknameTaken) {
+          this.flashMessagesService.showError('Nickname taken');
         }
-        if(error.error.emailTaken){
-          alert("Email taken")
+        else if (error.error.emailTaken) {
+          this.flashMessagesService.showError('Email taken');
         }
-        if(error.error.telephoneTaken){
-          alert("Telephone taken")
+        else if (error.error.telephoneTaken) {
+          this.flashMessagesService.showError('Telephone taken');
         }
-        //this.httpAnswerMessageError = error.error;
-      });
-      console.log(this.userForm.value)
+        else{
+          this.flashMessagesService.showError('Something was wrong');
+        }
+      }
+    );
+
   }
+
   matchingPasswords(passwordKey: string, confirmPasswordKey: string) {
     return (group: FormGroup) => {
       let password = group.controls[passwordKey];
       let confirmPassword = group.controls[confirmPasswordKey];
 
       if (password.value !== confirmPassword.value) {
-        return confirmPassword.setErrors({ mismatchedPasswords: true })
+        return confirmPassword.setErrors({ mismatchedPasswords: true });
       }
-    }
+    };
   }
 }

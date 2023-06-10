@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { FlashMessagesService } from 'src/app/services/flash-messages.service';
 import { MessagesService } from 'src/app/services/messages-service.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 
@@ -15,14 +16,11 @@ export class ChatsComponent implements OnInit {
   messages: any[];
   currentUserId: Number;
   targetid: Number; //Other user
-  isAtBottom: boolean = true;
-
-    @ViewChild('messageList') messageList: ElementRef;
 
 
 
   constructor(private messagesService: MessagesService, private route: ActivatedRoute,
-    private tokenStorageService: TokenStorageService) { }
+    private tokenStorageService: TokenStorageService, private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     //Get the id and load from the server
@@ -39,9 +37,8 @@ export class ChatsComponent implements OnInit {
         this.messages = response.messages;
         //Get the other user id
         this.targetid = (this.conversation.sourceid != this.currentUserId) ? this.conversation.sourceid : this.conversation.targetid
-        console.log(this.targetid)
+        console.log(this.targetid);
         console.log(this.messages);
-        this.scrollToBottom();
         // Do something with the user(s) data
       },
       (error: any) => {
@@ -49,7 +46,7 @@ export class ChatsComponent implements OnInit {
       }
     );
   }
-  
+
   inicializeComponent(){
     this.route.paramMap.subscribe(params => {
       this.chatid = params.get('id');
@@ -57,12 +54,6 @@ export class ChatsComponent implements OnInit {
       this.fetchData();
     });
   }
-
-  scrollToBottom(): void {
-    const messageListContainer = this.messageList.nativeElement;
-    messageListContainer.scrollTop = messageListContainer.scrollHeight;
-  }
-
 
 
 

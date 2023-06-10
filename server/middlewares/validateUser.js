@@ -2,8 +2,9 @@ const { response, request } = require('express');
 const { User } = require('../models/index');
 
 const emailIsUnique = async( req = request, res = response, next ) => {
+  console.log(req.body);
     const { email } = req.body;
-
+    console.log(email)
     try {
         const user = await User.findOne({ where: { email } });
         if (user) {
@@ -11,10 +12,9 @@ const emailIsUnique = async( req = request, res = response, next ) => {
         }
         next();
       } catch (err) {
-        return res.status(500).json({ message: 'Error occurred while checking email uniqueness.' });
+        return res.status(500).json({ message: 'Error occurred while checking email uniqueness. Validator' });
       }
       
-
 }
 const nicknameIsUnique = async( req = request, res = response, next ) => {
         

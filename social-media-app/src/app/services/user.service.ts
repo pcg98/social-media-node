@@ -6,6 +6,8 @@ import { User } from '../models/user.model';
 import { TokenStorageService } from './token-storage.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import * as internal from 'assert';
+import { env } from 'process';
+import { FormGroup } from '@angular/forms';
 
 
 const API_URL = environment.apiUrl+'/users';
@@ -27,34 +29,20 @@ export class UserService {
   getCurrentUserInfo():any {
     return this.tokenStorageService.getUser();
   }
-  /*
-  validarToken(): Observable<boolean> {
-    const token = localStorage.getItem('token') || '';
 
-    return this.http.get(`${ API_URL }/login/renew`, {
-      headers: {
-        'x-token': token
-      }
-    }).pipe(
-      tap( (resp: any) => {
-        localStorage.setItem('token', resp.token );
-      }),
-      map( resp => true),
-      catchError( error => of(false) )
-    );
-
-  }*/
-  createUser(data: any): Observable<any>{
-    console.log("Creating user ",data);
-    return this.http.post(API_URL+"/create", data)
+  createUser(form: FormGroup): Observable<any>{
+    console.log("Creating user ",form);
+    return this.http.post(`${environment.apiUrl}/register/create`, form.value)
   }
-  emailAvaliable(data: any): Observable<any>{
-    console.log("Creating user ",data);
-    return this.http.post(API_URL+"/check-email", data)
-  }
-  checkUsernameUnique(username: string): Observable<boolean> {
+  emailAvaliable(email: string): Observable<boolean>{
+    console.log("Checking email "+email);
     return this.http
-      .get<boolean>(`${API_URL}/users/check-username/${username}`);
+      .get<boolean>(`${environment.apiUrl}/register/check-email/${email}`);
+  }
+  checknicknameUnique(nickname: string): Observable<boolean> {
+    console.log('Into the checknicknameUnique we get '+nickname);
+    return this.http
+      .get<boolean>(`${environment.apiUrl}/register/check-nickname/${nickname}`);
   }
   getUsersByNickname(nickname: string) {
     console.log('Enter in the service');

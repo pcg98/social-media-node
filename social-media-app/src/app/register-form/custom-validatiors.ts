@@ -4,35 +4,40 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { UserService } from '../services/user.service';
 import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 const URL_API = environment.apiUrl+'users';
+@Injectable({ providedIn: 'root' })
 export class CustomValidators {
+  constructor(private userService: UserService) {}
 
-  static uniqueUsername(userService: UserService): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return userService.checkUsernameUnique(control.value).pipe(
-        map((response: any) => {
-          console.log("Username exist")
-          return response.available ? null : { usernameTaken: true };
-        }),
-        catchError(() => of(null))
+  uniquenicknameValidator(): AsyncValidatorFn {
+    console.log("Enter to check the nickname unique");
+    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      const value = control.value;
+      return this.userService.checknicknameUnique(value).pipe(
+        map(isAvailable => (isAvailable ? null : { uniqueNickname: true })),
+        catchError(() => of(null)) // Handle errors and return null if needed
       );
     };
   }
 
-  static uniqueEmail(http: HttpClient) {
-    return (control: FormControl) => {
-      const email = control.value;
-      return http.get(URL_API+'/check-email', { params: { email } })
-        .pipe(
-          map((res: any) => res.exists ? null : { emailTaken: true })
-        );
+
+  uniqueEmailValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+      const value = control.value;
+      return this.userService.emailAvaliable(value).pipe(
+        map(isAvailable => (isAvailable ? null : { uniqueEmail: true })),
+        catchError(() => of(null)) // Handle errors and return null if needed
+      );
     };
   }
-  static phoneValidator(): ValidatorFn {
-    return (control: AbstractControl): {[key: string]: any} | null => {
+
+  phoneValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
       const valid = /^\d{10}$/g.test(control.value);
-      return valid ? null : { 'invalidPhone': true };
+      return valid ? null : { invalidPhone: true };
     };
   }
+
 }

@@ -26,12 +26,12 @@ export class AuthService {
 
   register(user): Observable<any> {
     return this.http.post(BACKEND_URL + 'signup', {
-      username: user.username,
+      nickname: user.nickname,
       email: user.email,
       password: user.password
     }, httpOptions);
   }
-  
+
   get isLoggedIn$(): Observable<boolean> {
     return this.isLoggedInSubject.asObservable();
   }

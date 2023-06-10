@@ -9,7 +9,7 @@ import { TokenStorageService } from './services/token-storage.service';
 export class AppComponent implements OnInit {
   private role: number;
   isLoggedIn = false;
-  username: string;
+  nickname: string;
   currentUserId: number
 
   constructor(private tokenStorageService: TokenStorageService) { }
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
       const user = this.tokenStorageService.getUser();
       console.log(user," desde app");
       this.role = user.rol_id;
-      this.username = user.username;
+      this.nickname = user.nickname;
     }
   }
 }

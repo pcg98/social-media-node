@@ -2,36 +2,35 @@
   background-color: #f8f9fa;
 }
 
-.navbar .navbar-brand {
+.navbar-brand {
   font-weight: bold;
 }
 
-.navbar .navbar-nav .nav-link {
+.navbar-toggler-icon {
+  background-color: #000;
+}
+
+.navbar-nav .nav-link {
+  color: #000;
+}
+
+.notification-icon {
+  position: relative;
+  margin-left: 20px;
+}
+
+.notification-icon .bi-bell {
+  font-size: 1.5rem;
+}
+
+.notification-icon .nav-link {
   font-weight: bold;
 }
 
-.navbar .navbar-nav .active > .nav-link {
-  color: #007bff;
-}
-
-.navbar .logout-btn {
-  margin-left: auto;
-}
-
-.navbar .search-form {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
-}
-
-.navbar .search-input {
-  width: 200px;
-  margin-right: 5px;
-}
-
-.navbar .search-btn {
-  margin-left: 5px;
-}
 .red-icon {
   color: red;
+}
+
+.logout-btn {
+  margin-left: auto;
 }

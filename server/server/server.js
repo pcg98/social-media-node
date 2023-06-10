@@ -19,6 +19,7 @@ class Server {
         this.messagesPath = '/api/messages';
         this.followsPath = '/api';
         this.imagesPath = '/api/images';
+        this.registerPath = '/api/register';
 
         // Middlewares
         this.middlewares();
@@ -58,6 +59,7 @@ class Server {
         this.app.use( this.messagesPath, require('../routes/messages'));
         this.app.use( this.followsPath, require('../routes/friendship'));
         this.app.use( this.imagesPath, require('../routes/images'));
+        this.app.use( this.registerPath, require('../routes/register'));
 
     }
 

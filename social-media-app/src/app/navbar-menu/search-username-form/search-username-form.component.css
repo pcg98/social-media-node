@@ -1,0 +1,21 @@
+.form-inline .input-group {
+  position: relative;
+}
+
+.search-input {
+  border-radius: 0;
+}
+
+.search-btn {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.search-btn:focus {
+  box-shadow: none;
+}
+
+.search-input:focus,
+.search-btn:focus {
+  outline: none;
+}
