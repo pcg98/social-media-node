@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { tap } from 'rxjs/operators';
+import { CanActivate, Router} from '@angular/router';
 import { TokenStorageService } from '../services/token-storage.service';
 import { Observable } from 'rxjs';
+import { MessagesService } from '../services/messages-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor( private usuarioService: UserService,
+  constructor( private messagesService: MessagesService,
                private router: Router,
                private tokenStorageService: TokenStorageService) {}
     /*
@@ -27,7 +26,7 @@ export class AuthGuard implements CanActivate {
     if (!!this.tokenStorageService.getToken()) {
       return true;
     } else {
-      this.router.navigate(['/home']);
+      this.messagesService.sendMessageAndRedirect('You must be loggin', '/home', false);
       return false;
     }
   }

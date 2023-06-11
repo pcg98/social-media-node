@@ -20,11 +20,13 @@ export class MessagesService {
   constructor(private router: Router, private http: HttpClient,
     private flashMessagesService: FlashMessagesService) { }
 
-  sendMessageAndRedirect(message: string, url: string) {
-    this.messageSubject.next(message);
+  sendMessageAndRedirect(message: string, url: string, reload=true) {
+    //Redirect to the url
     this.router.navigateByUrl(url).then(() => {
-      window.location.reload();
-      this.flashMessagesService.showSuccess('Loggin succesful');
+      if(reload){ //If reload...
+        window.location.reload();
+      }
+      this.messageSubject.next(message);
     });
   }
 

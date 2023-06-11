@@ -1,24 +1,28 @@
 <div class="container">
-  <h1>Conversations</h1>
-
-  <div class="row" >
+  <div class="row">
     <div class="col-md-4">
       <div class="conversation-list">
+        <h1>Conversations</h1>
+        <div class="conversation-scroll">
+          <ul class="list-group" *ngIf="conversations; else no_conversations">
 
-        <ul class="list-group" *ngIf="conversations;else no_conversations">
+            <li class="list-group-item conversation-item" *ngFor="let conversation of conversations" [routerLink]="[conversation.id]">
+              <div class="conversation-info">
+                <div class="conversation-participant"><a [href]="'/users/profile/' + conversation.otherUser.id" >@{{ conversation.otherUser.nickname }}</a></div>
+                <div class="conversation-last-message">{{ conversation.last_message }}</div>
+                <div class="conversation-date">{{ conversation.updatedAt | date: 'MMM dd, yyyy' }}</div>
+              </div>
+            </li>
+          </ul>
 
-          <li class="list-group-item" *ngFor="let conversation of conversations" [routerLink]="[conversation.id]">
-            <div class="conversation-info">
-              <div class="conversation-participant">{{ conversation.otherUser.nickname }}</div>
-              <div class="conversation-last-message">{{ conversation.last_message }}</div>
-              <div class="conversation-date">{{ conversation.updatedAt | date: 'MMM dd, yyyy' }}</div>
+          <ng-template #no_conversations>
+            <div class="row">
+              <p class="no-conversations-text">Nothing to show</p>
             </div>
-          </li>
-        </ul>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>
-  <ng-template #no_conversations class="row">
-    <p>Nothing to show</p>
-  </ng-template>
 </div>
+

@@ -11,12 +11,12 @@ const URL_API = environment.apiUrl+'users';
 export class CustomValidators {
   constructor(private userService: UserService) {}
 
-  uniquenicknameValidator(): AsyncValidatorFn {
+  nicknameTakenValidator(): AsyncValidatorFn {
     console.log("Enter to check the nickname unique");
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
       const value = control.value;
       return this.userService.checknicknameUnique(value).pipe(
-        map(isAvailable => (isAvailable ? null : { uniqueNickname: true })),
+        map(isAvailable => (isAvailable ? null : { nicknameTaken: true })),
         catchError(() => of(null)) // Handle errors and return null if needed
       );
     };
@@ -27,7 +27,7 @@ export class CustomValidators {
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
       const value = control.value;
       return this.userService.emailAvaliable(value).pipe(
-        map(isAvailable => (isAvailable ? null : { uniqueEmail: true })),
+        map(isAvailable => (isAvailable ? null : { emailTaken: true })),
         catchError(() => of(null)) // Handle errors and return null if needed
       );
     };

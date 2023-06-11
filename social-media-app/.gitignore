@@ -38,4 +38,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-image_content_12699282_20170407113719.jpg
+#images
+/src/assets/images

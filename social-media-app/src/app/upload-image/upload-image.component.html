@@ -1,17 +1,21 @@
+<div class="container upload-container">
+  <label class="upload-btn">
+    <input type="file" name="image" (change)="selectFile($event)" />
+    Select Image
+  </label>
 
+  <div class="form-group">
+    <label>Title:</label>
+    <input type="text" name="title" [(ngModel)]="title" class="form-control" />
+  </div>
 
-<label class="btn btn-default">
-  <input type="file" name="image" (change)="selectFile($event)" />
-</label>
-<label>
-  Title: <input type="text" name="title" [(ngModel)]="title" />
-</label>
+  <button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
+    Upload
+  </button>
 
-<button class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
-  Upload
-</button>
+  <div class="alert alert-light" role="alert" *ngIf="message">{{ message }}</div>
+</div>
 
-<div class="alert alert-light" role="alert">{{ message }}</div>
 
 
 

@@ -7,11 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 
 import { authInterceptorProviders } from './helpers/auth.interceptor';
+import { tokenInterceptorProviders } from './helpers/token-expiration.interceptor';
+
 import { NavbarMenuComponent } from './navbar-menu/navbar-menu.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { SearchUsernameFormComponent } from './navbar-menu/search-username-form/search-username-form.component';
@@ -28,13 +29,13 @@ import { UploadImageComponent } from './upload-image/upload-image.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { ShowImageComponent } from './show-image/show-image.component';
 import { FlashMessageComponent } from './flash-message/flash-message.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent,
     HomeComponent,
     ProfileComponent,
     NavbarMenuComponent,
@@ -51,7 +52,8 @@ import { FlashMessageComponent } from './flash-message/flash-message.component';
     UploadImageComponent,
     ProfileSettingsComponent,
     ShowImageComponent,
-    FlashMessageComponent
+    FlashMessageComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,7 @@ import { FlashMessageComponent } from './flash-message/flash-message.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, tokenInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

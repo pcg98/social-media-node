@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { MessagesService } from '../services/messages-service.service';
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { environment } from 'src/environments/environment';
 import { ImageserviceService } from '../services/imageservice.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
 
 
 @Component({
@@ -28,12 +27,14 @@ export class ProfileComponent implements OnInit {
 
 
   constructor(private userService: UserService, private MessagesService: MessagesService,
-    private imageService: ImageserviceService, private sanitizer: DomSanitizer)
+    private imageService: ImageserviceService, private sanitizer: DomSanitizer,
+    private flashMessagesService: FlashMessagesService)
    { }
 
   ngOnInit() {
     this.subscription = this.MessagesService.message$.subscribe(message => {
       this.successMessage = message;
+      this.flashMessagesService.showSuccess(message);
     });
     this.userService.getCurrentUser()
     .subscribe((data: any) => {

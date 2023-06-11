@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
 
 
 const { cancelRequest, sendRequest, blockUser, sendMessage, searchUsersByNickname, showProfileById } = require('../controllers/actionsController');

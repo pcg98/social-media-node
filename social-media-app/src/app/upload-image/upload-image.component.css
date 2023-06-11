@@ -1,0 +1,32 @@
+.upload-container {
+  width: 300px;
+  margin: 0 auto;
+}
+
+.upload-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.upload-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.btn-success {
+  display: block;
+  width: 100%;
+}
+
+.alert {
+  margin-top: 10px;
+}

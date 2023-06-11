@@ -19,6 +19,10 @@
   background-color: #d9534f;
 }
 
+.info {
+  background-color: rgb(41, 167, 217);
+}
+
 .flash-message .icon {
   margin-right: 8px;
   font-size: 20px;

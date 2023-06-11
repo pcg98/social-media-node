@@ -99,3 +99,8 @@ body {
 .btn:hover {
   opacity: 0.8;
 }
+
+.content-container {
+  margin-bottom: 80px;
+}
+

@@ -1,63 +1,71 @@
 <div class="container" *ngIf="user">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <!-- User Info -->
-      <div class="user-profile">
-        <img class="profile-picture" [src]="profilePicture" alt="Profile Picture">
-        <h2 class="user-name">{{ user.name }}</h2>
-        <p class="user-description">{{ user.bio }}</p>
+      <div class="card mb-3">
+        <img [src]="profilePicture" alt="Profile Picture" class="card-img-top">
+        <div class="card-body">
+          <h2 class="card-title">{{ user.name }}</h2>
+          <p class="card-text">{{ user.bio }}</p>
 
-        <!-- Friend Request OR Cancel Button -->
-        <form class="form-inline" #f="ngForm" *ngIf="user.relationship=='pending'" name="form" novalidate (ngSubmit)="cancelRequest(f)">
-          <div class="input-group">
-            <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
-            <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
-            <button type="submit" class="btn btn-danger">Cancel Request</button>
-          </div>
-        </form>
-        <div class="row">
-        <form class="form-inline" #f="ngForm" *ngIf="user.relationship=='unknows'" name="form" novalidate (ngSubmit)="sendRequest(f)">
-          <div class="input-group">
-            <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
-            <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
-            <button type="submit" class="btn btn-success">Send Request</button>
-          </div>
-        </form>
+          <!-- Friend Request OR Cancel Button -->
+          <form class="form-inline" #f="ngForm" *ngIf="user.relationship == 'pending'" name="form" novalidate (ngSubmit)="cancelRequest(f)">
+            <div class="input-group">
+              <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
+              <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
+              <button type="submit" class="btn btn-danger">Cancel Request</button>
+            </div>
+          </form>
+          <form class="form-inline" #f="ngForm" *ngIf="user.relationship == 'unknows'" name="form" novalidate (ngSubmit)="sendRequest(f)">
+            <div class="input-group">
+              <input type="hidden" id="targetid" name="targetid" [(ngModel)]="user.id">
+              <input type="hidden" id="sourceid" name="sourceid" [(ngModel)]="id">
+              <button type="submit" class="btn btn-success">Send Request</button>
+            </div>
+          </form>
 
+          <!-- Send Message Button -->
+          <button class="btn btn-primary" (click)="toggleMessageForm()">Send Message</button>
+        </div>
 
-        <!-- Send Message Button -->
-        <button class="btn btn-primary" (click)="toggleMessageForm()">Send Message</button>
-      </div>
         <!-- Options -->
-        <div class="options">
+        <div class="card-footer">
           <button class="btn btn-link" (click)="reportUser(user.id)">Report User</button>
           <button class="btn btn-link" (click)="blockUser(user.id)">Block User</button>
         </div>
       </div>
     </div>
 
-    <div class="col-md-6">
-      <!-- User Photos. For each... -->
-      <div class="user-photos">
-        <h3 class="section-title">Photos</h3>
-
-        <div class="photo-grid">
-          <ng-container *ngIf="userPictures">
-            <div *ngFor="let image of userPictures" class="photo">
-              <a [href]="'/images/show/' +image.id">
-                <img [src]="image.result" [alt]="image.title" class="img-fluid">
-              </a>
+    <div class="col-md-8">
+      <!-- User Photos -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Photos</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <ng-container *ngIf="userPictures">
+              <div *ngFor="let image of userPictures" class="col-md-4">
+                <div class="card mb-3">
+                  <a [href]="'/images/show/' + image.id">
+                    <img [src]="image.result" [alt]="image.title" class="card-img-top">
+                  </a>
+                  <div class="card-body">
+                    <p class="card-text">{{ image.title }}</p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div *ngIf="!userPictures" class="col-md-12">
+              <p>No images to display.</p>
             </div>
-          </ng-container>
-          <div *ngIf="!userPictures" class="col-md-12">
-            <p>No images to display.</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 <div *ngIf="showMessageForm">
   <app-messages-form [targetid]="user.id" (close)="toggleMessageForm()"></app-messages-form>
 </div>
-

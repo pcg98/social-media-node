@@ -11,9 +11,9 @@ const emailIsUniqueContr = async( req = request, res = response ) => {
         console.log("Entramos al controller del email");
         const user = await User.findOne({ where: { email } });
         if (user) {
-          return res.status(409).json(false);
+          return res.status(409).json({ emailTaken: true });
         }
-        return res.status(200).json(true);
+        return res.status(200).json(null);
       } catch (err) {
         return res.status(500).json({ message: 'Error occurred while checking email uniqueness. Controller' });
       }
@@ -24,9 +24,9 @@ const nicknameIsUniqueContr = async( req = request, res = response ) => {
     try {
         const user = await User.findOne({ where: { nickname } });
         if (user) {
-          return res.status(409).json(false);
+          return res.status(409).json({ nicknameTaken: true });
         }
-        return res.status(200).json(true);
+        return res.status(200).json(null);
     } catch (err) {
         return res.status(500).json({ message: 'Error occurred while checking nickname uniqueness.' });
     }

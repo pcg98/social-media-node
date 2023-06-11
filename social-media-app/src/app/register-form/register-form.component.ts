@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
 import { FlashMessagesService } from '../services/flash-messages.service';
 import { MessagesService } from '../services/messages-service.service';
 import { UserService } from '../services/user.service';
@@ -15,7 +14,7 @@ import { CustomValidators } from './custom-validatiors';
   styleUrls: ['./register-form.component.css']
 })
 export class RegisterFormComponent implements OnInit {
-  sexes: string[] = ['man', 'woman', 'other'];
+  sexes: string[] = ['men', 'woman', 'other'];
   user: any = {};
   userForm: FormGroup;
   httpAnswerMessageError: string;
@@ -23,7 +22,6 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private MessagesService: MessagesService,
     private customValidators: CustomValidators,
     private flashMessagesService: FlashMessagesService
@@ -32,18 +30,18 @@ export class RegisterFormComponent implements OnInit {
   ngOnInit() {
     this.userForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      last_name: ['', [Validators.required, Validators.minLength(3)]],
       nickname: [
         '',
         [Validators.required, Validators.minLength(3)],
-        [this.customValidators.uniquenicknameValidator()]
+        [this.customValidators.nicknameTakenValidator()]
       ],
       telephone: [
         '',
         [Validators.required, Validators.minLength(3),
         this.customValidators.phoneValidator()]//After send the form
       ],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email], [this.customValidators.uniqueEmailValidator()]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       sex: ['', [Validators.required]],
       bio: ['', Validators.maxLength(100)]
@@ -57,25 +55,28 @@ export class RegisterFormComponent implements OnInit {
       this.flashMessagesService.showError('The form is invalid');
     }
     //If it's correct
-    this.userService.createUser(this.user).subscribe(
+    this.userService.createUser(this.userForm).subscribe(
       () => {
         this.flashMessagesService.showSuccess('User created successfully!');
-        this.MessagesService.sendMessageAndRedirect('Login successful', '/home');
+        this.MessagesService.sendMessageAndRedirect('User created successfully!', '/home');
       },
       (error) => {
         console.log(error);
         console.log(error.nicknameTaken);
         if (error.error.nicknameTaken) {
           this.flashMessagesService.showError('Nickname taken');
+          this.userForm.get('nickname').setErrors({ nicknameTaken: true });
         }
         else if (error.error.emailTaken) {
           this.flashMessagesService.showError('Email taken');
+          this.userForm.get('email').setErrors({ emailTaken: true });
         }
         else if (error.error.telephoneTaken) {
           this.flashMessagesService.showError('Telephone taken');
+          this.userForm.get('telephone').setErrors({ telephoneTaken: true });
         }
         else{
-          this.flashMessagesService.showError('Something was wrong');
+          this.flashMessagesService.showError('Something was wrong '+error);
         }
       }
     );

@@ -9,6 +9,7 @@ import { FlashMessagesService } from '../services/flash-messages.service';
 export class FlashMessageComponent implements OnInit {
   successMessage: string;
   errorMessage: string;
+  infoMessage: string;
 
   constructor(private flashMessagesService: FlashMessagesService) {}
 
@@ -22,14 +23,20 @@ export class FlashMessageComponent implements OnInit {
       this.errorMessage = message;
       this.clearMessage('error');
     });
+    this.flashMessagesService.infoMessage$.subscribe(message => {
+      this.infoMessage = message;
+      this.clearMessage('info');
+    });
   }
-  
+
   clearMessage(type: string) {
     setTimeout(() => {
       if (type === 'success') {
         this.successMessage = '';
       } else if (type === 'error') {
         this.errorMessage = '';
+      } else if (type === 'info') {
+        this.infoMessage = '';
       }
     }, 3000);
   }
