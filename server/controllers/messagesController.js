@@ -1,40 +1,8 @@
 const { response } = require('express');
-const { User,  Message, UserRequest, Conversation } = require('../models/index');
+const { User,  Message, Conversation } = require('../models/index');
 
 const { Op } = require('sequelize');
 
-/*
-const getConversations = async(req, res = response) => {
-    const id = req.user.id;
-    
-    try {
-        //Check on the conversations with the user
-        const conversations = await Conversation.findAll({ 
-            where: {
-                [Op.or]: [
-                    { targetid: id },
-                    { sourceid: id }
-                ]
-            }
-        });
-        //Return conversations
-        if(conversations){
-            return res.status(200).json({
-                conversations
-            })
-        };
-        //Or null
-        return res.status(200).json(null)
-        
-
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            msg: 'Talk with the admin'
-        });
-    }   
-
-}*/
 const getConversations = async(req, res = response) => {
     const id = req.user.id;
     
@@ -57,11 +25,7 @@ const getConversations = async(req, res = response) => {
             //DataValues is a sequelize property
             conversation.dataValues.otherUser = await User.findByPk(otherUserId);
             return conversation;
-        }));
-                
-
-          
-          
+        }));         
 
         return res.status(200).json(conversations)
         
@@ -89,14 +53,10 @@ const getMessages = async(req, res = response) => {
                 as: 'messages',
                 include: [
                   { model: User, as: 'user', attributes: ['id', 'name', 'profile_picture'] }
-                  //{ model: User, as: 'message_target' }
                 ]
               }
             ]
           });
-        /*
-        const otherUserId = (conversation.dataValues.sourceid != userid) ? conversation.sourceid : conversation.targetid 
-        conversation.dataValues.otherUserId = otherUserId;*/
         //Return the two users and the info
         return res.status(200).json(conversations);
         

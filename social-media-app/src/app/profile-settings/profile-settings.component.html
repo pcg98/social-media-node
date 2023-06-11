@@ -48,5 +48,11 @@
     </div>
     <button type="submit" class="btn btn-primary">Change Image</button>
   </form>
+  <br>
+  <h2>Drop account</h2>
+  <button class="btn btn-danger" (click)="openConfirmationModal()">Delete User</button>
+
+  <app-confirmation-modal [showModal]="showConfirmationModal" (deleteConfirmed)="deleteUser()" (modalClosed)="showConfirmationModal = false"></app-confirmation-modal>
+
 
 </div>

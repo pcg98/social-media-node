@@ -12,7 +12,7 @@ export class FlashMessagesService {
 
   public successMessage$: Observable<string> = this.successMessageSubject.asObservable();
   public errorMessage$: Observable<string> = this.errorMessageSubject.asObservable();
-  public infoMessage$: Observable<string> = this.errorMessageSubject.asObservable();
+  public infoMessage$: Observable<string> = this.infoMessageSubject.asObservable();
 
   constructor(private router: Router) {}
 

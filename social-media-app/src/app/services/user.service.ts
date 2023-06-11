@@ -54,6 +54,11 @@ export class UserService {
     return this.http
       .patch(`${environment.apiUrl}/users/update`, data);
   }
+  closeAccount(){
+    console.log('Closing account ');
+    return this.http
+      .get(`${environment.apiUrl}/users/close-profile`);
+  }
 
   changeProfilePicture(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();

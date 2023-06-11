@@ -53,6 +53,11 @@ export class ShowUserProfileByIdComponent implements OnInit {
         // Do something with the user(s) data
       },
       (error: any) => {
+        console.log(error);
+        if(error.status==403){
+          this.flashMessagesService.showError('Unavaliable user. The user can be private or disabled');
+          return;
+        }
         this.flashMessagesService.showError('Something was wrong loading the user' +error);
       }
     );

@@ -9,7 +9,6 @@ import { FlashMessagesService } from '../services/flash-messages.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  successMessage: string;
   private subscription: Subscription;
 
 
@@ -17,7 +16,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.subscription = this.MessagesService.message$.subscribe(message => {
-      this.successMessage = message;
       this.flashMessagesService.showInfo(message);
     });
   }

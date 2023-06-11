@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         console.log("Se accedio con exito");
         this.roles = this.tokenStorage.getUser().user_rolid;
-        this.messagesService.sendMessageAndRedirect('Login successful','/profile');
+        this.messagesService.sendMessageAndRedirect('Login successful','/profile', true);
       },
       err => {
         this.errorMessage = err.error.message;

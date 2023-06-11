@@ -1,10 +1,8 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { User, UserFollower, UserFollowing, UserImage } = require('../models/index');
 const { Op } = require('sequelize');
 const fs = require('fs');
-const user_image = require('../models/user_image');
 const { getImagesFromUser } = require('../helpers/userFunctions');
 
 
@@ -14,13 +12,6 @@ const usersGet = async(req = request, res = response) => {
     const query = { user_statusid: 1 };
 
     const users = await User.findAll({offset, limit, where: query });
-    /*
-    const users = await user.findAll({offset, limit, where: query, include:{
-        model: user_rol,
-        as: 'user_rol'
-        }
-    });
-    */
     res.json({
         users
     });
@@ -113,7 +104,7 @@ const userGetSearchByNickname = async(req, res = response) => {
         console.log(e);
         res.status(422).json('Something was wrong');
     }
-}
+};
 const uploadProfilePicture = (req, res, next) => {
     if (!req.file) {
       res.status(400).send({ message: 'No file uploaded!' });
@@ -143,46 +134,46 @@ const updateUser = async (req, res) => {
     }catch(e){
         res.status(500).json("Something was wrong");
     }
-}
+};
+//Method for change his status of one to two (closed)
+const userCloseProfile = async (req, res) => {
+    try{
+        const id_user = req.user.id;
+        console.log("We enter to close the profile");
 
-/*
-const usuariosPut = async(req, res = response) => {
+        const user = await User.findByPk(id_user,{
+            where: { user_statusid: 1 }
+        });
 
-    const { id } = req.params;
-    const { _id, password, google, correo, ...resto } = req.body;
-
-    if ( password ) {
-        // Encriptar la contraseña
-        const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync( password, salt );
+        let result = await user.update({user_statusid: 2});
+        if(result){
+            return res.status(200).json("Account close");
+        }
+        res.status(404).json("Active user not found");
+    }catch(e){
+        console.log("Something was wrong closing an account");
+        res.status(500).json("Something was wrong");
     }
+};
+const userReactivateProfile = async (req, res) => {
+    try{
+        const id_user = req.user.id;
+        console.log("We enter to reactivate the profile");
 
-    const usuario = await Usuario.findByIdAndUpdate( id, resto );
+        const user = await User.findByPk(id_user,{
+            where: { user_statusid: 2 }
+        });
 
-    res.json(usuario);
-}
-
-const usuariosPatch = (req, res = response) => {
-    res.json({
-        msg: 'patch API - usuariosPatch'
-    });
-}
-
-const usuariosDelete = async(req, res = response) => {
-
-    const { id } = req.params;
-    const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
-
-    
-    res.json(usuario);
-}
-
-    usuariosPost,
-    usuariosPut,
-    usuariosPatch,
-    usuariosDelete,
-
-*/
+        let result = await user.update({user_statusid: 1});
+        if(result){
+            return res.status(200).json("Account reactivated");
+        }
+        res.status(404).json("Disabled user not found");
+    }catch(e){
+        console.log("Something was wrong reactivating an account");
+        res.status(500).json("Something was wrong");
+    }
+};
 
 module.exports = {
     usersGet,
@@ -191,5 +182,6 @@ module.exports = {
     userPostCreate,
     uploadProfilePicture,
     userGetSearchByNickname,
-    updateUser
+    updateUser,
+    userCloseProfile
 }

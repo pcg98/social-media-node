@@ -14,7 +14,6 @@ import { FlashMessagesService } from '../services/flash-messages.service';
 })
 export class ProfileComponent implements OnInit {
   user: any;
-  successMessage: string;
   numberFollowing: number;
   numberFollowers: number;
   userPictures: any;
@@ -33,7 +32,6 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.subscription = this.MessagesService.message$.subscribe(message => {
-      this.successMessage = message;
       this.flashMessagesService.showSuccess(message);
     });
     this.userService.getCurrentUser()

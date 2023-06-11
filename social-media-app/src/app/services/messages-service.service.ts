@@ -20,7 +20,7 @@ export class MessagesService {
   constructor(private router: Router, private http: HttpClient,
     private flashMessagesService: FlashMessagesService) { }
 
-  sendMessageAndRedirect(message: string, url: string, reload=true) {
+  sendMessageAndRedirect(message: string, url: string, reload=false) {
     //Redirect to the url
     this.router.navigateByUrl(url).then(() => {
       if(reload){ //If reload...

@@ -1,8 +1,7 @@
 const { response, request } = require('express');
-const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 
-const { User, Conversation } = require('../models/index');
+const { Conversation } = require('../models/index');
 //Method that return the id of conversation.
 //Check if have or create a new one
 //returning the id
@@ -30,23 +29,6 @@ const haveConversation = async( req = request, res = response, next ) => {
         console.error('Error finding or creating conversation:', error);
         return res.status(500).json("Something happens", error);
     });
-    /*
-    const conversationExist = await Conversation.findOne({
-        where: {
-            [Op.or]: [
-                { targetid: targetid, sourceid: sourceid },
-                { targetid: sourceid, sourceid: targetid }
-            ]
-        }
-    });
-    if (conversationExist){
-        console.log("Existe");
-        req.conversation = conversationExist;
-        //Nos salimos
-        next();
-    }
-    //La creamos
-    */
         
 }
 const isUserConversation = async( req = request, res = response, next ) => {

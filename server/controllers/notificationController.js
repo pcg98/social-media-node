@@ -1,7 +1,5 @@
 const { response } = require('express');
-const { User,  Message, UserRequest, Conversation, UserNotification, NotificationObject } = require('../models/index');
-
-const { Op, where } = require('sequelize');
+const { User, UserNotification, NotificationObject } = require('../models/index');
 
 const getNotifications = async(req, res = response) => {
     //Catch the current user thanks to the JWT

@@ -1,5 +1,5 @@
 const {uploadFileMiddleware} = require("../middlewares/multer");
-const { UserImage, User, ImageComment, UserNotification } = require("../models");
+const { UserImage, User, ImageComment } = require("../models");
 const fs = require('fs');
 const path = require('path');
 const { newNotification } = require("../helpers/userFunctions");
@@ -96,15 +96,6 @@ const uploadProfilePicture = async (req, res) => {
       res.status(400).send({ error: 'Something happens' })
   }
 }
-/*
-const listOwnImages = (req, res) => {
-  const userId = req.user.id;
-  const folderPath = directoryImages + "/" + userId;
-
-  const staticFilesDirectory = path.join(__dirname, 'static', req.user.id.toString());
-  express.static(staticFilesDirectory)(req, res);
- 
-}*/
 //Get the files from a site
 const getListFiles = (req, res) => {
     //Read the user folder
@@ -283,7 +274,6 @@ module.exports = {
   getListFiles,
   download,
   uploadOne,
-  //listOwnImagesMiddl,
   listImage,
   serveImage,
   publicImage,

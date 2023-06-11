@@ -4,6 +4,7 @@ import { TokenStorageService } from '../services/token-storage.service';
 import { UserService } from '../services/user.service';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FlashMessagesService } from '../services/flash-messages.service';
+import { MessagesService } from '../services/messages-service.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -15,10 +16,12 @@ export class ProfileSettingsComponent implements OnInit {
   form: FormGroup;
   visibilyOptions: any = [];
   imageFile: File;
+  showConfirmationModal = false;
 
 
   constructor(private userService: UserService, private formBuilder: FormBuilder,
-    private flashMessagesService: FlashMessagesService) { }
+    private flashMessagesService: FlashMessagesService, private messagesService: MessagesService,
+    private tokenStorageService: TokenStorageService) { }
 
   ngOnInit() {
 
@@ -94,6 +97,21 @@ export class ProfileSettingsComponent implements OnInit {
       // Form is invalid, handle validation errors
       this.flashMessagesService.showError('Invalid form');
     }
+  }
+  deleteUser() {
+    this.userService.closeAccount().subscribe((data)=>{
+      console.log(data);
+      window.sessionStorage.clear();
+      this.messagesService.sendMessageAndRedirect('Closed account we will miss you :((', '/home', false);
+    },
+    (error)=> {
+      console.log(error);
+      this.flashMessagesService.showError("Something was wrong, you can try later ");
+    });
+  }
+
+  openConfirmationModal() {
+    this.showConfirmationModal = true;
   }
 
 

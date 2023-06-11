@@ -10,7 +10,6 @@ import { MessagesService } from '../services/messages-service.service';
 export class AuthGuard implements CanActivate {
 
   constructor( private messagesService: MessagesService,
-               private router: Router,
                private tokenStorageService: TokenStorageService) {}
     /*
   canActivate(

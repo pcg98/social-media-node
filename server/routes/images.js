@@ -1,11 +1,8 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
 
 
-const { getRequests, responseRequest, getFollowers, getFollowing, deleteFollower, deleteFollowing } = require('../controllers/friendshipController');
 const { publicImage, serveImage, serveProfilePicture, getImageAndComments, newComment } = require('../controllers/imagesController');
 const { validateJWT, userHaveAccessToPhoto, } = require('../middlewares');
-const { upload } = require('../middlewares/multer');
 
 const router = Router();
 

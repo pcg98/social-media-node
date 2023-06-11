@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { User, UserBlocked, UserFollowing, UserNotification, UserImage, UserFollower, UserRequest } = require('../models/index');
+const { UserBlocked, UserNotification, UserImage, UserFollower, UserRequest } = require('../models/index');
 
 //We check if the user is blocked by other
 const userIsNotBlocked = (sourceId, targetId) => {

@@ -1,6 +1,6 @@
 const { response } = require('express');
 const sequelize = require('../database/config')
-const { User, UserBlocked, UserFollowing, UserFollower, Message, UserRequest, Conversation, UserImage } = require('../models/index');
+const { User, UserBlocked, UserFollower, Message, UserRequest, UserImage } = require('../models/index');
 
 
 const { generateJWT } = require('../helpers/generate-jwt');
@@ -113,20 +113,31 @@ const showProfileById = async(req, res = response) => {
     //If he wants herself
     if(id == targetid){
         //If not, code error
-        return res.status(403).json("NOthing to show");
+        return res.status(403).json("Nothing to show");
     }
     console.log("Entramos a enseñar perfil "+targetid);
     //Query to get the users with that id.
     //Want that is diferent to our user
     //and is visible or friend
     try{
+        let userSeq = await User.findByPk(targetid, 
+            {include:{
+                model: UserFollower,
+                as: 'user_followers',
+                where: {
+                    sourceid: id
+                }
+            }
+        });
+        console.log("Vamos con la query 2")
         let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
+            'and user_statusid = 1'+ //it's avaliable
             'and (user_visibilityid = 1 or EXISTS '+//User is public or...
             //Actual user following the wanted 
             '(select * from user_following where targetid = :targetid and sourceid = :currentId))',
             { 
                 replacements: { targetid: targetid,
-                    currentId: id}, 
+                    currentId: id }, 
                 type: sequelize.QueryTypes.SELECT // Specify the query type as SELECT
             })
             .then((user) => {
@@ -138,8 +149,9 @@ const showProfileById = async(req, res = response) => {
             });
         //If we find an user...
         if(!user){
+
             //If not, code error
-            return res.status(403).json("Nothing to show");
+            return res.status(403).json({ok: false, message: "unavaliable user", userSeq});
         }
         //If user exists
         //FInd his images
@@ -154,6 +166,7 @@ const showProfileById = async(req, res = response) => {
         //Succesful request
         return res.status(200).json(user);
     }catch(e){
+        console.log("Error fetching the user in get profile by id "+e);
         return res.status(500).json("Something was wrong fetching the user by id")
     }
 

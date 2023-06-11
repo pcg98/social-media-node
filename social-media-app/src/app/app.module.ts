@@ -30,6 +30,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { ShowImageComponent } from './show-image/show-image.component';
 import { FlashMessageComponent } from './flash-message/flash-message.component';
 import { FooterComponent } from './footer/footer.component';
+import { ConfirmationModalComponent } from './profile-settings/confirmation-modal/confirmation-modal.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { FooterComponent } from './footer/footer.component';
     ProfileSettingsComponent,
     ShowImageComponent,
     FlashMessageComponent,
-    FooterComponent
+    FooterComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,

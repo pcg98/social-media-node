@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { usersGet, usersGetById, userProfilebyJWT, userPostCreate , userGetSearchByNickname, updateUser } = require('../controllers/userController');
+const { usersGet, usersGetById, userProfilebyJWT, userPostCreate , userGetSearchByNickname, updateUser, userCloseProfile } = require('../controllers/userController');
 const { validateJWT, emailIsUnique, telephoneIsUnique, nicknameIsUnique } = require('../middlewares');
 const { uploadOne, listImage, serveImage, uploadProfilePicture } = require('../controllers/imagesController');
 const router = Router();
@@ -22,6 +22,8 @@ router.post('/profile/picture',[validateJWT, uploadProfilePictureMult.single("im
 router.get('/images',[validateJWT], serveImage);
 //Modify his profile
 router.patch('/update',[validateJWT], updateUser);
+//Close his profile
+router.get('/close-profile',[validateJWT], userCloseProfile);
 
 router.get('/friend/images/:id_image',[validateJWT], listImage );
 
