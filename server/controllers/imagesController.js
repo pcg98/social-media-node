@@ -61,9 +61,9 @@ const newComment = async (req, res) => {
     
     await newNotification(userid, uploaderid, 3, user_imageid);
 
-    res.status(200).send({ok: true});
+    res.status(200).json({ok: true});
   }catch(err){
-    res.status(403).send({ok: false,
+    res.status(403).json({ok: false,
       message: "Something was wrong "+err
     });
   }

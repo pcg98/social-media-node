@@ -1,12 +1,6 @@
-<div style="text-align:center">
-  <h1>
-    Welcome to Social Media App!
-  </h1>
-</div>
-  <app-navbar-menu *ngIf="isLoggedIn"></app-navbar-menu>
+<app-navbar-menu *ngIf="isLoggedIn"></app-navbar-menu>
 <div id="page-container">
   <app-flash-message></app-flash-message>
   <router-outlet class="content-container"></router-outlet>
-  <app-footer class="footer"></app-footer>
 </div>
 

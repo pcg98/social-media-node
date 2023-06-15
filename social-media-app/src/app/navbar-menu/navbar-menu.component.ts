@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActionsService } from '../services/actions.service';
 import { TokenStorageService } from '../services/token-storage.service';
 
@@ -9,7 +9,9 @@ import { TokenStorageService } from '../services/token-storage.service';
 })
 export class NavbarMenuComponent implements OnInit {
 
+  @Input() isLogged: boolean = false;
   hasNewNotifications: boolean = false;
+
 
   constructor(private tokenStorageService: TokenStorageService,
     private actionsService: ActionsService) { }

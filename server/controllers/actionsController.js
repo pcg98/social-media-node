@@ -131,7 +131,7 @@ const showProfileById = async(req, res = response) => {
         });
         console.log("Vamos con la query 2")
         let [user]= await sequelize.query('SELECT * FROM user WHERE id = :targetid '+//Id the same
-            'and user_statusid = 1'+ //it's avaliable
+            'and user_statusid = 1 '+ //it's avaliable
             'and (user_visibilityid = 1 or EXISTS '+//User is public or...
             //Actual user following the wanted 
             '(select * from user_following where targetid = :targetid and sourceid = :currentId))',

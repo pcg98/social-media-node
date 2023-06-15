@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionsService } from '../services/actions.service';
+import { FlashMessagesService } from '../services/flash-messages.service';
+
 
 
 @Component({
@@ -11,22 +13,22 @@ export class NotificationsComponent implements OnInit {
 
   notifications: any;
 
-  constructor(private actionsService: ActionsService) { }
+  constructor(private actionsService: ActionsService,
+    private flashMessagesService: FlashMessagesService) { }
 
   ngOnInit() {
     this.fetchNotifications();
   }
 
   fetchNotifications() {
-    // Call your API service to fetch notifications from the server
     this.actionsService.getNotifications().subscribe(
       (response: any) => {
         this.notifications = response.notifications;
       },
       (error) => {
-        console.error('Error fetching notifications:', error);
+        this.flashMessagesService.showError('Error fetching notifications:' +error);
       }
     );
   }
-  
+
 }
