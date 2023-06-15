@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterFormComponent},
+  
   //AuthGuard check that we are login with the backend
   { path: 'users/search/:nickname', component: ShowUsersSearchComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

@@ -23,6 +23,7 @@ export class TokenInterceptor implements HttpInterceptor {
             sessionStorage.getItem(this.TOKEN_KEY); // Assuming JWT is stored in local storage
             // Redirect to login page
             this.messagesService.sendMessageAndRedirect('Token expired, please start session again', '/home', false);
+
           }
         }
       )

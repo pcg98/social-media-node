@@ -33,15 +33,14 @@ export class RegisterFormComponent implements OnInit {
       last_name: ['', [Validators.required, Validators.minLength(3)]],
       nickname: [
         '',
-        [Validators.required, Validators.minLength(3)],
-        [this.customValidators.nicknameTakenValidator()]
+        [Validators.required, Validators.minLength(3)]
       ],
       telephone: [
         '',
         [Validators.required, Validators.minLength(3),
         this.customValidators.phoneValidator()]//After send the form
       ],
-      email: ['', [Validators.required, Validators.email], [this.customValidators.uniqueEmailValidator()]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       sex: ['', [Validators.required]],
       bio: ['', Validators.maxLength(100)]

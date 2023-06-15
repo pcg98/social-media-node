@@ -11,16 +11,6 @@ export class AuthGuard implements CanActivate {
 
   constructor( private messagesService: MessagesService,
                private tokenStorageService: TokenStorageService) {}
-    /*
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot) {
-      if(!!this.tokenStorageService.getToken()){
-        return true;
-      }else{
-        return this.router.createUrlTree(['/home']);
-      }
-  }*/
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (!!this.tokenStorageService.getToken()) {
       return true;
