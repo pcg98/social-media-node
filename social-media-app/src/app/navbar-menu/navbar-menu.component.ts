@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActionsService } from '../services/actions.service';
+import { MessagesService } from '../services/messages-service.service';
 import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class NavbarMenuComponent implements OnInit {
 
 
   constructor(private tokenStorageService: TokenStorageService,
-    private actionsService: ActionsService) { }
+    private actionsService: ActionsService,
+    private messagesService: MessagesService) { }
 
   ngOnInit() {
     this.hasNotifications();
@@ -36,7 +38,7 @@ export class NavbarMenuComponent implements OnInit {
 
   logout() {
     this.tokenStorageService.signOut();
-    window.location.reload();
+    this.messagesService.sendMessageAndRedirect("Logout succesful", "/home", true);
   }
 
 }

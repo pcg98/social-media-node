@@ -14,6 +14,7 @@ export class ShowRequestsComponent implements OnInit {
   id : number;
   requests: any;
   form: FormBuilder;
+  serverImages =  "http://localhost:8000/api/images/"
 
 
   constructor(private actionsService: ActionsService,

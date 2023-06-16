@@ -98,6 +98,7 @@ const uploadProfilePicture = async (req, res) => {
 }
 //Get the files from a site
 const getListFiles = (req, res) => {
+  try{
     //Read the user folder
     const directoryPath = `${process.env.FOLDER_IMAGES_USERS}/${req.user.id}`;
 
@@ -119,36 +120,44 @@ const getListFiles = (req, res) => {
 
         res.status(200).send(fileInfos);
     });
+  }catch(e){
+    return res.status(500).json({ok: false, message:"Something was wrong"});
+  }
+    
 };
 const getImageAndComments = async (req, res) => {
   const id_image = req.photo.id ||req.params.image_id;
-  console.log("Entramos a cargar imagen con sus comentarios");
-  const image = await UserImage.findByPk(id_image, {
-    include: [
-        {
-          model: ImageComment, //Model
-          as : 'image_comments', //Name relationship
-          attributes: ['id', 'body', 	'createdAt' ], //Attributes that we want
-          include:{
-            model: User,
-            as: 'user',
-            attributes: ['id','name', 'last_name', 'nickname', 'profile_picture']
+  try{
+    console.log("Entramos a cargar imagen con sus comentarios");
+    const image = await UserImage.findByPk(id_image, {
+      include: [
+          {
+            model: ImageComment, //Model
+            as : 'image_comments', //Name relationship
+            attributes: ['id', 'body', 	'createdAt' ], //Attributes that we want
+            include:{
+              model: User,
+              as: 'user',
+              attributes: ['id','name', 'last_name', 'nickname', 'profile_picture']
+            },
           },
-        },
-        {
-          model: User, //Model
-          as : 'user', //Name relationship
-          attributes: ['id','nickname'], //Attributes that we want
-        }
-    ]
-  });
-  console.log("Hola");
-  if(!image){
-    return res.status(404);
-  } 
-  console.log("Hola");
+          {
+            model: User, //Model
+            as : 'user', //Name relationship
+            attributes: ['id','nickname'], //Attributes that we want
+          }
+      ]
+    });
+    console.log("Hola");
+    if(!image){
+      return res.status(404);
+    } 
+    console.log("Hola");
 
-  return res.status(200).json(image);
+    return res.status(200).json(image);
+  }catch(e){
+    return res.status(500).json({ok: false, message:'something was wrong'});
+  }
 }
 const download = (req, res) => {
   const fileName = req.params.name;
@@ -163,18 +172,18 @@ const download = (req, res) => {
   });
 };
 const serveImage = async (req, res) => {
-  const id_image = req.params.image_id;
-  console.log("Hola");
-  const image = req.photo || await UserImage.findByPk(id_image);
-
-  console.log(image);
-  if(!image){
-    return res.status(404);
-  } 
-  console.log("Hola");
-  const imagePath = path.join(__dirname, '../static/files', image.url);
-  console.log(imagePath);
   try {
+    const id_image = req.params.image_id;
+    console.log("Hola");
+    const image = req.photo || await UserImage.findByPk(id_image);
+
+    console.log(image);
+    if(!image){
+      return res.status(404);
+    } 
+    console.log("Hola");
+    const imagePath = path.join(__dirname, '../static/files', image.url);
+    console.log(imagePath);
     //If file exists in the storage...
     if (fs.existsSync(imagePath)) {
       console.log("Existe");
@@ -187,69 +196,77 @@ const serveImage = async (req, res) => {
   }
 };
 const serveProfilePicture = async (req, res) => {
-  const id_image = req.params.id;
-  console.log("Hola");
-  const image = await UserImage.findOne({
-    where:{
-      id: id_image     
-    }
-  });
-  console.log(image);
-  if(!image || !image.dataValues.url.includes("/profile_picture/")){
-    return res.status(404);
-  } 
-  console.log("Hola");
-  const imagePath = path.join(__dirname, '../static/files', image.url);
-  console.log(imagePath);
-  try {
+  try{
+    const id_image = req.params.id;
+    console.log("Hola");
+    const image = await UserImage.findOne({
+      where:{
+        id: id_image     
+      }
+    });
+    console.log(image);
+    if(!image || !image.dataValues.url.includes("/profile_picture/")){
+      return res.status(404);
+    } 
+    console.log("Hola");
+    const imagePath = path.join(__dirname, '../static/files', image.url);
+    console.log(imagePath);
     //If file exists in the storage...
     if (fs.existsSync(imagePath)) {
       console.log("Existe");
       return res.status(200).sendFile(imagePath);
     }else{
-      return res.status(500);
+      return res.status(404);
     }
   } catch(err) {
-    return res.status(404);
+    return res.status(500).json({ok:false, message:"Something was wrong"});
   }
 };
 const getImagesFromUser = async (req, res) => {
-  const id_user = req.user.id;
-  const images = await UserImage.findAll({
-    where:{
-      userid: id_user
+  try{
+    const id_user = req.user.id;
+    const images = await UserImage.findAll({
+      where:{
+        userid: id_user
+      }
+    });
+
+    if(!images){
+      return res.status(404);
     }
-  });
 
-  if(!images){
-    return res.status(404);
+    //We fullfill this with info of every image
+    const responseData = images.map(image => {
+      return {
+        imageUrl: `/images/${image.id}`,
+        title: image.title,
+        createdAt: image.createdAt
+      };
+    });
+    return res.status(200).json(responseData);
+  }catch(e){
+    return res.status(500).json({ok: false, message:"Something was wrong"});
   }
-
-  //We fullfill this with info of every image
-  const responseData = images.map(image => {
-    return {
-      imageUrl: `/images/${image.id}`,
-      title: image.title,
-      createdAt: image.createdAt
-    };
-  });
-  return res.status(200).send(responseData);
 };
 
 //Get a image info
 const listImage = async (req, res) => {
   const id_image = req.params.id_image;
-  const image = await UserImage.findByPk(id_image);
-  if(!image){
-    return res.status(404);
-  }
+  try{
+    const image = await UserImage.findByPk(id_image);
+    if(!image){
+      return res.status(404);
+    }
 
-  const responseData = {
-    imageUrl: `/images/${id_image}`,
-    title: image.title,
-    createdAt: image.createdAt
-  };
-  return res.status(200).send(responseData);
+    const responseData = {
+      imageUrl: `/images/${id_image}`,
+      title: image.title,
+      createdAt: image.createdAt
+    };
+    return res.status(200).send(responseData);
+  }catch(e){
+    return res.status(500).json({ok: false, message:"Something was wrong"});
+  }
 };
 
 //Get all the info of pictures from a user
